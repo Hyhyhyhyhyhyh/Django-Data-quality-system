@@ -1,0 +1,82 @@
+{% load staticfiles %}
+<html lang="zh-cmn-Hans">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <!-- Tell the browser to be responsive to screen width -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" type="image/png" sizes="16x16" href="{% static 'img/favicon.ico' %}" />
+    <title>数据质量检核平台</title>
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="{% static 'css/lib/bootstrap/bootstrap.min.css' %}" />
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{% static 'css/helper.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/style.css' %}" />
+</head>
+
+<body class="fix-header fix-sidebar">
+    <!-- Preloader - style you can find in spinners.css -->
+    <div class="preloader">
+        <svg class="circular" viewBox="25 25 50 50">
+            <circle class="path" cx="50" cy="50" r="20" fill="none" stroke-width="2" stroke-miterlimit="10" /> </svg>
+    </div>
+
+    <script color="92,74,199" pointColor="92,74,199" opacity="0.7" src="{% static 'js/canvas-nest.js' %}"></script>
+
+    <!-- Main wrapper  -->
+    <div id="main-wrapper">
+
+        <div class="unix-login">
+            <div class="container-fluid">
+                <div class="row justify-content-center">
+                    <div class="col-lg-4">
+                        <div class="login-content card">
+                            <div class="login-form">
+                                <h4>用户登录</h4>
+                                <form action="../login_auth" method="POST"> {% csrf_token %}
+                                    <div class="form-group">
+                                        <label>用户名称</label>
+                                        <input type="text" name="username" class="form-control" placeholder="OA账号名">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>密码</label>
+                                        <input type="password" name="password" class="form-control"
+                                            placeholder="OA账号密码">
+                                    </div>
+                                    <div class="checkbox">
+                                        <label>
+                                            <input type="checkbox" name="autologin">7天内记住我
+                                        </label>
+                                        {{ alert|safe }}
+                                    </div>
+                                    <button type="submit" class="btn btn-primary btn-flat m-b-30 m-t-30">登录</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <!-- End Wrapper -->
+    <!-- All Jquery -->
+    <script src="{% static 'js/lib/jquery/jquery.min.js' %}"></script>
+    <!-- Bootstrap tether Core JavaScript -->
+    <script src="{% static 'js/lib/bootstrap/js/popper.min.js' %}"></script>
+    <script src="{% static 'js/lib/bootstrap/js/bootstrap.min.js' %}"></script>
+    <!-- slimscrollbar scrollbar JavaScript -->
+    <script src="{% static 'js/jquery.slimscroll.js' %}"></script>
+    <!--Menu sidebar -->
+    <script src="{% static 'js/sidebarmenu.js' %}"></script>
+    <!--stickey kit -->
+    <script src="{% static 'js/lib/sticky-kit-master/dist/sticky-kit.min.js' %}"></script>
+    <!--Custom JavaScript -->
+    <script src="{% static 'js/custom.min.js' %}"></script>
+
+</body>
+
+</html>

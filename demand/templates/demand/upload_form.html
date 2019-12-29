@@ -1,0 +1,22 @@
+<html>
+<head>
+    <title>数据质量检核平台</title>
+</head>
+<body>
+    <h5>上传源系统改造进度Excel表</h5>
+
+    {% if form.errors %}
+        <p style="color: red;">
+            上传过程发生错误：{{ form.errors|pluralize }}
+        </p>
+    {% endif %}
+
+    <form action="" enctype="multipart/form-data"  method="post">
+        <table>
+            {{ form.as_table }}
+        </table>
+        {% csrf_token %}
+        <input type="submit" value="Submit">
+    </form>
+</body>
+</html>

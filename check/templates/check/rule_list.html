@@ -1,0 +1,267 @@
+{% include "data/template-ui.html" %}
+{% load staticfiles %}
+
+<link rel="stylesheet" type="text/css" href="{% static 'css/datatables/foundation.min.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'css/datatables/dataTables.bootstrap4.min.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'css/icons.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'css/fonts.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'css/rule_list.css' %}" />
+<!-- <link rel="stylesheet" type="text/css" href="{% static 'check/css/css3/animate.css' %}"/> -->
+
+<style>
+	td.details-control {
+		background: url("{% static 'img/details_open.png' %}") no-repeat center center;
+		cursor: pointer;
+	}
+
+	tr.shown td.details-control {
+		background: url("{% static 'img/details_close.png' %}") no-repeat center center;
+	}
+</style>
+
+<div class="page-wrapper">
+	<!-- 正文 -->
+	<div class="container-fluid animated fadeInUp">
+		<div class="col-12">
+			<div class="card">
+				<div class="card-title">
+					<div class="row" style="padding:0px !important;">
+						<div class="col-md-10">
+							<h4 class="text-primary">{{ source_system }}公司-检核规则库</h4>
+						</div>
+						<div class="col-md-2 pull-right">
+							<a href="../rule_config?company={{ source_system }}&amp;id=null"
+								class="btn btn-primary btn-xs p310"><i class="im-plus"></i> 添加规则</a>
+							<button id="tb-refresh" href="#" class="btn btn-primary btn-xs p1010"><i
+									class="im-spinner2 fa-spin"></i> 刷新</button>
+						</div>
+					</div>
+				</div>
+
+				<div class="card-content">
+					<div class="col-lg-3 ">
+						<!-- <select class="input-sm form-control input-s-sm inline" onchange="fun_option(this.value);"> -->
+						<select style="height:2.2rem; font-size:13px; bottom:10px;margin:unset;"
+							onchange="fun_option(this.value);">
+							<option>是否风险集市</option>
+							<option value="是">是</option>
+							<option value="否">否</option>
+							<option value="">显示全部</option>
+						</select>
+					</div>
+
+					<!-- <table id="example" class="table table-striped table-bordered table-hover dataTables-example dataTable" cellspacing="0" width="100%">  -->
+					<table id="example" class="table table-bordered" cellspacing="0" width="100%">
+						<thead>
+							<tr>
+								<th>ID</th>
+								<th>数据标准</th>
+								<th>目标表</th>
+								<th>是否风险集市</th>
+								<th>问题分类</th>
+								<th>源系统数据库</th>
+								<th>检核逻辑</th>
+								<th>状态</th>
+								<th>操作</th>
+							</tr>
+						</thead>
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<footer class="navbar-fixed-bottom" style="line-height: 10px;font-size:13px;">
+		<div class="footer">
+			© 2019 Hyhyhyhyhyhyh
+		</div>
+	</footer>
+
+	<!-- Jquery -->
+	<script src="{% static 'js/lib/jquery/jquery.min.js' %}"></script>
+	<!-- Bootstrap tether Core JavaScript -->
+	<script src="{% static 'js/lib/bootstrap/js/popper.min.js' %}"></script>
+	<script src="{% static 'js/lib/bootstrap/js/bootstrap.min.js' %}"></script>
+	<!-- slimscrollbar scrollbar JavaScript -->
+	<script src="{% static 'js/jquery.slimscroll.js' %}"></script>
+	<!--Menu sidebar -->
+	<script src="{% static 'js/sidebarmenu.js' %}"></script>
+	<!--stickey kit -->
+	<script src="{% static 'js/lib/sticky-kit-master/dist/sticky-kit.min.js' %}"></script>
+	<script src="{% static 'js/custom.min.js' %}"></script>
+
+	<script type="text/javascript" src="{% static 'js/DataTables/DataTables-1.10.18/js/jquery.dataTables.js' %}">
+	</script>
+	<script type="text/javascript" src="{% static 'js/DataTables/DataTables-1.10.18/js/dataTables.bootstrap.js' %}">
+	</script>
+	<script type="text/javascript">
+		function fun_option(val) { //下拉框触发事件
+			document.location.href = "../rule_list?name={{ source_system }}&risk_market=" + val;
+		}
+
+		function fun_status(id, status) { //下拉框触发事件
+			$.ajax({
+				type: "POST",
+				url: "../rule_status_modify",
+				data: {
+					id: id,
+					status: status,
+					company: "{{ source_system }}",
+				},
+				success: function (data) {
+					console.log(data);
+					location.reload(true);
+				},
+				error: function (e) {
+					console.log(e);
+				}
+			})
+		}
+
+		function format(d) {
+			// `d` is the original data object for the row
+			return '<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;">' +
+				'<tr>' +
+				'<td>检核逻辑:</td>' +
+				'<td>' + d.check_sql + '</td>' +
+				'</tr>' +
+				'<tr>' +
+				'<td>备注:</td>' +
+				'<td>' + d.note + '</td>' +
+				'</tr>' +
+				'</table>';
+		}
+
+		$(document).ready(function () {
+			var table = $('#example').DataTable({
+				"ajax": {
+					"url": "../rule_detail",
+					"type": "GET",
+					"data": function (d) {
+						return $.extend({}, d, {
+							name: "{{ source_system }}",
+							risk_market_filter: "{{ risk_market_filter }}",
+						});
+					}
+				},
+				//"ajax": "{% static 'resource/objects2.txt' %}",
+				"columns": [{
+						"data": "id"
+					},
+					{
+						"data": "check_item"
+					},
+					{
+						"data": "target_table"
+					},
+					{
+						"data": "risk_market_item"
+					},
+					{
+						"data": "problem_type"
+					},
+					{
+						"data": "db"
+					},
+					{
+						"className": 'details-control',
+						"orderable": false,
+						"data": null,
+						"defaultContent": ''
+					},
+					{
+						"data": "status"
+					},
+				],
+
+				"columnDefs": [{
+						// 定义操作列,######以下是重点########
+						"targets": 8,
+						//操作按钮目标列
+						"data": null,
+						"render": function (data, type, row) {
+							var id = '"' + row.id + '"';
+							var html = "<a href='../rule_config?id=" + row.id + "&company=" + row
+								.source_system + "&username=" + "{{ username }}" +
+								"' style='margin-right:5px;border-bottom: 1px dotted;'>编辑</a>"
+							return html;
+						}
+					},
+
+					{
+						"targets": 7,
+						"data": "status",
+						"render": function (data, type, row) {
+							var id = '"' + row.id + '"';
+							if (data == '已启用') {
+								var html = "<a href='javascript:void(0);' onclick='fun_status(" + row
+									.id + ",\"" + row.status +
+									"\")' style='color:#429e47;border-bottom: 1px dotted;'>" + data +
+									"</a>"
+								return html;
+							} else {
+								var html = "<a href='javascript:void(0);' onclick='fun_status(" + row
+									.id + ",\"" + row.status +
+									"\")' style='color:#e33734;border-bottom: 1px dotted;'>" + data +
+									"</a>"
+								return html;
+							}
+						}
+					},
+				],
+
+				"pagingType": "full_numbers",
+				"sLoadingRecords": "正在加载数据...",
+				"sZeroRecords": "暂无数据",
+				stateSave: true,
+				"searching": true,
+				"ordering": true,
+				//"dom":'frtilp',
+				"dom": 'frt<"row"<"col-md-3"l><"col-md-3"i><"col-md-6 pull-right"p>>',
+
+				//汉化
+				"language": {
+					"processing": "玩命加载中...",
+					"lengthMenu": "显示 _MENU_ 项结果",
+					"zeroRecords": "没有匹配结果",
+					"info": "显示第 _START_ 至 _END_ 项结果，共 _TOTAL_ 项",
+					"infoEmpty": "显示第 0 至 0 项结果，共 0 项",
+					"infoFiltered": "(由 _MAX_ 项结果过滤)",
+					"infoPostFix": "",
+					"url": "",
+					"paginate": {
+						"first": "首页",
+						"previous": "上一页",
+						"next": "下一页",
+						"last": "末页"
+					},
+					"sSearch": "搜索:",
+				},
+			});
+
+			$('#example tbody').on('click', 'td.details-control', function () {
+				var tr = $(this).closest('tr');
+				var row = table.row(tr);
+
+				if (row.child.isShown()) {
+					// This row is already open - close it
+					row.child.hide();
+					tr.removeClass('shown');
+				} else {
+					// Open this row
+					row.child(format(row.data())).show();
+					tr.addClass('shown');
+				}
+			});
+
+			//刷新页面按钮
+			$("#tb-refresh").on("click", function () {
+				location.reload();
+			});
+
+		});
+	</script>
+
+	</body>
+
+	</html>

@@ -1,0 +1,350 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<!-- Tell the browser to be responsive to screen width -->
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="description" content="">
+	<meta name="author" content="">
+	<link rel="icon" type="image/png" sizes="16x16" href="{% static 'img/favicon.ico' %}" />
+	<title>数据质量检核平台</title>
+
+
+	<link rel="stylesheet" type="text/css" href="{% static 'check/css/admin/bootstrap.min.css' %}" />
+	<link rel="stylesheet" type="text/css" href="{% static 'check/css/admin/style.css' %}" />
+	<link rel="stylesheet" type="text/css" href="{% static 'css/animate.css' %}" />
+	<link rel="stylesheet" type="text/css" href="{% static 'css/fonts.css' %}" />
+	<link rel="stylesheet" type="text/css" href="{% static 'css/icons.css' %}" />
+
+    <link rel="stylesheet" type="text/css" href="{% static 'css/sweetalert.css' %}" />
+    
+    <style>
+        textarea {
+            white-space:pre-wrap;
+        }
+    </style>
+</head>
+
+<body>
+	<!-- head star -->
+	<div class="tnav row wrapper border-bottom white-bg page-heading">
+		<div class="col-sm-4">
+			<h2 class="fl" style="color: #007bff;font-size: 21px;font-weight:500">数据质量检核规则库</h2>
+			<ol class="breadcrumb fl">
+				<li><a href="../../data/index">主页</a></li>
+				<li><strong>数据标准</strong></li>
+			</ol>
+		</div>
+	</div>
+	<!-- head end -->
+
+	<!-- table star -->
+	<div class="row col-lg-12">
+		<div class="wrapper wrapper-content animated fadeInUp">
+			<div class="ibox">
+				<div class="ibox-title">
+					<h5>编辑数据标准-{{ std_name }}</h5>
+					<div class="ibox-tools rboor">
+						<a href="javascript:void(0)" id="commit" class="btn btn-primary btn-xs p310"><i class="im-reply"></i> 提交</a>
+					</div>
+                </div>
+                
+                <!-- 修改标准概述 -->
+                <div id="desc" class="ibox-content" style="display: none;">
+                    <div class="row">
+						<div class="form-group col-sm-8 col-md-10">
+							<label class="form-label">标题</label>
+							<input id="desc_name" type="text" class="form-control" style="width: 400px;" value="">
+						</div>
+                    </div>
+                    
+                    <div class="row">
+						<div class="form-group col-sm-8 col-md-10">
+							<label class="form-label">内容</label>
+							<textarea id="content" type="text" class="form-control" style="width: 800px;height:400px;" value=""></textarea>
+						</div>
+                    </div>
+                </div>
+
+                <!-- 修改标准明细 -->
+				<div id="std" class="ibox-content" style="display: none;">
+					<div class="row">
+						<div class="form-group col-sm-8 col-md-10">
+							<label class="form-label">标准编号</label>
+							<input id="std_id" type="text" class="form-control" style="width: 400px;" value="">
+						</div>
+					</div>
+
+					<div class="row">
+						<div class="form-group col-sm-8 col-md-10">
+							<label class="form-label">标准中文名称</label>
+							<input id="std_name" type="text" class="form-control" style="width: 400px;" value="">
+						</div>
+					</div>
+
+					<div class="row">
+						<div class="form-group col-sm-8 col-md-10">
+							<label class="form-label">标准英文名称</label>
+							<input id="en_name" type="text" class="form-control" style="width: 400px;" value="">
+						</div>
+					</div>
+
+					<div class="row">
+						<div class="form-group col-sm-8 col-md-10">
+							<label class="form-label">业务定义</label>
+							<textarea id="business_definition" type="text" class="form-control" style="width: 800px;" value=""></textarea>
+						</div>
+                    </div>
+                    
+                    <div class="row">
+						<div class="form-group col-sm-8 col-md-10">
+							<label class="form-label">业务规则</label>
+							<textarea id="business_rule" type="text" class="form-control" style="width: 800px;" value=""></textarea>
+						</div>
+                    </div>
+                    
+                    <div class="row">
+						<div class="form-group col-sm-8 col-md-10">
+							<label class="form-label">标准来源</label>
+							<textarea id="std_source" type="text" class="form-control" style="width: 800px;" value=""></textarea>
+						</div>
+                    </div>
+                    
+                    <div class="row">
+						<div class="form-group col-sm-8 col-md-10">
+							<label class="form-label">数据类别</label>
+							<input id="data_type" type="text" class="form-control" style="width: 800px;" value="">
+						</div>
+                    </div>
+                    
+                    <div class="row">
+						<div class="form-group col-sm-8 col-md-10">
+							<label class="form-label">业务定义</label>
+							<textarea id="business_definition" type="text" class="form-control" style="width: 800px;" value=""></textarea>
+						</div>
+                    </div>
+                    
+                    <div class="row">
+						<div class="form-group col-sm-8 col-md-10">
+							<label class="form-label">数据格式</label>
+							<input id="data_format" type="text" class="form-control" style="width: 800px;" value="">
+						</div>
+                    </div>
+                    
+                    <div class="row">
+						<div class="form-group col-sm-8 col-md-10">
+							<label class="form-label">代码编码规则	</label>
+							<textarea id="code_rule" type="text" class="form-control" style="width: 1200px;" value=""></textarea>
+						</div>
+                    </div>
+                    
+                    <div class="row">
+						<div class="form-group col-sm-8 col-md-10">
+							<label class="form-label">取值范围</label>
+							<textarea id="code_range" type="text" class="form-control" style="width: 1200px;" value=""></textarea>
+						</div>
+                    </div>
+                    
+                    <div class="row">
+						<div class="form-group col-sm-8 col-md-10">
+							<label class="form-label">代码取值含义</label>
+							<textarea id="code_meaning" type="text" class="form-control" style="width: 1200px;" value=""></textarea>
+						</div>
+                    </div>
+                    
+                    <div class="row">
+						<div class="form-group col-sm-8 col-md-10">
+							<label class="form-label">数据业务范围</label>
+							<textarea id="business_range" type="text" class="form-control" style="width: 1200px;" value=""></textarea>
+						</div>
+                    </div>
+                    
+                    <div class="row">
+						<div class="form-group col-sm-8 col-md-10">
+							<label class="form-label">数据责任部门</label>
+							<input id="dept" type="text" class="form-control" style="width: 400px;" value="">
+						</div>
+                    </div>
+                    
+                    <div class="row">
+						<div class="form-group col-sm-8 col-md-10">
+							<label class="form-label">数据使用系统</label>
+							<input id="system" type="text" class="form-control" style="width: 300px;" value="">
+						</div>
+					</div>
+
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- table end -->
+	<footer class="navbar-fixed-bottom" style="line-height: 10px;font-size:13px;">
+		<div class="footer">
+			© 2019 Hyhyhyhyhyhyh
+		</div>
+	</footer>
+
+	<script type="text/javascript" src="{% static 'js/lib/jquery/jquery.min.js' %}"></script>
+	<script type="text/javascript" src="{% static 'js/lib/bootstrap/js/bootstrap.min.js' %}"></script>
+
+	<script type="text/javascript" src="{% static 'js/sweetalert.min.js' %}"></script>
+
+	<script>
+		$(document).ready(function(){
+            //初始化页面
+            if ("{{std_type}}" == 'desc'){
+                $.ajax({
+                    type : "GET",
+                    async : false,
+                    url : "../../api/datastandard/query",
+                    data: {
+                        std_name: "{{ std_name }}",
+                        std_type: "desc"
+                    },
+                    dataType : "json",
+                    success : function(result) {
+                        document.getElementById("std").style.display="none";
+                        document.getElementById("desc").style.display="";
+                        document.getElementById("desc_name").value = result.name;
+                        document.getElementById("content").value = result.content;
+
+                        //textarea高度自适应
+                        $.each($("textarea"), function(i, n){
+                            $(n).css("height", n.scrollHeight + "px");
+                        })
+                    },
+                })
+            }
+            else {
+                $.ajax({
+                    type : "GET",
+                    async : false,
+                    url : "../../api/datastandard/query",    
+                    data: {
+                        std_name: "{{ std_name }}",
+                        std_type: "detail"
+                    },
+                    dataType : "json",
+                    success : function(result) {
+                        console.log(result);
+                        document.getElementById("std").style.display="";
+                        document.getElementById("desc").style.display="none";
+                        document.getElementById("std_id").value = result.std_id;
+                        document.getElementById("std_name").value = result.name;
+                        document.getElementById("en_name").value = result.en_name;
+                        document.getElementById("business_definition").value = result.business_definition;
+                        document.getElementById("business_rule").value = result.business_rule;
+                        document.getElementById("std_source").value = result.std_source;
+                        document.getElementById("data_type").value = result.data_type;
+                        document.getElementById("data_format").value = result.data_format;
+                        document.getElementById("code_rule").value = result.code_rule;
+                        document.getElementById("code_range").value = result.code_range;
+                        document.getElementById("code_meaning").value = result.code_meaning;
+                        document.getElementById("business_range").value = result.business_range;
+                        document.getElementById("dept").value = result.dept;
+                        document.getElementById("system").value = result.system;
+
+                        //textarea高度自适应
+                        $.each($("textarea"), function(i, n){
+                            $(n).css("height", n.scrollHeight + "px");
+                        })
+                    },
+                })
+            }
+        });
+
+        $("#commit").on("click", function () {
+            //获取每个标签中的value,更新至数据库中
+            if ("{{std_type}}" == 'desc'){
+                var std_name = document.getElementById("desc_name").value;
+                var content  = document.getElementById("content").value;
+                $.ajax({
+					type: "POST",
+					url: "../../api/datastandard/update",
+					data: {
+                        std_type: 'desc',
+						std_name: std_name,
+						content: content
+					},
+					success: function (data) {
+						console.log(data);
+						swal({
+                                text: "数据标准修改成功，正在返回上一页...",
+                                icon: "success",
+								buttons: false,
+								timer: 1000
+                            }).then(function(){
+								window.location.replace('../../datastandard/show');
+							});
+					},
+					error: function (e) {
+						swal({
+							title: "发生错误",
+							text: e,
+							icon: "error",
+						})
+					}
+				})
+            }
+            else {
+                var std_name            = document.getElementById("std_name").value;
+                var en_name             = document.getElementById("en_name").value;
+                var business_definition = document.getElementById("business_definition").value;
+                var business_rule       = document.getElementById("business_rule").value;
+                var std_source          = document.getElementById("std_source").value;
+                var data_type           = document.getElementById("data_type").value;
+                var data_format         = document.getElementById("data_format").value;
+                var code_rule           = document.getElementById("code_rule").value;
+                var code_range          = document.getElementById("code_range").value;
+                var code_meaning        = document.getElementById("code_meaning").value;
+                var business_range      = document.getElementById("business_range").value;
+                var dept                = document.getElementById("dept").value;
+                var system              = document.getElementById("system").value;
+                $.ajax({
+					type: "POST",
+					url: "../../api/datastandard/update",
+					data: {
+                        std_type           : 'detail',
+						std_name           : std_name            ,
+						en_name            : en_name             ,
+						business_definition: business_definition ,
+						business_rule      : business_rule       ,
+						std_source         : std_source          ,
+						data_type          : data_type           ,
+						data_format        : data_format         ,
+						code_rule          : code_rule           ,
+						code_range         : code_range          ,
+						code_meaning       : code_meaning        ,
+						business_range     : business_range      ,
+						dept               : dept                ,
+                        system             : system              ,
+					},
+					success: function (data) {
+						console.log(data);
+						swal({
+                                text: "数据标准修改成功，正在返回上一页...",
+                                icon: "success",
+								buttons: false,
+								timer: 1000
+                            }).then(function(){
+								window.location.replace('../../datastandard/show');
+							});
+					},
+					error: function (e) {
+						swal({
+							title: "发生错误",
+							text: e,
+							icon: "error",
+						})
+					}
+				})
+            }
+        });
+	</script>
+
+</body>
+
+</html>

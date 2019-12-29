@@ -1,0 +1,308 @@
+{% include "data/template-ui.html" %}
+<style>
+    table {
+        border-collapse: collapse;
+        width: 100%;
+    }
+    thead th {
+        border-bottom: 2px solid #dee2e6;
+    }
+    tbody tr td {
+        padding: 7px;
+        vertical-align: top;
+        border-top: 1px solid #dee2e6;
+    }
+    .excel-btn {
+        position: absolute;
+        right: 60%;
+        top: 85%;
+        background-color: #fff;
+        border-radius: 50%;
+        white-space: nowrap;
+        height: 56px;
+        width: 56px;
+        text-decoration: none;
+        box-shadow: 0 3px 5px -1px rgba(0, 0, 0, .2), 0 6px 10px 0 rgba(0, 0, 0, .14), 0 1px 18px 0 rgba(0, 0, 0, .12);
+        border-radius: 50%;
+        font-weight: 500;
+        letter-spacing: .0892857143em;
+    }
+
+    .excel-tips {
+        position: absolute;
+        display: none;
+        background: rgba(97, 97, 97, .9);
+        color: #fff;
+        border-radius: 4px;
+        font-size: 14px;
+        line-height: 22px;
+        padding: 5px 8px;
+        text-transform: none;
+        width: auto;
+        pointer-events: none;
+    }
+
+    .excel-icon {
+        border-radius: 50%;
+        height: 56px;
+        width: 56px;
+    }
+
+    .excel-btn:hover .excel-tips {
+        display: inline-block;
+        top: 25%;
+        left: 120%;
+        animation: fade-in;/*动画名称*/  
+        animation-duration: 0.3s;/*动画持续时间*/  
+        -webkit-animation:fade-in 0.3s;/*针对webkit内核*/
+    }
+
+    @keyframes fade-in {  
+        0% {opacity: 0;}/*初始状态 透明度为0*/  
+        50% {opacity: 0.5;}/*过渡状态 透明度为0*/  
+        100% {opacity: 1;}/*结束状态 透明度为1*/  
+    }  
+    @-webkit-keyframes fade-in {/*针对webkit内核*/  
+        0% {opacity: 0;}  
+        50% {opacity: 0.5;}  
+        100% {opacity: 1;}  
+    }  
+</style>
+
+<!-- 正文主体 -->
+<div class="page-wrapper">
+    <!-- 标题 -->
+    <div class="row page-titles">
+        <div class="col-md-4 align-self-center">
+            <h3 class="text-primary">风险集市数据质量仪表盘</h3>
+        </div>
+
+        <div class="col-md-5 align-self-center">
+            <div class="btn-group">
+                <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown"
+                    style="background-color:#007bff;">
+                    当前显示季度:{{ quarter }} <span class="caret"></span></button>
+                <ul class="dropdown-menu" role="menu">
+                    {% for quarter_list in db_quarter_list %}
+                    <li><a href="?name={{ company }}&quarter={{ quarter_list }}">{{ quarter_list }}</a></li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+
+        <div class="col-md-3 align-self-center">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="../../data/index">主页</a></li>
+                <li class="breadcrumb-item active">仪表盘</li>
+            </ol>
+        </div>
+    </div>
+
+    <!-- Begin 正文-->
+    <div class="container-fluid">
+        <div class="alert alert-secondary alert-dismissible fade show" style="margin-top:10px;margin-bottom:-7px;">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <strong>注：</strong> 本季度的检核逻辑主要针对数据的规范性，尚未检核数据的准确性
+        </div>
+        
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="card" id="chart1" style="width:100%;height:500px;"></div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-4">
+                <div class="card">
+                        <h4 class="card-title">问题数据统计（风险集市相关）</h4>
+                        <table id="chart1_table"></table>
+                </div>
+            </div>
+
+            <div class="col-lg-8">
+                    <div class="card">
+                        <h4 class="card-title">源系统改造情况（风险集市相关）</h4>
+                        <table id="demand_table"></table>
+                    </div>
+                </div>
+        </div>
+
+        <!-- 各公司风险指标图 -->
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="card" style="position:relative;">
+                    <img src="../../static/resource/{{ company_zh }}公司风险指标.png" style="object-fit:contain;width:100%;height:43vw;">
+                    <a href="../../api/files/download?filename={{ company_zh }}公司风险指标.xlsx" class="excel-btn">
+                        <i><img src="../../static/img/excel-icon.jpg" class="excel-icon" /></i>
+                        <div class="excel-tips">
+                            <span>下载详细定义</span>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- End 正文 -->
+</div>
+
+<!-- footer -->
+<footer class="navbar-fixed-bottom" style="line-height: 10px;font-size:13px;">
+    <div class="footer">
+            © 2019 Hyhyhyhyhyhyh
+    </div>
+</footer>
+</div>
+
+{% load staticfiles %}
+<!-- Jquery -->
+<script src="{% static 'js/lib/jquery/jquery.min.js' %}"></script>
+<!-- Bootstrap tether Core JavaScript -->
+<script src="{% static 'js/lib/bootstrap/js/popper.min.js' %}"></script>
+<script src="{% static 'js/lib/bootstrap/js/bootstrap.min.js' %}"></script>
+<!-- slimscrollbar scrollbar JavaScript -->
+<script src="{% static 'js/jquery.slimscroll.js' %}"></script>
+<!--Menu sidebar -->
+<script src="{% static 'js/sidebarmenu.js' %}"></script>
+<!--stickey kit -->
+<script src="{% static 'js/lib/sticky-kit-master/dist/sticky-kit.min.js' %}"></script>
+<script src="{% static 'js/custom.min.js' %}"></script>
+
+<script type="text/javascript">
+    var myChart1 = echarts.init(document.getElementById('chart1'));
+    
+    $('.chart').resize(function(){
+        myChart1.resize();
+    });
+    
+    var option = {
+        title : {
+            text: '问题数据项统计',
+            subtext: "{{ quarter }}"+'风险集市相关',
+            x:'center'
+        },
+        dataset: {
+            source: []
+        },
+        tooltip : {
+            trigger: 'axis',
+            formatter: ('{c}'.split(","))[1]
+        },
+        grid: {
+            containLabel: true,
+            //width: 500,
+        },
+        xAxis: {
+            name: '问题数据总量',
+        },
+        yAxis: {
+            name: '问题数据项',
+            type: 'category',
+        },
+        visualMap: {
+            orient: 'horizontal',
+            left: 'center',
+            min: 10,
+            max: 100,
+            text: ['高占比', '低占比'],
+            // Map the score column to color
+            dimension: 0,
+            inRange: {
+                color: ['#D7DA8B', '#E15457']
+            }
+        },
+        series: [
+            {
+                type: 'bar',
+                encode: {
+                    x: '问题数据总量',
+                    y: '问题数据项'
+                }
+            }
+        ]
+    };    
+    
+    myChart1.setOption(option);
+    myChart1.showLoading();
+
+    // 请求接口数据-填充[问题数据统计]
+    $.ajax({
+        type : "get",
+        async : true,
+        url : "../../api/dashboard/subcompany_problem_count",
+        data: {
+            company: "{{ company }}",
+            quarter: "{{ quarter }}"
+        },
+        dataType : "json",
+        success : function(result) {
+            if (result) {                           //请求成功时执行该函数内容，result即为服务器返回的json对象
+                myChart1.hideLoading();              //隐藏加载动画
+                myChart1.setOption({                 //加载数据图表
+                //渲染echarts
+                    dataset: {
+                        source: result
+                    }
+                });
+
+                //渲染table
+                var html = "<thead><th>问题数据项</th><th>问题数据总量</th><th>问题占比</th></thead><tbody>";
+                for(var i=1;i<result.length;i++){
+                    html += "<tr>";
+                    html += "<td>" + result[i][2] + "</td>";
+                    html += "<td>" + result[i][1] + "</td>";
+                    html += "<td>" + result[i][0] + "%</td>";
+                    html += "</tr>";
+                }
+                html += "</tbody>";
+                document.getElementById("chart1_table").innerHTML = html;
+            }
+        },
+        error : function(errorMsg) {
+            console.log(errorMsg);
+        }
+    })
+
+
+    // 请求接口数据-填充[源系统改造需求情况]
+    $.ajax({
+        type : "get",
+        async : true,           //异步请求（同步请求将会锁住浏览器，用户其他操作必须等待请求完成才可以执行）
+        url : "../../static/resource/demand.json",
+        data: {},
+        dataType : "json",        //返回数据形式为json
+        success : function(result) {
+            if (result) {
+                //渲染table
+                var html = "<thead><th>#</th><th>源系统数据项</th><th>改造需求</th><th>需求提出时间</th>";
+                for(var i=5;i<result[0].length;i++){
+                    html += "<th>";
+                    html += result[0][i].substr(0,6) + "进度";
+                    html += "</th>"
+                }
+                html += "</thead><tbody>";
+
+                for(var i=1;i<result.length;i++){
+                    html += "<tr>";
+                    if (result[i][1] != '{{ company_zh }}'){
+                       continue;
+                    }
+                    for(var t=0;t<result[i].length;t++){
+                        if(t==1){
+                           continue; 
+                        }
+                        html += "<td>" + result[i][t] + "</td>";
+                    }
+                    html += "</tr>";
+                }
+                html += "</tbody>";
+                document.getElementById("demand_table").innerHTML = html;
+            }
+        },
+        error : function(errorMsg) {
+            console.log(errorMsg);
+        }
+    })
+</script>
+</body>
+
+</html>

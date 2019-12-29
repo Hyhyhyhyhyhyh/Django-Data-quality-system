@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+{% load staticfiles %}
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,Chrome=1" />
+    <!-- Tell the browser to be responsive to screen width -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>数据质量检核平台</title>
+
+    <link rel="icon" type="image/png" sizes="16x16" href="{% static 'img/favicon.ico' %}" />
+    <!-- Bootstraore CSS -->
+    <link rel="stylesheet" href="{% static 'css/lib/bootstrap/bootstrap.min.css' %}" />
+    <!-- Custom CSS-->
+    <link rel="stylesheet" href="{% static 'css/helper.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/style.css' %}" />
+
+    <!-- Echarts js如果放在二级模板延迟加载,会出现始化空白 -->
+    <script src="{% static 'js/Echarts/echarts.js' %}"></script>
+    <script>
+        function setAvatar(name) {
+            let bgColor = [ //from  https://www.google.com/design/spec/style/color.html
+                '#F44336', // red 500
+                '#E91E63', // pink 500
+                '#9C27B0', // purple 500,
+                '#673AB7', // deep purple 500
+                '#3F51B5', // indigo 500
+                '#2196F3', // blue 500
+                '#03A9F4', // light blue 500
+                '#00BCD4', // cyan 500
+                '#009688', // teal 500
+                '#4CAF50', // green 500
+                '#8BC34A', // light green 500
+                '#CDDC39', // lime 500
+                '#FFEB3B', // yellow 500
+                '#FFC107', // amber 500
+                '#FF9800', // orange 500
+                '#FF5722', // deep orange 500
+                '#795548', // brown 500
+                '#9E9E9E', // grey 500
+                '#607D8B', // blue grey 500
+            ];
+            let myAvatar = document.getElementById('avatar');
+            let index = Math.floor(Math.random() * bgColor.length);
+            myAvatar.style.backgroundColor = bgColor[index];
+            myAvatar.innerHTML = name.substr(0,1).toLocaleUpperCase();
+        }
+    </script>
+</head>
+
+<style>
+    .nav-label {
+        clear: both;
+        display: block;
+        font-family: open sans;
+        font-size: 14px;
+        font-weight: 600;
+        line-height: 20px;
+        width: 100%;
+        padding-left: 15px;
+        color: #fff;
+    }
+    .nav-label-home {
+        color: #fff;
+        clear: both;
+        display: block;
+        font-family: open sans;
+        font-size: 14px;
+        font-weight: 600;
+        line-height: 20px;
+        width: 100%;
+        padding-left: 15px;
+        padding-top: 10px;
+    }
+    hr {
+        border-color: hsla(0,0%,100%,.12);
+    }
+    .message-center {
+        height: auto !important;
+    }
+    .btn-circle {
+        padding: unset;
+        padding-top: 7px;
+    }
+    #avatar {
+        width: 40px;
+        color: #fff;
+        border-radius: 50%;
+        text-align: center;
+        font-size: 16px;
+    }
+</style>
+
+<body class="fix-header fix-sidebar" onload="setAvatar('{{ username }}');">
+    <!-- 加载图 spinners.css -->
+    <div class="preloader">
+        <svg class="circular" viewBox="25 25 50 50">
+            <circle class="path" cx="50" cy="50" r="20" fill="none" stroke-width="2" stroke-miterlimit="10" /> </svg>
+    </div>
+
+    <div id="main-wrapper">
+        <div class="header">
+            <nav class="navbar top-navbar navbar-expand-md navbar-light">
+                <!-- 左上角Logo -->
+                <div class="navbar-header">
+                    <a class="navbar-brand" href="../../data/index">
+                        <span style="margin-left:-30px;color:#fff;">数据质量检核平台</span>
+                    </a>
+                </div>
+
+                <!-- 顶栏 -->
+                <div class="navbar-collapse" style="height:60px;">
+                    <ul class="navbar-nav mr-auto mt-md-0">
+                        <!-- 点击展开/隐藏侧边栏  -->
+                        <li class="nav-item"> <a class="nav-link nav-toggler hidden-md-up text-muted  "
+                                href="javascript:void(0)"><i class="mdi mdi-menu"></i></a> </li>
+                        <li class="nav-item m-l-10"> <a class="nav-link sidebartoggler hidden-sm-down text-muted  "
+                                href="javascript:void(0)"><i class="ti-menu"></i></a> </li>
+                    </ul>
+
+                    <ul class="navbar-nav my-lg-0">
+                        <!-- Begin 提示 -->
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle text-muted text-muted" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="fa fa-bell"></i>
+								<div class="notify"> <span class="heartbit"></span> <span class="point"></span> </div>
+							</a>
+                            <div class="dropdown-menu dropdown-menu-right mailbox animated zoomIn">
+                                <ul>
+                                    <li>
+                                        <div class="drop-title">系统通知</div>
+                                    </li>
+                                    <li>
+                                        <div class="message-center">
+                                            <!-- Message -->
+                                            <a href="#">
+                                                <div class="btn btn-danger btn-circle m-r-10"><i class="fa fa-commenting"></i></div>
+                                                <div class="mail-contnet">
+                                                    <span class="mail-desc">截止至2019Q4，检核内容主要针对数据的规范性，尚不对数据准确性进行检核</span> <span class="time">2019Q4</span>
+                                                </div>
+                                            </a>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </li>
+                        <!-- End 提示 -->
+
+                        <!-- Begin 用户 -->
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle text-muted  " href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <div id="avatar"></div>
+                            <div id="avatar"></div></a>
+                            <div class="dropdown-menu dropdown-menu-right animated zoomIn">
+                                <ul class="dropdown-user">
+                                    <li><a href="../../authorize/logout"><i class="fa fa-power-off"></i> 退出登录</a></li>
+                                </ul>
+                            </div>
+                        </li>
+                        <!-- End 用户 -->
+                    </ul>
+                </div>
+            </nav>
+        </div>
+
+        <!-- 侧边栏 -->
+        <div class="left-sidebar">
+            <div class="scroll-sidebar">
+                <nav class="sidebar-nav">
+                    <ul id="sidebarnav">
+                        <li class="nav-devider"></li>
+                        <li> <a class="has-arrow" href="../../data/index" aria-expanded="false"><i class="fa fa-home"></i>
+                            <span class="hide-menu">主页</span></a>
+                        </li>
+                        <hr></hr>
+
+                        <li class="nav-label">风险集市数据质量仪表盘</li>
+                        <!-- <li class="active"> -->
+                        <li>
+                            <a class="has-arrow" href="#" aria-expanded="false">
+                                <i class="fa fa-bar-chart-o"></i>
+                                <span class="hide-menu">仪表盘<span class="label label-rouded label-info pull-right">9</span>
+                            </a>
+                            <ul aria-expanded="false" class="collapse">
+                                <li><a href="../../data/dashboard">集团 </a></li>
+                                <li><a href="../../data/dashboard/subcompany?name=xt&company_zh=信托">信托 </a></li>
+                                <li><a href="../../data/dashboard/subcompany?name=zc&company_zh=资产">资产 </a></li>
+                                <li><a href="../../data/dashboard/subcompany?name=db&company_zh=担保">担保 </a></li>
+                                <li><a href="../../data/dashboard/subcompany?name=jk&company_zh=金科">金科 </a></li>
+                                <li><a href="../../data/dashboard/subcompany?name=jj1&company_zh=基金1">基金1 </a></li>
+                                <li><a href="../../data/dashboard/subcompany?name=jj2&company_zh=基金2">基金2 </a></li>
+                                <li><a href="../../data/dashboard/subcompany?name=jz&company_zh=金租">金租 </a></li>
+                            </ul>
+                        </li>
+                        <hr></hr>
+                        
+                        <li class="nav-label">数据质量检核报告</li>
+                        <li> <a class="has-arrow" href="#" aria-expanded="false">
+                            <i class="fa fa-table"></i>
+                            <span class="hide-menu">风险集市相关-Excel<span class="label label-rouded label-danger pull-right">7</span>
+                            </a>
+                            <ul aria-expanded="false" class="collapse">
+                                <li><a href="../../data/result_detail?name=xt">信托 </a></li>
+                                <li><a href="../../data/result_detail?name=zc">资产 </a></li>
+                                <li><a href="../../data/result_detail?name=db">担保 </a></li>
+                                <li><a href="../../data/result_detail?name=jk">金科 </a></li>
+                                <li><a href="../../data/result_detail?name=jj1">基金2 </a></li>
+                                <li><a href="../../data/result_detail?name=jj2">基金1 </a></li>
+                                <li><a href="../../data/result_detail?name=jz">金租 </a></li>
+                            </ul>
+                        </li>
+                        <hr></hr>
+
+                        <li class="nav-label">数据质量检核标准</li>
+                        <li> <a class="has-arrow" href="../../datastandard/show" aria-expanded="false"><i class="fa fa-flag-o"></i>
+                            <span class="hide-menu">风险集市数据标准</span>
+                            </a>
+                        </li>
+
+                        <li> <a class="has-arrow" href="#" aria-expanded="false"><i class="fa fa-check-square-o"></i>
+                            <span class="hide-menu">检核规则库<span class="label label-rouded label-warning pull-right">7</span>
+                            </a>
+                            <ul aria-expanded="false" class="collapse">
+                                <li><a href="../../check/rule_list?name=信托&risk_market="> 信托 </a></li>
+                                <li><a href="../../check/rule_list?name=资产&risk_market="> 资产 </a></li>
+                                <li><a href="../../check/rule_list?name=担保&risk_market=">担保 </a></li>
+                                <li><a href="../../check/rule_list?name=金科&risk_market="> 金科 </a></li>
+                                <li><a href="../../check/rule_list?name=基金2&risk_market="> 基金2 </a></li>
+                                <li><a href="../../check/rule_list?name=基金1&risk_market="> 基金1 </a></li>
+                                <li><a href="../../check/rule_list?name=金租&risk_market="> 金租 </a></li>
+                            </ul>
+                        </li>
+                        <hr></hr>
+                        
+                        {% if username != 'OASSO' %}
+                        <li class="nav-label">自动生成Word报告</li>
+                        <li> <a class="has-arrow" href="../../data/report" aria-expanded="false"><i class="fa fa-file-text"></i>
+                            <span class="hide-menu">风险集市相关</span></a>
+                        </li>
+                        <hr></hr>
+
+                        <li class="nav-label">后台管理</li>
+                        <li> <a class="has-arrow" href="../../check/show_crontab" aria-expanded="false"><i class="fa fa-terminal"></i>
+                            <span class="hide-menu">自动检核（定时任务）</span>
+                            </a>
+                        </li>
+                        <li> <a class="has-arrow" href="../../check/rule_exec" aria-expanded="false"><i class="fa fa-male"></i>
+                            <span class="hide-menu">手工检核</span>
+                            </a>
+                        </li>
+                        <li> <a class="has-arrow" href="../../demand/import_sheet" target="_blank" aria-expanded="false"><i class="fa fa-tags"></i>
+                            <span class="hide-menu">更新源系统改造需求进度表</span>
+                            </a>
+                        </li>
+                        <hr></hr>
+                        {% endif %}
+
+                        <li class="nav-label">知识管理</li>
+                        <li> <a class="has-arrow" href="../../files/list" aria-expanded="false"><i class="fa fa-database"></i>
+                            <span class="hide-menu">数据治理知识库</span>
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+        </div>

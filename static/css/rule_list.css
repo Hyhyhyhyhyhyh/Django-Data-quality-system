@@ -1,0 +1,98 @@
+table {
+    font-size: 13px;
+}
+
+/* 表格紧凑 */
+.table > tbody > tr > td, .table > tbody > tr > th, .table > tfoot > tr > td, .table > tfoot > tr > th, .table > thead > tr > td, .table > thead > tr > th{
+    line-height: unset;
+}
+
+/* datatables 搜索框 */
+.dataTables_filter{
+    margin-top:-45px;
+}
+.dataTables_wrapper .dataTables_filter input{
+    width: 300px;
+}
+
+/* datatables 显示 _MENU_ 项结果 */
+.dataTables_length {
+    padding-top: unset;
+    margin-top:  unset;
+}
+.dataTables_wrapper .dataTables_length {
+    margin-left: unset;
+    margin-top : -7;
+}
+.dataTables_length select {
+    padding-bottom: unset;
+}
+
+.container-fluid {
+    padding: 0 0 0;
+}
+
+.pagination {
+    display: inline-block;
+    padding-left: 0;
+    margin: 20px 0;
+    border-radius: 4px;
+    font-size:13px;
+}
+.pagination>li:first-child>a, .pagination>li:first-child>span {
+    margin-left: 0;
+    border-top-left-radius: 4px;
+    border-bottom-left-radius: 4px;
+}
+.pagination>.disabled>a, .pagination>.disabled>a:focus, .pagination>.disabled>a:hover, .pagination>.disabled>span, .pagination>.disabled>span:focus, .pagination>.disabled>span:hover {
+    outline: none;
+    color: #777;
+    cursor: not-allowed;
+    background-color: #fff;
+    border-color: #ddd;
+}
+.pagination > li > a, .pagination > li > span {
+    background-color: #FFFFFF;
+    color: inherit;
+    float: left;
+    line-height: 1.42857;
+    margin-left: -1px;
+    padding: 4px 10px;
+    position: relative;
+    text-decoration: none;
+}
+.pagination>li>a, .pagination>li>span {
+    position: relative;
+    float: left;
+    padding: 6px 12px;
+    margin-left: -1px;
+    line-height: 1.42857143;
+    color: #337ab7;
+    text-decoration: none;
+    background-color: #fff;
+}
+.pagination > li > a, .pagination > li > span {
+    background-color: #FFFFFF;
+    color: inherit;
+    float: left;
+    line-height: 1.42857;
+    margin-left: -1px;
+    padding: 4px 10px;
+    position: relative;
+    text-decoration: none;
+}
+.pagination>li>a:focus, .pagination>li>a:hover, .pagination>li>span:focus, .pagination>li>span:hover {
+    color: #23527c;
+    background-color: #eee;
+    border-color: #ddd;
+}
+
+div.dataTables_wrapper div.dataTables_info {
+    padding-top: 0.75em;
+    white-space: nowrap;
+    font-size: 13px;
+}
+
+label{
+    font-size: 13px;
+}

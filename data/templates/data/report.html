@@ -1,0 +1,440 @@
+{% include "data/template-ui.html" %}
+<!-- 设置word文档格式 -->
+<style type="text/css">
+    tbody tr td {
+        font-family: "SimSun", sans-serif;
+        font-size: 21.3px;
+        color: #000;
+        text-align: center;
+    }
+
+    .table>thead>tr>th {
+        line-height: 25px;
+        vertical-align: top;
+    }
+
+    .table>thead>tr>th {
+        font-weight: 100;
+    }
+
+    thead tr th {
+        color: #000;
+        text-align: center;
+    }
+
+    thead tr th:last-child {
+        text-align: center;
+    }
+
+    tbody tr td:last-child {
+        text-align: center;
+    }
+
+    h3 {
+        size: 21.3px;
+        font-family: "SimSun", sans-serif;
+        color: #000;
+    }
+</style>
+<!-- 设置word文档格式 END -->
+
+<div class="page-wrapper">
+    <!-- 标题 -->
+    <div class="row page-titles">
+        <div class="col-md-4 align-self-center">
+            <h3 class="text-primary" style="font-family: 'Open Sans', sans-serif;">数据质量报告</h3>
+        </div>
+
+        <div class="col-md-5 align-self-center">
+            <div class="btn-group">
+                <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown"
+                    style="background-color:#007bff;">
+                    当前显示季度:{{ quarter }} <span class="caret"></span></button>
+                <ul class="dropdown-menu" role="menu">
+                    {% for quarter_list in db_quarter_list %}
+                    <li><a href="?quarter={{ quarter_list }}">{{ quarter_list }}</a></li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+
+        <div class="col-md-3 align-self-center">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="../../data/index">主页</a></li>
+                <li class="breadcrumb-item active">数据质量检核报告-WORD</li>
+            </ol>
+        </div>
+    </div>
+
+    <div class="container-fluid animated fadeInUp">
+        <div class="row">
+            <div class="col-md-10">
+                <div class="card" id="page-content">
+                    <h2 style="size:29.3px;text-align:center;font-family:SimSun;font-weight:bold;color:#000;" />
+                    集团{{ quarter }}数据质量报告
+                    <h3 style="font-weight:bold;" />1 总结
+                    <h3>&nbsp;&nbsp;本季度对对信托、资产、担保、金科、基金1、基金2、金租七个公司风险集市相关共{{ sum_item_cnt }}条数据进行检查，合计问题数{{ sum_problem_cnt }}，问题占比{{ total_problem_per }}。
+                        <font
+                            style="font-style:italic;size:21.3px;font-family:SimSun;color:rgb(91, 155, 213);text-decoration:underline;">
+                            补充环比统计和需求完成情况统计</font>
+                    </h3>
+                    <h3 style="font-style:italic;color:rgb(91, 155, 213);" />
+                    &nbsp;&nbsp;注：每个基础数据项为一条数据。例如一个项目的项目名称、项目类别、项目资金用途将会统计为3条数据。问题数据量、系统改造需求数量均按此粒度统计。
+                    </br>
+
+                    <h3 />风险集市相关数据质量概况如下（详见附件一）：
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th />季度
+                                <th />公司
+                                <th />监测数据量
+                                <th />问题数据量
+                                <th />问题数据占比
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for i in overview_result_1 %}
+                            <tr>
+                                <td>{{ i.0 }}</td>
+                                <td>{{ i.1 }}</td>
+                                <td>{{ i.2 }}</td>
+                                <td>{{ i.3 }}</td>
+                                <td>{{ i.4 }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                    <h3 style="font-style:italic;color:rgb(91, 155, 213);text-decoration:underline;" />注：填写备注
+                    <h3 />&nbsp;&nbsp;源系统改造需求完成情况如下（详见附件一的“系统改造需求”标签页）：
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th />序号
+                                <th />公司
+                                <th />已完成需求数
+                                <th />待完成需求数
+                                <th />完成率
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td />1
+                                <td />信托
+                                <td />
+                                <td />
+                                <td />
+                            </tr>
+                            <tr>
+                                <td />2
+                                <td />资产
+                                <td />
+                                <td />
+                                <td />
+                            </tr>
+                            <tr>
+                                <td />3
+                                <td />担保
+                                <td />
+                                <td />
+                                <td />
+                            </tr>
+                            <tr>
+                                <td />4
+                                <td />金科
+                                <td />
+                                <td />
+                                <td />
+                            </tr>
+                            <tr>
+                                <td />5
+                                <td />基金1
+                                <td />
+                                <td />
+                                <td />
+                            </tr>
+                            <tr>
+                                <td />6
+                                <td />基金2
+                                <td />
+                                <td />
+                                <td />
+                            </tr>
+                            <tr>
+                                <td />7
+                                <td />金租
+                                <td />
+                                <td />
+                                <td />
+                            </tr>
+                            <tr>
+                                <td />
+                                <td />合计
+                                <td />
+                                <td />
+                                <td />
+                            </tr>
+                        </tbody>
+                    </table>
+                    </br>
+
+                    <h3 style="font-weight:bold;" />2 检查方案
+                    <h3 />依据标准：《集团数据质量标准V1.0》。
+                    <h3 />检查数据范围：
+                    <h3 style="color:#FF0000;" />风险集市需要且截止2018年1月1日未结项的数据。
+                    <h3 />检查方法：具体参考附件一，主要对数据项进行空值检核、值域检核、类型检核、未创建项检核、合法性检核等。检核规则会逐步完善。
+                    </br>
+
+                    <h3 style="font-weight:bold;" />3 数据质量检查结果
+                    <h3 />3.1 信托公司
+                    <h3 style="font-style:italic;color:rgb(91, 155, 213);text-decoration:underline;">问题分析</h3>
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th style="background-color:rgb(221,235,247);font-weight:bold;" />数据项
+                                <th style="background-color:rgb(221,235,247);font-weight:bold;" />检核规则
+                                <th style="background-color:rgb(221,235,247);font-weight:bold;color:#FF0000;" />问题数据量
+                                <th style="background-color:rgb(221,235,247);font-weight:bold;" />检核数据量
+                                <th style="background-color:rgb(221,235,247);font-weight:bold;" />占比
+                                <th style="background-color:rgb(221,235,247);font-weight:bold;" />建议改进方案
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for i in ycxt_detail %}
+                            <tr>
+                                <td>{{ i.0|default_if_none:"" }}</td>
+                                <td>{{ i.1|default_if_none:"" }}</td>
+                                <td>{{ i.2|default_if_none:"" }}</td>
+                                <td>{{ i.3|default_if_none:"" }}</td>
+                                <td>{{ i.4|default_if_none:"" }}</td>
+                                <td>{{ i.5|default_if_none:"" }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                    </br>
+
+                    <h3 />3.2 资产公司
+                    <h3 style="font-style:italic;color:rgb(91, 155, 213);text-decoration:underline;">问题分析</h3>
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th style="background-color:rgb(221,235,247);font-weight:bold;" />数据项
+                                <th style="background-color:rgb(221,235,247);font-weight:bold;" />检核规则
+                                <th style="background-color:rgb(221,235,247);font-weight:bold;color:#FF0000;" />问题数据量
+                                <th style="background-color:rgb(221,235,247);font-weight:bold;" />检核数据量
+                                <th style="background-color:rgb(221,235,247);font-weight:bold;" />占比
+                                <th style="background-color:rgb(221,235,247);font-weight:bold;" />建议改进方案
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for i in yczc_detail %}
+                            <tr>
+                                <td>{{ i.0|default_if_none:"" }}</td>
+                                <td>{{ i.1|default_if_none:"" }}</td>
+                                <td>{{ i.2|default_if_none:"" }}</td>
+                                <td>{{ i.3|default_if_none:"" }}</td>
+                                <td>{{ i.4|default_if_none:"" }}</td>
+                                <td>{{ i.5|default_if_none:"" }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                    </br>
+
+                    <h3 />3.3 担保公司
+                    <h3 style="font-style:italic;color:rgb(91, 155, 213);text-decoration:underline;">问题分析</h3>
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th style="background-color:rgb(221,235,247);font-weight:bold;" />数据项
+                                <th style="background-color:rgb(221,235,247);font-weight:bold;" />检核规则
+                                <th style="background-color:rgb(221,235,247);font-weight:bold;color:#FF0000;" />问题数据量
+                                <th style="background-color:rgb(221,235,247);font-weight:bold;" />检核数据量
+                                <th style="background-color:rgb(221,235,247);font-weight:bold;" />占比
+                                <th style="background-color:rgb(221,235,247);font-weight:bold;" />建议改进方案
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for i in gdzdb_detail %}
+                            <tr>
+                                <td>{{ i.0|default_if_none:"" }}</td>
+                                <td>{{ i.1|default_if_none:"" }}</td>
+                                <td>{{ i.2|default_if_none:"" }}</td>
+                                <td>{{ i.3|default_if_none:"" }}</td>
+                                <td>{{ i.4|default_if_none:"" }}</td>
+                                <td>{{ i.5|default_if_none:"" }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                    </br>
+
+                    <h3 />3.4 金科公司
+                    <h3 style="font-style:italic;color:rgb(91, 155, 213);text-decoration:underline;">问题分析</h3>
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th style="background-color:rgb(221,235,247);font-weight:bold;" />数据项
+                                <th style="background-color:rgb(221,235,247);font-weight:bold;" />检核规则
+                                <th style="background-color:rgb(221,235,247);font-weight:bold;color:#FF0000;" />问题数据量
+                                <th style="background-color:rgb(221,235,247);font-weight:bold;" />检核数据量
+                                <th style="background-color:rgb(221,235,247);font-weight:bold;" />占比
+                                <th style="background-color:rgb(221,235,247);font-weight:bold;" />建议改进方案
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for i in ycjk_detail %}
+                            <tr>
+                                <td>{{ i.0|default_if_none:"" }}</td>
+                                <td>{{ i.1|default_if_none:"" }}</td>
+                                <td>{{ i.2|default_if_none:"" }}</td>
+                                <td>{{ i.3|default_if_none:"" }}</td>
+                                <td>{{ i.4|default_if_none:"" }}</td>
+                                <td>{{ i.5|default_if_none:"" }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                    </br>
+
+                    <h3 />3.5 基金1
+                    <h3 style="font-style:italic;color:rgb(91, 155, 213);text-decoration:underline;">问题分析</h3>
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th style="background-color:rgb(221,235,247);font-weight:bold;" />数据项
+                                <th style="background-color:rgb(221,235,247);font-weight:bold;" />检核规则
+                                <th style="background-color:rgb(221,235,247);font-weight:bold;color:#FF0000;" />问题数据量
+                                <th style="background-color:rgb(221,235,247);font-weight:bold;" />检核数据量
+                                <th style="background-color:rgb(221,235,247);font-weight:bold;" />占比
+                                <th style="background-color:rgb(221,235,247);font-weight:bold;" />建议改进方案
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for i in fdct_detail %}
+                            <tr>
+                                <td>{{ i.0|default_if_none:"" }}</td>
+                                <td>{{ i.1|default_if_none:"" }}</td>
+                                <td>{{ i.2|default_if_none:"" }}</td>
+                                <td>{{ i.3|default_if_none:"" }}</td>
+                                <td>{{ i.4|default_if_none:"" }}</td>
+                                <td>{{ i.5|default_if_none:"" }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                    </br>
+
+                    <h3 />3.6 基金2
+                    <h3 style="font-style:italic;color:rgb(91, 155, 213);text-decoration:underline;">问题分析</h3>
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th style="background-color:rgb(221,235,247);font-weight:bold;" />数据项
+                                <th style="background-color:rgb(221,235,247);font-weight:bold;" />检核规则
+                                <th style="background-color:rgb(221,235,247);font-weight:bold;color:#FF0000;" />问题数据量
+                                <th style="background-color:rgb(221,235,247);font-weight:bold;" />检核数据量
+                                <th style="background-color:rgb(221,235,247);font-weight:bold;" />占比
+                                <th style="background-color:rgb(221,235,247);font-weight:bold;" />建议改进方案
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for i in zyyc_detail %}
+                            <tr>
+                                <td>{{ i.0|default_if_none:"" }}</td>
+                                <td>{{ i.1|default_if_none:"" }}</td>
+                                <td>{{ i.2|default_if_none:"" }}</td>
+                                <td>{{ i.3|default_if_none:"" }}</td>
+                                <td>{{ i.4|default_if_none:"" }}</td>
+                                <td>{{ i.5|default_if_none:"" }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                    </br>
+
+                    <h3 />3.7 金租公司
+                    <h3 style="font-style:italic;color:rgb(91, 155, 213);text-decoration:underline;">问题分析</h3>
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th style="background-color:rgb(221,235,247);font-weight:bold;" />数据项
+                                <th style="background-color:rgb(221,235,247);font-weight:bold;" />检核规则
+                                <th style="background-color:rgb(221,235,247);font-weight:bold;color:#FF0000;" />问题数据量
+                                <th style="background-color:rgb(221,235,247);font-weight:bold;" />检核数据量
+                                <th style="background-color:rgb(221,235,247);font-weight:bold;" />占比
+                                <th style="background-color:rgb(221,235,247);font-weight:bold;" />建议改进方案
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for i in jz_detail %}
+                            <tr>
+                                <td>{{ i.0|default_if_none:"" }}</td>
+                                <td>{{ i.1|default_if_none:"" }}</td>
+                                <td>{{ i.2|default_if_none:"" }}</td>
+                                <td>{{ i.3|default_if_none:"" }}</td>
+                                <td>{{ i.4|default_if_none:"" }}</td>
+                                <td>{{ i.5|default_if_none:"" }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                    </br>
+
+                    <h3 style="font-weight:bold;font-family:SimSun;color:#000;">4 附件</h3>
+                    <h3 style="font-family:SimSun;color:#000;">附件一、数据质量检核结果明细</h3>
+                    <h3
+                        style="font-style:italic;size:21.3px;font-family:SimSun;color:rgb(91, 155, 213);text-decoration:underline;" />
+                    &nbsp;&nbsp;插入附件
+                    <h3 style="font-family:SimSun;color:#000;">附件二、集团风险数据集市数据标准</h3>
+                    <h3
+                        style="font-style:italic;size:21.3px;font-family:SimSun;color:rgb(91, 155, 213);text-decoration:underline;" />
+                    &nbsp;&nbsp;插入附件
+                </div>
+            </div>
+
+            <div class="col-md-2">
+                <div class="card">
+                    <a class="btn jquery-word-export" href="javascript:void(0)" style="color:#000;">
+                        <span class="word-icon" style="font-family:'Helvetica', sans-serif;
+                        font-size: 24px;
+                        font-weight: bold;
+                        background-color: #0054a6;
+                        color: white;
+                        padding: 2px 5px;
+                        vertical-align: middle;">W</span>
+                        导出为.doc
+                    </a>
+                </div>
+            </div>
+            <!-- /.blog-sidebar -->
+        </div>
+    </div>
+</div>
+
+<!-- footer -->
+<footer class="navbar-fixed-bottom" style="line-height: 10px;font-size:13px;">
+    <div class="footer">
+        © 2019 Hyhyhyhyhyhyh
+    </div>
+</footer>
+</div>
+
+
+{% load staticfiles %}
+<!-- Jquery -->
+<script src="{% static 'js/lib/jquery/jquery.min.js' %}"></script>
+<!-- Bootstrap tether Core JavaScript -->
+<script src="{% static 'js/lib/bootstrap/js/popper.min.js' %}"></script>
+<script src="{% static 'js/lib/bootstrap/js/bootstrap.min.js' %}"></script>
+<!-- slimscrollbar scrollbar JavaScript -->
+<script src="{% static 'js/jquery.slimscroll.js' %}"></script>
+<!--Menu sidebar -->
+<script src="{% static 'js/sidebarmenu.js' %}"></script>
+<!--stickey kit -->
+<script src="{% static 'js/lib/sticky-kit-master/dist/sticky-kit.min.js' %}"></script>
+<script src="{% static 'js/custom.min.js' %}"></script>
+</body>
+
+</html>

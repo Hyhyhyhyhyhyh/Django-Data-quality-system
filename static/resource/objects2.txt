@@ -1,0 +1,801 @@
+{"data": [{
+	"id": 1,
+	"check_item": "项目编号",
+	"target_table": "项目基本信息",
+	"risk_market_item": "是",
+	"problem_type": "空值检核",
+	"check_sql": "select count(distinct vc_stock_code),count(CASE WHEN vc_stock_code IS NULL or vc_stock_code='' THEN 1 END) from (select t.vc_stock_code,t.vc_contract_no,t.en_contract_balance,t.vc_invest_use,t.l_begin_date from hswinrun2.dbo.stockcodesex t\nwhere t.l_begin_date>=20180101\nunion all\nselect t.vc_stock_code,t.vc_contract_no,t.en_contract_balance,t.vc_invest_use,t.l_begin_date from hswinrun2_xedk.dbo.stockcodesex t\nwhere t.l_begin_date>=20180101) a",
+	"note": null
+}, {
+	"id": 2,
+	"check_item": "项目编号",
+	"target_table": "资金基本信息",
+	"risk_market_item": "是",
+	"problem_type": "空值检核",
+	"check_sql": "select count(distinct c_fundcode),count(CASE WHEN c_fundcode IS NULL or c_fundcode='' THEN 1 END) from (\n    select a.c_fundcode,a.c_fundname,a.c_projecttype,a.c_projectcode,b.c_projectsources,b.c_managetype,min(c.f_lastshares) as f_lastshares\n    from hsta.ttrustcontracts a ,tcmp.tproject_info b ,hsta.tsharecurrents c\n    where a.c_projectcode=b.c_projectcode and a.c_fundcode=c.c_fundcode\n    and a.d_inputdate >= date '2018-01-01' and c.d_cdate>= date '2018-01-01' \n    and c.d_sharevaliddate= date '2099-12-31' \n    group by a.c_fundcode,a.c_fundname,a.c_projecttype,a.c_projectcode,b.c_projectsources,b.c_managetype\n    )",
+	"note": null
+}, {
+	"id": 3,
+	"check_item": "项目名称",
+	"target_table": "项目基本信息",
+	"risk_market_item": "是",
+	"problem_type": "空值检核",
+	"check_sql": "select count(distinct vc_stock_code),count(distinct case when vc_contract_no is null or vc_contract_no ='' then vc_stock_code end) from (\n    select t.vc_stock_code,t.vc_contract_no,t.en_contract_balance,t.vc_invest_use,t.l_begin_date from hswinrun2.dbo.stockcodesex t\n    where t.l_begin_date>=20180101\n    union all\n    select t.vc_stock_code,t.vc_contract_no,t.en_contract_balance,t.vc_invest_use,t.l_begin_date from hswinrun2_xedk.dbo.stockcodesex t\n    where t.l_begin_date>=20180101) a",
+	"note": null
+}, {
+	"id": 4,
+	"check_item": "项目名称",
+	"target_table": "资金基本信息",
+	"risk_market_item": "是",
+	"problem_type": "空值检核",
+	"check_sql": "select count(distinct c_fundcode),count(distinct case when c_fundname is null or c_fundname='' then c_fundcode end) from (\n    select a.c_fundcode,a.c_fundname,a.c_projecttype,a.c_projectcode,b.c_projectsources,b.c_managetype,min(c.f_lastshares) as f_lastshares\n    from hsta.ttrustcontracts a ,tcmp.tproject_info b ,hsta.tsharecurrents c\n    where a.c_projectcode=b.c_projectcode and a.c_fundcode=c.c_fundcode\n    and a.d_inputdate >= date '2018-01-01' and c.d_cdate>= date '2018-01-01' \n    and c.d_sharevaliddate= date '2099-12-31' \n    group by a.c_fundcode,a.c_fundname,a.c_projecttype,a.c_projectcode,b.c_projectsources,b.c_managetype) t",
+	"note": null
+}, {
+	"id": 5,
+	"check_item": "项目类别",
+	"target_table": "项目基本信息",
+	"risk_market_item": "是",
+	"problem_type": "未创建项",
+	"check_sql": "select count(distinct vc_stock_code),0 as '信托业务' from (\n    select t.vc_stock_code,t.vc_contract_no,t.en_contract_balance,t.vc_invest_use,t.l_begin_date from hswinrun2.dbo.stockcodesex t\n    where t.l_begin_date>=20180101\n    union all\n    select t.vc_stock_code,t.vc_contract_no,t.en_contract_balance,t.vc_invest_use,t.l_begin_date from hswinrun2_xedk.dbo.stockcodesex t\n    where t.l_begin_date>=20180101) a",
+	"note": "全部都是信托业务，目前固有业务不走系统"
+}, {
+	"id": 6,
+	"check_item": "项目类别",
+	"target_table": "资金基本信息",
+	"risk_market_item": "是",
+	"problem_type": "空值检核",
+	"check_sql": "select count(distinct c_fundcode),count(distinct case when c_projecttype is null or c_projecttype='' then c_fundcode end) from (\n    select a.c_fundcode,a.c_fundname,a.c_projecttype,a.c_projectcode,b.c_projectsources,b.c_managetype,min(c.f_lastshares) as f_lastshares\n    from hsta.ttrustcontracts a ,tcmp.tproject_info b ,hsta.tsharecurrents c\n    where a.c_projectcode=b.c_projectcode and a.c_fundcode=c.c_fundcode\n    and a.d_inputdate >= date '2018-01-01' and c.d_cdate>= date '2018-01-01' \n    and c.d_sharevaliddate= date '2099-12-31' \n    group by a.c_fundcode,a.c_fundname,a.c_projecttype,a.c_projectcode,b.c_projectsources,b.c_managetype) t",
+	"note": null
+}, {
+	"id": 7,
+	"check_item": "项目投向行业",
+	"target_table": "项目其它信息",
+	"risk_market_item": "是",
+	"problem_type": "空值检核",
+	"check_sql": "select count(distinct vc_stock_code),count(distinct case when c_invest_industry is null or c_invest_industry='' then vc_stock_code end) from (\n    select t.vc_stock_code,t.vc_contract_no,t.en_contract_balance,t.c_invest_industry,t.l_begin_date from hswinrun2.dbo.stockcodesex t\n    where t.l_begin_date>=20180101\n    union all\n    select t.vc_stock_code,t.vc_contract_no,t.en_contract_balance,t.c_invest_industry,t.l_begin_date from hswinrun2_xedk.dbo.stockcodesex t\n    where t.l_begin_date>=20180101) a",
+	"note": null
+}, {
+	"id": 8,
+	"check_item": "项目投向（按功能）",
+	"target_table": "项目其它信息",
+	"risk_market_item": "是",
+	"problem_type": "空值检核",
+	"check_sql": "select count(distinct vc_stock_code),count(distinct case when c_invest_industry is null then vc_stock_code end) from (\n    select t.vc_stock_code,t.vc_contract_no,t.en_contract_balance,t.vc_invest_use,b.c_invest_industry,t.l_begin_date \n    from hswinrun2.dbo.stockcodesex t , hswinrun2.dbo.productsx b\n    WHERE t.vc_product_id=b.vc_product_id\n    and t.l_begin_date>=20180101 \n    union all\n    select t.vc_stock_code,t.vc_contract_no,t.en_contract_balance,t.vc_invest_use,b.c_invest_industry,t.l_begin_date \n    from hswinrun2_xedk.dbo.stockcodesex t , hswinrun2_xedk.dbo.vproductx b\n    WHERE t.vc_product_id=b.vc_product_id\n    and t.l_begin_date>=20180101 ) g",
+	"note": null
+}, {
+	"id": 9,
+	"check_item": "项目资金用途",
+	"target_table": "项目基本信息",
+	"risk_market_item": "是",
+	"problem_type": "空值检核",
+	"check_sql": "select count(distinct vc_stock_code),count(distinct case when c_invest_direction is null then vc_stock_code end) from (\n    select t.vc_stock_code,t.vc_contract_no,t.en_contract_balance,t.vc_invest_use,b.c_invest_direction,t.l_begin_date\n    from hswinrun2.dbo.stockcodesex t , hswinrun2.dbo.productsx b\n    WHERE t.vc_product_id=b.vc_product_id\n    and t.l_begin_date>=20180101 \n    union all\n    select t.vc_stock_code,t.vc_contract_no,t.en_contract_balance,t.vc_invest_use,b.c_invest_direction,t.l_begin_date\n    from hswinrun2_xedk.dbo.stockcodesex t , hswinrun2_xedk.dbo.vproductx b\n    WHERE t.vc_product_id=b.vc_product_id\n    and t.l_begin_date>=20180101) g",
+	"note": null
+}, {
+	"id": 10,
+	"check_item": "项目交易对手（投向）",
+	"target_table": "项目其它信息",
+	"risk_market_item": "是",
+	"problem_type": "空值检核",
+	"check_sql": "select count(distinct vc_stock_code),count(distinct case when c_industry_type is null then vc_stock_code end) from (\n    select t.vc_stock_code,t.vc_contract_no,t.en_contract_balance,t.vc_invest_use,t.l_begin_date,a.c_industry_type \n    from hswinrun2.dbo.stockcodesex t , hswinrun2.dbo.loanrival a\n    WHERE t.l_rival_id=a.l_rival_id\n    and t.l_begin_date>=20180101 \n    union all\n    select t.vc_stock_code,t.vc_contract_no,t.en_contract_balance,t.vc_invest_use,t.l_begin_date,a.c_industry_type \n    from hswinrun2_xedk.dbo.stockcodesex t , hswinrun2_xedk.dbo.loanrival a\n    WHERE t.l_rival_id=a.l_rival_id\n    and t.l_begin_date>=20180101) g",
+	"note": null
+}, {
+	"id": 11,
+	"check_item": "项目来源",
+	"target_table": "资金基本信息",
+	"risk_market_item": "是",
+	"problem_type": "空值检核",
+	"check_sql": "select count(distinct c_fundcode),count(distinct case when c_projectsources is null or c_projectsources='' then c_fundcode end) from (\n    select a.c_fundcode,a.c_fundname,a.c_projecttype,a.c_projectcode,b.c_projectsources,b.c_managetype,min(c.f_lastshares) as f_lastshares\n    from hsta.ttrustcontracts a ,tcmp.tproject_info b ,hsta.tsharecurrents c\n    where a.c_projectcode=b.c_projectcode and a.c_fundcode=c.c_fundcode\n    and a.d_inputdate >= date '2018-01-01' and c.d_cdate>= date '2018-01-01' \n    and c.d_sharevaliddate= date '2099-12-31' \n    group by a.c_fundcode,a.c_fundname,a.c_projecttype,a.c_projectcode,b.c_projectsources,b.c_managetype) t",
+	"note": null
+}, {
+	"id": 12,
+	"check_item": "项目所在省",
+	"target_table": null,
+	"risk_market_item": "是",
+	"problem_type": "未创建项",
+	"check_sql": "select count(distinct vc_stock_code),0 from (\n    select t.vc_stock_code,t.vc_contract_no,t.en_contract_balance,t.vc_invest_use,t.l_begin_date,a.c_industry_type \n    from hswinrun2.dbo.stockcodesex t , hswinrun2.dbo.loanrival a\n    WHERE t.l_rival_id=a.l_rival_id\n    and t.l_begin_date>=20180101 \n    union all\n    select t.vc_stock_code,t.vc_contract_no,t.en_contract_balance,t.vc_invest_use,t.l_begin_date,a.c_industry_type \n    from hswinrun2_xedk.dbo.stockcodesex t , hswinrun2_xedk.dbo.loanrival a\n    WHERE t.l_rival_id=a.l_rival_id\n    and t.l_begin_date>=20180101) g",
+	"note": "页面有但是底层数据库找不到字典，暂认为没问题"
+}, {
+	"id": 13,
+	"check_item": "项目所在市",
+	"target_table": null,
+	"risk_market_item": "是",
+	"problem_type": "未创建项",
+	"check_sql": "select count(distinct vc_stock_code),0 from (\n    select t.vc_stock_code,t.vc_contract_no,t.en_contract_balance,t.vc_invest_use,t.l_begin_date,a.c_industry_type \n    from hswinrun2.dbo.stockcodesex t , hswinrun2.dbo.loanrival a\n    WHERE t.l_rival_id=a.l_rival_id\n    and t.l_begin_date>=20180101 \n    union all\n    select t.vc_stock_code,t.vc_contract_no,t.en_contract_balance,t.vc_invest_use,t.l_begin_date,a.c_industry_type \n    from hswinrun2_xedk.dbo.stockcodesex t , hswinrun2_xedk.dbo.loanrival a\n    WHERE t.l_rival_id=a.l_rival_id\n    and t.l_begin_date>=20180101) g",
+	"note": "页面有但是底层数据库找不到字典，暂认为没问题"
+}, {
+	"id": 14,
+	"check_item": "项目管理方式",
+	"target_table": "项目其它信息",
+	"risk_market_item": "是",
+	"problem_type": "未创建项",
+	"check_sql": "select count(distinct vc_stock_code),count(distinct case when c_manage_type is null then vc_stock_code end) from (\n    select t.vc_stock_code,t.vc_contract_no,t.en_contract_balance,t.vc_invest_use,b.c_manage_type,t.l_begin_date\n    from hswinrun2.dbo.stockcodesex t , hswinrun2.dbo.productsx b\n    WHERE t.vc_product_id=b.vc_product_id\n    and t.l_begin_date>=20180101 \n    union all\n    select t.vc_stock_code,t.vc_contract_no,t.en_contract_balance,t.vc_invest_use,b.c_manage_type,t.l_begin_date\n    from hswinrun2_xedk.dbo.stockcodesex t , hswinrun2_xedk.dbo.vproductx b\n    WHERE t.vc_product_id=b.vc_product_id\n    and t.l_begin_date>=20180101) g",
+	"note": null
+}, {
+	"id": 15,
+	"check_item": "项目管理方式",
+	"target_table": "资金基本信息",
+	"risk_market_item": "是",
+	"problem_type": "空值检核",
+	"check_sql": "select count(distinct c_fundcode),count(distinct case when c_managetype is null or c_managetype='' then c_fundcode end) from (\n    select a.c_fundcode,a.c_fundname,a.c_projecttype,a.c_projectcode,b.c_projectsources,b.c_managetype,min(c.f_lastshares) as f_lastshares\n    from hsta.ttrustcontracts a ,tcmp.tproject_info b ,hsta.tsharecurrents c\n    where a.c_projectcode=b.c_projectcode and a.c_fundcode=c.c_fundcode\n    and a.d_inputdate >= date '2018-01-01' and c.d_cdate>= date '2018-01-01' \n    and c.d_sharevaliddate= date '2099-12-31' \n    group by a.c_fundcode,a.c_fundname,a.c_projecttype,a.c_projectcode,b.c_projectsources,b.c_managetype) t",
+	"note": null
+}, {
+	"id": 16,
+	"check_item": "项目管理方式（监管）",
+	"target_table": "项目其它信息",
+	"risk_market_item": "是",
+	"problem_type": "未创建项",
+	"check_sql": "select count(distinct vc_stock_code),count(distinct case when c_manage_type is null then vc_stock_code end) from (\n    select t.vc_stock_code,t.vc_contract_no,t.en_contract_balance,t.vc_invest_use,b.c_manage_type,t.l_begin_date\n    from hswinrun2.dbo.stockcodesex t , hswinrun2.dbo.productsx b\n    WHERE t.vc_product_id=b.vc_product_id\n    and t.l_begin_date>=20180101 \n    union all\n    select t.vc_stock_code,t.vc_contract_no,t.en_contract_balance,t.vc_invest_use,b.c_manage_type,t.l_begin_date\n    from hswinrun2_xedk.dbo.stockcodesex t , hswinrun2_xedk.dbo.vproductx b\n    WHERE t.vc_product_id=b.vc_product_id\n    and t.l_begin_date>=20180101) g",
+	"note": null
+}, {
+	"id": 17,
+	"check_item": "项目金额",
+	"target_table": "项目基本信息",
+	"risk_market_item": "是",
+	"problem_type": "空值检核",
+	"check_sql": "select count(distinct vc_stock_code),count(distinct case when en_contract_balance is null then vc_stock_code end) from (\n    select t.vc_stock_code,t.vc_contract_no,t.en_contract_balance,t.vc_invest_use,t.l_begin_date from hswinrun2.dbo.stockcodesex t\n    where t.l_begin_date>=20180101\n    union all\n    select t.vc_stock_code,t.vc_contract_no,t.en_contract_balance,t.vc_invest_use,t.l_begin_date from hswinrun2_xedk.dbo.stockcodesex t\n    where t.l_begin_date>=20180101) a",
+	"note": null
+}, {
+	"id": 18,
+	"check_item": "项目余额",
+	"target_table": "项目余额信息历史",
+	"risk_market_item": "是",
+	"problem_type": "空值检核",
+	"check_sql": "select count(distinct vc_stock_code),0 from (\n    select t.vc_stock_code,t.vc_contract_no,t.en_contract_balance,t.vc_invest_use,t.l_begin_date from hswinrun2.dbo.stockcodesex t\n    where t.l_begin_date>=20180101\n    union all\n    select t.vc_stock_code,t.vc_contract_no,t.en_contract_balance,t.vc_invest_use,t.l_begin_date from hswinrun2_xedk.dbo.stockcodesex t\n    where t.l_begin_date>=20180101) a",
+	"note": "能通过复杂的逻辑计算出该数据"
+}, {
+	"id": 19,
+	"check_item": "项目余额",
+	"target_table": "资金基本信息",
+	"risk_market_item": "是",
+	"problem_type": "空值检核",
+	"check_sql": "select count(distinct c_fundcode),count(distinct case when f_lastshares is null or f_lastshares='' then c_fundcode end) from (\n    select a.c_fundcode,a.c_fundname,a.c_projecttype,a.c_projectcode,b.c_projectsources,b.c_managetype,min(c.f_lastshares) as f_lastshares\n    from hsta.ttrustcontracts a ,tcmp.tproject_info b ,hsta.tsharecurrents c\n    where a.c_projectcode=b.c_projectcode and a.c_fundcode=c.c_fundcode\n    and a.d_inputdate >= date '2018-01-01' and c.d_cdate>= date '2018-01-01' \n    and c.d_sharevaliddate= date '2099-12-31' \n    group by a.c_fundcode,a.c_fundname,a.c_projecttype,a.c_projectcode,b.c_projectsources,b.c_managetype) t",
+	"note": null
+}, {
+	"id": 20,
+	"check_item": "收益率",
+	"target_table": "项目基本信息",
+	"risk_market_item": "是",
+	"problem_type": "空值检核",
+	"check_sql": "select count(distinct vc_stock_code),0 from (     select t.vc_stock_code,t.vc_contract_no,t.en_contract_balance,t.vc_invest_use,t.l_begin_date from hswinrun2.dbo.stockcodesex t     where t.l_begin_date>=20180101     union all     select t.vc_stock_code,t.vc_contract_no,t.en_contract_balance,t.vc_invest_use,t.l_begin_date from hswinrun2_xedk.dbo.stockcodesex t     where t.l_begin_date>=20180101) a",
+	"note": "标准里面需要固收项目的收益率，信托项目能通过复杂的逻辑计算出该数据（2019Q2反馈）"
+}, {
+	"id": 21,
+	"check_item": "风险等级",
+	"target_table": "项目风险记录历史",
+	"risk_market_item": "是",
+	"problem_type": "未创建项",
+	"check_sql": null,
+	"note": "系统改造"
+}, {
+	"id": 22,
+	"check_item": "风险项目简述",
+	"target_table": "项目风险记录历史",
+	"risk_market_item": "否",
+	"problem_type": "未创建项",
+	"check_sql": null,
+	"note": null
+}, {
+	"id": 23,
+	"check_item": "资金或资产来源",
+	"target_table": "资金基本信息",
+	"risk_market_item": "是",
+	"problem_type": "未创建项",
+	"check_sql": "select count(distinct c_fundcode),count(distinct case when c_Channelsource is null then c_fundcode end) from (\n    select a.c_fundcode,a.c_fundname,a.c_projecttype,a.c_projectcode,b.c_projectsources,b.c_managetype,min(c.f_lastshares) as f_lastshares,d.c_Channelsource\n    from hsta.ttrustcontracts a ,tcmp.tproject_info b ,hsta.tsharecurrents c,hsta.Ttrustcontractdetails d\n    where a.c_projectcode=b.c_projectcode and a.c_fundcode=c.c_fundcode and a.l_serialno=d.l_contractserialno\n    and a.d_inputdate >= date '2018-01-01' and c.d_cdate>= date '2018-01-01' \n    and c.d_sharevaliddate= date '2099-12-31' \n    group by a.c_fundcode,a.c_fundname,a.c_projecttype,a.c_projectcode,b.c_projectsources,b.c_managetype,d.c_Channelsource) g",
+	"note": null
+}, {
+	"id": 24,
+	"check_item": "净资本类别",
+	"target_table": "项目基本信息",
+	"risk_market_item": "是",
+	"problem_type": "未创建项",
+	"check_sql": null,
+	"note": "补录"
+}, {
+	"id": 25,
+	"check_item": "风险资本类别",
+	"target_table": "项目基本信息",
+	"risk_market_item": "是",
+	"problem_type": "未创建项",
+	"check_sql": null,
+	"note": "补录"
+}, {
+	"id": 26,
+	"check_item": "交易编号",
+	"target_table": "交易流水表",
+	"risk_market_item": "是",
+	"problem_type": "空值检核",
+	"check_sql": "select count(distinct l_serial_no),count(CASE WHEN l_serial_no IS NULL or l_serial_no='' THEN 1 END) from (\n    select b.l_date,b.l_serial_no,b.l_busin_flag,b.en_occur_balance from hswinrun2.dbo.vdictateinfoex b where b.l_date>=20180101\n    union all \n    select b.l_date,b.l_serial_no,b.l_busin_flag,b.en_occur_balance from hswinrun2_xedk.dbo.vdictateinfoex b where b.l_date>=20180101\n    ) a",
+	"note": null
+}, {
+	"id": 27,
+	"check_item": "交易类型",
+	"target_table": "交易流水表",
+	"risk_market_item": "是",
+	"problem_type": "空值检核",
+	"check_sql": "select count(distinct l_serial_no),count(distinct case when l_busin_flag is null or l_busin_flag='' then l_serial_no end) from (\n    select b.l_date,b.l_serial_no,b.l_busin_flag,b.en_occur_balance from hswinrun2.dbo.vdictateinfoex b where b.l_date>=20180101\n    union all \n    select b.l_date,b.l_serial_no,b.l_busin_flag,b.en_occur_balance from hswinrun2_xedk.dbo.vdictateinfoex b where b.l_date>=20180101) a",
+	"note": null
+}, {
+	"id": 28,
+	"check_item": "交易日期",
+	"target_table": "交易流水表",
+	"risk_market_item": "是",
+	"problem_type": "空值检核",
+	"check_sql": "select count(l_date),count(case when l_date is null or l_date='' then 1 end) from (\n\tselect b.l_date,b.l_serial_no,b.l_busin_flag,b.en_occur_balance from hswinrun2.dbo.vdictateinfoex b where b.l_date>=20180101\n\tunion all \n\tselect b.l_date,b.l_serial_no,b.l_busin_flag,b.en_occur_balance from hswinrun2_xedk.dbo.vdictateinfoex b where b.l_date>=20180101\n) a",
+	"note": null
+}, {
+	"id": 29,
+	"check_item": "交易本金金额",
+	"target_table": "交易流水表",
+	"risk_market_item": "是",
+	"problem_type": "空值检核",
+	"check_sql": "select count(distinct l_serial_no),count(distinct case when en_occur_balance is null then l_serial_no end) from ( select b.l_date,b.l_serial_no,b.l_busin_flag,b.en_occur_balance from hswinrun2.dbo.vdictateinfoex b where b.l_date>=20180101 union all select b.l_date,b.l_serial_no,b.l_busin_flag,b.en_occur_balance from hswinrun2_xedk.dbo.vdictateinfoex b where b.l_date>=20180101) a",
+	"note": null
+}, {
+	"id": 30,
+	"check_item": "交易利息金额",
+	"target_table": "交易流水表",
+	"risk_market_item": "否",
+	"problem_type": "空值检核",
+	"check_sql": "select count(distinct l_serial_no),count(distinct case when en_occur_balance is null then l_serial_no end) from ( select b.l_date,b.l_serial_no,b.l_busin_flag,b.en_occur_balance from hswinrun2.dbo.vdictateinfoex b where b.l_date>=20180101 union all select b.l_date,b.l_serial_no,b.l_busin_flag,b.en_occur_balance from hswinrun2_xedk.dbo.vdictateinfoex b where b.l_date>=20180101) a",
+	"note": null
+}, {
+	"id": 31,
+	"check_item": "交易分红金额",
+	"target_table": "交易流水表",
+	"risk_market_item": "否",
+	"problem_type": "空值检核",
+	"check_sql": "select count(distinct l_serial_no),count(distinct case when en_occur_balance is null then l_serial_no end) from ( select b.l_date,b.l_serial_no,b.l_busin_flag,b.en_occur_balance from hswinrun2.dbo.vdictateinfoex b where b.l_date>=20180101 union all select b.l_date,b.l_serial_no,b.l_busin_flag,b.en_occur_balance from hswinrun2_xedk.dbo.vdictateinfoex b where b.l_date>=20180101) a",
+	"note": null
+}, {
+	"id": 32,
+	"check_item": "逾期天数",
+	"target_table": "交易流水表",
+	"risk_market_item": "否",
+	"problem_type": "未创建项",
+	"check_sql": null,
+	"note": null
+}, {
+	"id": 33,
+	"check_item": "参与人类别",
+	"target_table": "对公参与人基本信息",
+	"risk_market_item": "是",
+	"problem_type": "空值检核",
+	"check_sql": "select count(l_rival_id),count(case when c_rival_kind is null or c_rival_kind ='' then l_rival_id end)\n  from (select a.vc_stock_code, --合同代码\n               a.vc_product_id,--产品代码\n               a.c_business_type,--业务子类\n               a.c_ex_type,--扩展分类\n               a.l_begin_date,--起息日期\n               a.l_end_date,--到期日期\n               a.vc_contract_no,--实际合同号\n               a.c_invest_industry,--投向行业\n               a.vc_invest_use,--投资用途\n               a.c_quit_way,--退出方式\n               a.en_contract_balance,--合同金额\n               b.l_rival_id,--对手ID\n               b.vc_name,--对手简称\n               b.c_industry_type,--行业分类\n               b.vc_rival_roles,--对手方角色（角色标识）\n               b.c_rival_kind,--对手类型\n               b.vc_registration_type,--注册类型（所有制）\n               b.c_enterprise_kind,--企业类型(大中小)\n               b.c_listed_flag--是否上市\n          from hswinrun2.dbo.stockcodesex a\n          left join hswinrun2.dbo.loanrival b\n            on a.l_rival_id = b.l_rival_id\n         where a.l_end_date >= '20180101' and b.c_rival_kind <>'1') T",
+	"note": null
+}, {
+	"id": 34,
+	"check_item": "参与人编号",
+	"target_table": "对公参与人基本信息",
+	"risk_market_item": "是",
+	"problem_type": "空值检核",
+	"check_sql": "select count(l_rival_id),count(case when l_rival_id is null or l_rival_id ='' then l_rival_id end)\n  from (select a.vc_stock_code, --合同代码\n               a.vc_product_id,--产品代码\n               a.c_business_type,--业务子类\n               a.c_ex_type,--扩展分类\n               a.l_begin_date,--起息日期\n               a.l_end_date,--到期日期\n               a.vc_contract_no,--实际合同号\n               a.c_invest_industry,--投向行业\n               a.vc_invest_use,--投资用途\n               a.c_quit_way,--退出方式\n               a.en_contract_balance,--合同金额\n               b.l_rival_id,--对手ID\n               b.vc_name,--对手简称\n               b.c_industry_type,--行业分类\n               b.vc_rival_roles,--对手方角色（角色标识）\n               b.c_rival_kind,--对手类型\n               b.vc_registration_type,--注册类型（所有制）\n               b.c_enterprise_kind,--企业类型(大中小)\n               b.c_listed_flag--是否上市\n          from hswinrun2.dbo.stockcodesex a\n          left join hswinrun2.dbo.loanrival b\n            on a.l_rival_id = b.l_rival_id\n         where a.l_end_date >= '20180101' and b.c_rival_kind <>'1') T",
+	"note": null
+}, {
+	"id": 35,
+	"check_item": "参与人名称",
+	"target_table": "对公参与人基本信息",
+	"risk_market_item": "否",
+	"problem_type": "空值检核",
+	"check_sql": "select count(distinct l_rival_id),count(distinct case when l_rival_id is null or l_rival_id='' then 1 end) from ( select a.l_rival_id,vc_all_name from hswinrun2.dbo.loanrival a where c_rival_kind <> '1'  ) a; select C_CUSTNO,C_CUSTNAME,C_IDENTITYTYPE,C_IDENTITYNO from hsta.tcustomerinfo where c_custtype = '0'",
+	"note": null
+}, {
+	"id": 36,
+	"check_item": "机构证件类别",
+	"target_table": "对公参与人基本信息",
+	"risk_market_item": "否",
+	"problem_type": "空值检核",
+	"check_sql": "select count(distinct l_rival_id),count(distinct case when l_rival_id is null or l_rival_id='' then 1 end) from ( select a.l_rival_id,vc_all_name from hswinrun2.dbo.loanrival a where c_rival_kind <> '1'  ) a; select C_CUSTNO,C_CUSTNAME,C_IDENTITYTYPE,C_IDENTITYNO from hsta.tcustomerinfo where c_custtype = '0'",
+	"note": null
+}, {
+	"id": 37,
+	"check_item": "机构证件号码",
+	"target_table": "对公参与人基本信息",
+	"risk_market_item": "否",
+	"problem_type": "空值检核",
+	"check_sql": "select count(distinct l_rival_id),count(distinct case when l_rival_id is null or l_rival_id='' then 1 end) from ( select a.l_rival_id,vc_all_name from hswinrun2.dbo.loanrival a where c_rival_kind <> '1'  ) a; select C_CUSTNO,C_CUSTNAME,C_IDENTITYTYPE,C_IDENTITYNO from hsta.tcustomerinfo where c_custtype = '0'",
+	"note": null
+}, {
+	"id": 38,
+	"check_item": "机构证件有效期",
+	"target_table": "对公参与人基本信息",
+	"risk_market_item": "否",
+	"problem_type": "空值检核",
+	"check_sql": null,
+	"note": null
+}, {
+	"id": 39,
+	"check_item": "参与人角色标识",
+	"target_table": "对公参与人基本信息",
+	"risk_market_item": "是",
+	"problem_type": "空值检核",
+	"check_sql": "select count(l_rival_id),count(case when c_listed_flag is null or c_listed_flag ='' then l_rival_id end)\n  from (select a.vc_stock_code, --合同代码\n               a.vc_product_id,--产品代码\n               a.c_business_type,--业务子类\n               a.c_ex_type,--扩展分类\n               a.l_begin_date,--起息日期\n               a.l_end_date,--到期日期\n               a.vc_contract_no,--实际合同号\n               a.c_invest_industry,--投向行业\n               a.vc_invest_use,--投资用途\n               a.c_quit_way,--退出方式\n               a.en_contract_balance,--合同金额\n               b.l_rival_id,--对手ID\n               b.vc_name,--对手简称\n               b.c_industry_type,--行业分类\n               b.vc_rival_roles,--对手方角色\n               b.c_rival_kind,--对手类型\n               b.vc_registration_type,--注册类型\n               b.c_enterprise_kind,--企业类型\n               b.c_listed_flag--是否上市\n          from hswinrun2.dbo.stockcodesex a\n          left join hswinrun2.dbo.loanrival b\n            on a.l_rival_id = b.l_rival_id\n         where a.l_end_date >= '20180101' and b.c_rival_kind <>'1') T",
+	"note": "只对AM进行检核，角色：被投资人、担保人、抵质押人分别取LOANRIVAL表的vc_rival_roles，1贷款借款人，2其他投融资交易对手，3抵质押人、担保人（贷款类），4抵质押人、担保人（非贷款类），5委托方，z其他对手方等 如:付费对象（2019Q2反馈）"
+}, {
+	"id": 40,
+	"check_item": "参与人规模",
+	"target_table": "对公参与人基本信息",
+	"risk_market_item": "是",
+	"problem_type": "空值检核",
+	"check_sql": "select count(l_rival_id),count(case when c_enterprise_kind is null or c_enterprise_kind ='' then l_rival_id end)\n  from (select a.vc_stock_code, --合同代码\n               a.vc_product_id,--产品代码\n               a.c_business_type,--业务子类\n               a.c_ex_type,--扩展分类\n               a.l_begin_date,--起息日期\n               a.l_end_date,--到期日期\n               a.vc_contract_no,--实际合同号\n               a.c_invest_industry,--投向行业\n               a.vc_invest_use,--投资用途\n               a.c_quit_way,--退出方式\n               a.en_contract_balance,--合同金额\n               b.l_rival_id,--对手ID\n               b.vc_name,--对手简称\n               b.c_industry_type,--行业分类\n               b.vc_rival_roles,--对手方角色（角色标识）\n               b.c_rival_kind,--对手类型\n               b.vc_registration_type,--注册类型（所有制）\n               b.c_enterprise_kind,--企业类型(大中小)\n               b.c_listed_flag--是否上市\n          from hswinrun2.dbo.stockcodesex a\n          left join hswinrun2.dbo.loanrival b\n            on a.l_rival_id = b.l_rival_id\n         where a.l_end_date >= '20180101' and b.c_rival_kind <>'1') T",
+	"note": "只对AM进行检核（2019Q2反馈）"
+}, {
+	"id": 41,
+	"check_item": "从业人数",
+	"target_table": "对公参与人基本信息",
+	"risk_market_item": "否",
+	"problem_type": "未创建项",
+	"check_sql": null,
+	"note": null
+}, {
+	"id": 42,
+	"check_item": "营业收入",
+	"target_table": "对公参与人基本信息",
+	"risk_market_item": "否",
+	"problem_type": "未创建项",
+	"check_sql": null,
+	"note": null
+}, {
+	"id": 43,
+	"check_item": "营业状态",
+	"target_table": "对公参与人基本信息",
+	"risk_market_item": "否",
+	"problem_type": "未创建项",
+	"check_sql": null,
+	"note": null
+}, {
+	"id": 44,
+	"check_item": "所有制类型",
+	"target_table": "对公参与人基本信息",
+	"risk_market_item": "是",
+	"problem_type": "空值检核",
+	"check_sql": "select count(l_rival_id),count(case when vc_registration_type is null or vc_registration_type ='' then l_rival_id end)\n  from (select a.vc_stock_code, --合同代码\n               a.vc_product_id,--产品代码\n               a.c_business_type,--业务子类\n               a.c_ex_type,--扩展分类\n               a.l_begin_date,--起息日期\n               a.l_end_date,--到期日期\n               a.vc_contract_no,--实际合同号\n               a.c_invest_industry,--投向行业\n               a.vc_invest_use,--投资用途\n               a.c_quit_way,--退出方式\n               a.en_contract_balance,--合同金额\n               b.l_rival_id,--对手ID\n               b.vc_name,--对手简称\n               b.c_industry_type,--行业分类\n               b.vc_rival_roles,--对手方角色（角色标识）\n               b.c_rival_kind,--对手类型\n               b.vc_registration_type,--注册类型（所有制）\n               b.c_enterprise_kind,--企业类型(大中小)\n               b.c_listed_flag--是否上市\n          from hswinrun2.dbo.stockcodesex a\n          left join hswinrun2.dbo.loanrival b\n            on a.l_rival_id = b.l_rival_id\n         where a.l_end_date >= '20180101' and b.c_rival_kind <>'1') T",
+	"note": "只对AM进行检核（2019Q2反馈）"
+}, {
+	"id": 45,
+	"check_item": "参与人上市标识",
+	"target_table": "对公参与人基本信息",
+	"risk_market_item": "是",
+	"problem_type": "空值检核",
+	"check_sql": "select count(l_rival_id),count(case when c_listed_flag is null or c_listed_flag ='' then l_rival_id end)\n  from (select a.vc_stock_code, --合同代码\n               a.vc_product_id,--产品代码\n               a.c_business_type,--业务子类\n               a.c_ex_type,--扩展分类\n               a.l_begin_date,--起息日期\n               a.l_end_date,--到期日期\n               a.vc_contract_no,--实际合同号\n               a.c_invest_industry,--投向行业\n               a.vc_invest_use,--投资用途\n               a.c_quit_way,--退出方式\n               a.en_contract_balance,--合同金额\n               b.l_rival_id,--对手ID\n               b.vc_name,--对手简称\n               b.c_industry_type,--行业分类\n               b.vc_rival_roles,--对手方角色（角色标识）\n               b.c_rival_kind,--对手类型\n               b.vc_registration_type,--注册类型（所有制）\n               b.c_enterprise_kind,--企业类型(大中小)\n               b.c_listed_flag--是否上市\n          from hswinrun2.dbo.stockcodesex a\n          left join hswinrun2.dbo.loanrival b\n            on a.l_rival_id = b.l_rival_id\n         where a.l_end_date >= '20180101' and b.c_rival_kind <>'1') T",
+	"note": "只对AM进行检核（2019Q2反馈）"
+}, {
+	"id": 46,
+	"check_item": "股票代码",
+	"target_table": "对公参与人基本信息",
+	"risk_market_item": "否",
+	"problem_type": "空值检核",
+	"check_sql": null,
+	"note": null
+}, {
+	"id": 47,
+	"check_item": "股票类型",
+	"target_table": "对公参与人基本信息",
+	"risk_market_item": "否",
+	"problem_type": "空值检核",
+	"check_sql": null,
+	"note": null
+}, {
+	"id": 48,
+	"check_item": "股票名称",
+	"target_table": "对公参与人基本信息",
+	"risk_market_item": "否",
+	"problem_type": "空值检核",
+	"check_sql": null,
+	"note": null
+}, {
+	"id": 49,
+	"check_item": "参与人实际控制人类别",
+	"target_table": "对公参与人基本信息",
+	"risk_market_item": "否",
+	"problem_type": "空值检核",
+	"check_sql": null,
+	"note": null
+}, {
+	"id": 50,
+	"check_item": "参与人实际控制人名称",
+	"target_table": "对公参与人基本信息",
+	"risk_market_item": "否",
+	"problem_type": "空值检核",
+	"check_sql": null,
+	"note": null
+}, {
+	"id": 51,
+	"check_item": "上级股东类别",
+	"target_table": "对公参与人基本信息",
+	"risk_market_item": "否",
+	"problem_type": "空值检核",
+	"check_sql": null,
+	"note": null
+}, {
+	"id": 52,
+	"check_item": "上级股东名称",
+	"target_table": "对公参与人基本信息",
+	"risk_market_item": "否",
+	"problem_type": "空值检核",
+	"check_sql": null,
+	"note": null
+}, {
+	"id": 53,
+	"check_item": "参与人历史违约标识",
+	"target_table": "对公参与人基本信息",
+	"risk_market_item": "否",
+	"problem_type": "空值检核",
+	"check_sql": null,
+	"note": null
+}, {
+	"id": 54,
+	"check_item": "历史违约事件类型",
+	"target_table": "对公参与人基本信息",
+	"risk_market_item": "否",
+	"problem_type": "空值检核",
+	"check_sql": null,
+	"note": null
+}, {
+	"id": 55,
+	"check_item": "违约日期",
+	"target_table": "对公参与人基本信息",
+	"risk_market_item": "否",
+	"problem_type": "空值检核",
+	"check_sql": null,
+	"note": null
+}, {
+	"id": 56,
+	"check_item": "首次业务签约日期",
+	"target_table": "对公参与人基本信息",
+	"risk_market_item": "否",
+	"problem_type": "空值检核",
+	"check_sql": null,
+	"note": null
+}, {
+	"id": 57,
+	"check_item": "法人代表姓名",
+	"target_table": "对公参与人基本信息",
+	"risk_market_item": "否",
+	"problem_type": "空值检核",
+	"check_sql": "select count(distinct l_rival_id),count(distinct case when vc_corporation is null or vc_corporation ='' then l_rival_id end) from ( select a.l_rival_id,a.vc_all_name,a.c_card_type,a.vc_card_id,c_listed_flag,vc_corporation,c_corporation_certificate_type,vc_corporation_certificate,c_group_flag,l_enterprise_start_date from hswinrun2.dbo.loanrival a where c_rival_kind <> '1' ) t",
+	"note": null
+}, {
+	"id": 58,
+	"check_item": "法人代表证件类型",
+	"target_table": "对公参与人基本信息",
+	"risk_market_item": "否",
+	"problem_type": "空值检核",
+	"check_sql": "select count(distinct l_rival_id),count(distinct case when c_corporation_certificate_type is null or c_corporation_certificate_type ='' then l_rival_id end) from ( select a.l_rival_id,a.vc_all_name,a.c_card_type,a.vc_card_id,c_listed_flag,vc_corporation,c_corporation_certificate_type,vc_corporation_certificate,c_group_flag,l_enterprise_start_date from hswinrun2.dbo.loanrival a where c_rival_kind <> '1' ) t",
+	"note": null
+}, {
+	"id": 59,
+	"check_item": "法人代表证件号码",
+	"target_table": "对公参与人基本信息",
+	"risk_market_item": "否",
+	"problem_type": "空值检核",
+	"check_sql": "select count(distinct l_rival_id),count(distinct case when vc_corporation_certificate is null or vc_corporation_certificate ='' then l_rival_id end) from ( select a.l_rival_id,a.vc_all_name,a.c_card_type,a.vc_card_id,c_listed_flag,vc_corporation,c_corporation_certificate_type,vc_corporation_certificate,c_group_flag,l_enterprise_start_date from hswinrun2.dbo.loanrival a where c_rival_kind <> '1' ) t",
+	"note": null
+}, {
+	"id": 60,
+	"check_item": "集团客户标志",
+	"target_table": "对公参与人基本信息",
+	"risk_market_item": "否",
+	"problem_type": "空值检核",
+	"check_sql": "select count(distinct l_rival_id),count(distinct case when c_group_flag is null or c_group_flag ='' then l_rival_id end) from ( select a.l_rival_id,a.vc_all_name,a.c_card_type,a.vc_card_id,c_listed_flag,vc_corporation,c_corporation_certificate_type,vc_corporation_certificate,c_group_flag,l_enterprise_start_date from hswinrun2.dbo.loanrival a where c_rival_kind <> '1' ) t",
+	"note": null
+}, {
+	"id": 61,
+	"check_item": "企业成长阶段",
+	"target_table": "对公参与人基本信息",
+	"risk_market_item": "否",
+	"problem_type": "空值检核",
+	"check_sql": null,
+	"note": null
+}, {
+	"id": 62,
+	"check_item": "注册日期",
+	"target_table": "对公参与人基本信息",
+	"risk_market_item": "否",
+	"problem_type": "空值检核",
+	"check_sql": null,
+	"note": null
+}, {
+	"id": 63,
+	"check_item": "参与人编号",
+	"target_table": "对私参与人基本信息",
+	"risk_market_item": "是",
+	"problem_type": "空值检核",
+	"check_sql": "select count(l_rival_id),count(case when l_rival_id is null or l_rival_id ='' then l_rival_id end)\n  from (select a.vc_stock_code, --合同代码\n               a.vc_product_id,--产品代码\n               a.c_business_type,--业务子类\n               a.c_ex_type,--扩展分类\n               a.l_begin_date,--起息日期\n               a.l_end_date,--到期日期\n               a.vc_contract_no,--实际合同号\n               a.c_invest_industry,--投向行业\n               a.vc_invest_use,--投资用途\n               a.c_quit_way,--退出方式\n               a.en_contract_balance,--合同金额\n               b.l_rival_id,--对手ID\n               b.vc_name,--对手简称\n               b.c_industry_type,--行业分类\n               b.vc_rival_roles,--对手方角色（角色标识）\n               b.c_rival_kind,--对手类型\n               b.vc_registration_type,--注册类型（所有制）\n               b.c_enterprise_kind,--企业类型(大中小)\n               b.c_listed_flag--是否上市\n          from hswinrun2.dbo.stockcodesex a\n          left join hswinrun2.dbo.loanrival b\n            on a.l_rival_id = b.l_rival_id\n         where a.l_end_date >= '20180101' and b.c_rival_kind ='1') T",
+	"note": "只对AM进行检核（2019Q2反馈）"
+}, {
+	"id": 64,
+	"check_item": "参与人名称",
+	"target_table": "对私参与人基本信息",
+	"risk_market_item": "否",
+	"problem_type": "空值检核",
+	"check_sql": "select count(distinct l_rival_id),count(distinct case when vc_all_name is null or vc_all_name ='' then l_rival_id end) from ( select a.l_rival_id,a.vc_all_name,a.c_card_type,a.vc_card_id,a.vc_rival_roles,a.en_personal_income,vc_phone from hswinrun2.dbo.loanrival a where c_rival_kind = '1') t);\nselect count(distinct C_CUSTNO),count(distinct case when C_CUSTNAME is null then C_CUSTNO end) from ( select C_CUSTNO,C_CUSTNAME,C_IDENTITYTYPE,C_IDENTITYNO,C_INCOME,C_MOBILENO from hsta.tcustomerinfo where c_custtype = '1') a",
+	"note": null
+}, {
+	"id": 65,
+	"check_item": "个人证件类别",
+	"target_table": "对私参与人基本信息",
+	"risk_market_item": "否",
+	"problem_type": "空值检核",
+	"check_sql": "select count(distinct l_rival_id),count(distinct case when c_card_type is null or c_card_type ='' then l_rival_id end) from ( select a.l_rival_id,a.vc_all_name,a.c_card_type,a.vc_card_id,a.vc_rival_roles,a.en_personal_income,vc_phone from hswinrun2.dbo.loanrival a where c_rival_kind = '1') t;\nselect count(distinct C_CUSTNO),count(distinct case when C_IDENTITYTYPE is null or C_IDENTITYTYPE='' then C_CUSTNO end) from ( select C_CUSTNO,C_CUSTNAME,C_IDENTITYTYPE,C_IDENTITYNO,C_INCOME,C_MOBILENO from hsta.tcustomerinfo where c_custtype = '1') a",
+	"note": null
+}, {
+	"id": 66,
+	"check_item": "个人证件号码",
+	"target_table": "对私参与人基本信息",
+	"risk_market_item": "否",
+	"problem_type": "空值检核",
+	"check_sql": "select count(distinct l_rival_id),count(distinct case when vc_card_id is null or vc_card_id ='' then l_rival_id end) from ( select a.l_rival_id,a.vc_all_name,a.c_card_type,a.vc_card_id,a.vc_rival_roles,a.en_personal_income,vc_phone from hswinrun2.dbo.loanrival a where c_rival_kind = '1') t;\nselect count(distinct C_CUSTNO),count(distinct case when C_IDENTITYNO is null or C_IDENTITYNO='' then C_CUSTNO end) from ( select C_CUSTNO,C_CUSTNAME,C_IDENTITYTYPE,C_IDENTITYNO,C_INCOME,C_MOBILENO from hsta.tcustomerinfo where c_custtype = '1') a",
+	"note": null
+}, {
+	"id": 67,
+	"check_item": "个人证件有效期",
+	"target_table": "对私参与人基本信息",
+	"risk_market_item": "否",
+	"problem_type": "空值检核",
+	"check_sql": null,
+	"note": null
+}, {
+	"id": 68,
+	"check_item": "参与人角色",
+	"target_table": "对私参与人基本信息",
+	"risk_market_item": "是",
+	"problem_type": "空值检核",
+	"check_sql": "select count(l_rival_id),count(case when vc_rival_roles is null or vc_rival_roles ='' then l_rival_id end)\n  from (select a.vc_stock_code, --合同代码\n               a.vc_product_id,--产品代码\n               a.c_business_type,--业务子类\n               a.c_ex_type,--扩展分类\n               a.l_begin_date,--起息日期\n               a.l_end_date,--到期日期\n               a.vc_contract_no,--实际合同号\n               a.c_invest_industry,--投向行业\n               a.vc_invest_use,--投资用途\n               a.c_quit_way,--退出方式\n               a.en_contract_balance,--合同金额\n               b.l_rival_id,--对手ID\n               b.vc_name,--对手简称\n               b.c_industry_type,--行业分类\n               b.vc_rival_roles,--对手方角色（角色标识）\n               b.c_rival_kind,--对手类型\n               b.vc_registration_type,--注册类型（所有制）\n               b.c_enterprise_kind,--企业类型(大中小)\n               b.c_listed_flag--是否上市\n          from hswinrun2.dbo.stockcodesex a\n          left join hswinrun2.dbo.loanrival b\n            on a.l_rival_id = b.l_rival_id\n         where a.l_end_date >= '20180101' and b.c_rival_kind ='1') T",
+	"note": "只对AM进行检核（2019Q2反馈）"
+}, {
+	"id": 69,
+	"check_item": "参与人年龄",
+	"target_table": "对私参与人基本信息",
+	"risk_market_item": "否",
+	"problem_type": "空值检核",
+	"check_sql": null,
+	"note": null
+}, {
+	"id": 70,
+	"check_item": "参与人性别",
+	"target_table": "对私参与人基本信息",
+	"risk_market_item": "否",
+	"problem_type": "空值检核",
+	"check_sql": null,
+	"note": null
+}, {
+	"id": 71,
+	"check_item": "参与人岗位",
+	"target_table": "对私参与人基本信息",
+	"risk_market_item": "否",
+	"problem_type": "空值检核",
+	"check_sql": null,
+	"note": null
+}, {
+	"id": 72,
+	"check_item": "参与人所属单位",
+	"target_table": "对私参与人基本信息",
+	"risk_market_item": "否",
+	"problem_type": "空值检核",
+	"check_sql": null,
+	"note": null
+}, {
+	"id": 73,
+	"check_item": "参与人所属部门",
+	"target_table": "对私参与人基本信息",
+	"risk_market_item": "否",
+	"problem_type": "空值检核",
+	"check_sql": null,
+	"note": null
+}, {
+	"id": 74,
+	"check_item": "参与人职务",
+	"target_table": "对私参与人基本信息",
+	"risk_market_item": "否",
+	"problem_type": "空值检核",
+	"check_sql": null,
+	"note": null
+}, {
+	"id": 75,
+	"check_item": "参与人职级",
+	"target_table": "对私参与人基本信息",
+	"risk_market_item": "否",
+	"problem_type": "空值检核",
+	"check_sql": null,
+	"note": null
+}, {
+	"id": 76,
+	"check_item": "从业状况",
+	"target_table": "对私参与人基本信息",
+	"risk_market_item": "否",
+	"problem_type": "空值检核",
+	"check_sql": null,
+	"note": null
+}, {
+	"id": 77,
+	"check_item": "婚姻状况",
+	"target_table": "对私参与人基本信息",
+	"risk_market_item": "否",
+	"problem_type": "空值检核",
+	"check_sql": null,
+	"note": null
+}, {
+	"id": 78,
+	"check_item": "健康状况",
+	"target_table": "对私参与人基本信息",
+	"risk_market_item": "否",
+	"problem_type": "空值检核",
+	"check_sql": null,
+	"note": null
+}, {
+	"id": 79,
+	"check_item": "年收入",
+	"target_table": "对私参与人基本信息",
+	"risk_market_item": "否",
+	"problem_type": "空值检核",
+	"check_sql": "select count(distinct l_rival_id),count(distinct case when en_personal_income is null or en_personal_income =0 then l_rival_id end) from ( select a.l_rival_id,a.vc_all_name,a.c_card_type,a.vc_card_id,a.vc_rival_roles,a.en_personal_income,vc_phone from hswinrun2.dbo.loanrival a where c_rival_kind = '1') t;\nselect count(distinct C_CUSTNO),count(distinct case when C_INCOME is null or C_INCOME='' then C_CUSTNO end) from ( select C_CUSTNO,C_CUSTNAME,C_IDENTITYTYPE,C_IDENTITYNO,C_INCOME,C_MOBILENO from hsta.tcustomerinfo where c_custtype = '1') a",
+	"note": null
+}, {
+	"id": 80,
+	"check_item": "国籍",
+	"target_table": "对私参与人基本信息",
+	"risk_market_item": "否",
+	"problem_type": "空值检核",
+	"check_sql": null,
+	"note": null
+}, {
+	"id": 81,
+	"check_item": "家庭地址",
+	"target_table": "对私参与人基本信息",
+	"risk_market_item": "否",
+	"problem_type": "空值检核",
+	"check_sql": null,
+	"note": null
+}, {
+	"id": 82,
+	"check_item": "通讯地址",
+	"target_table": "对私参与人基本信息",
+	"risk_market_item": "否",
+	"problem_type": "空值检核",
+	"check_sql": null,
+	"note": null
+}, {
+	"id": 83,
+	"check_item": "联系电话",
+	"target_table": "对私参与人基本信息",
+	"risk_market_item": "否",
+	"problem_type": "空值检核",
+	"check_sql": "select count(distinct l_rival_id),count(distinct case when vc_phone is null or vc_phone ='' then l_rival_id end) from ( select a.l_rival_id,a.vc_all_name,a.c_card_type,a.vc_card_id,a.vc_rival_roles,a.en_personal_income,vc_phone from hswinrun2.dbo.loanrival a where c_rival_kind = '1') t;\nselect count(distinct C_CUSTNO),count(distinct case when C_MOBILENO is null or C_MOBILENO='' then C_CUSTNO end) from ( select C_CUSTNO,C_CUSTNAME,C_IDENTITYTYPE,C_IDENTITYNO,C_INCOME,C_MOBILENO from hsta.tcustomerinfo where c_custtype = '1') a",
+	"note": null
+}, {
+	"id": 84,
+	"check_item": "民族",
+	"target_table": "对私参与人基本信息",
+	"risk_market_item": "否",
+	"problem_type": "空值检核",
+	"check_sql": null,
+	"note": null
+}, {
+	"id": 85,
+	"check_item": "户口性质",
+	"target_table": "对私参与人基本信息",
+	"risk_market_item": "否",
+	"problem_type": "空值检核",
+	"check_sql": null,
+	"note": null
+}, {
+	"id": 86,
+	"check_item": "内部员工标志",
+	"target_table": "对私参与人基本信息",
+	"risk_market_item": "否",
+	"problem_type": "空值检核",
+	"check_sql": null,
+	"note": null
+}, {
+	"id": 87,
+	"check_item": "机构编号",
+	"target_table": "机构信息",
+	"risk_market_item": "是",
+	"problem_type": "空值检核",
+	"check_sql": "select count(distinct org_id),count(distinct case when org_id is null then 1 end) from (\n    select org_id,org_name,parent_id from tcmp.tsys_organization\n    )",
+	"note": null
+}, {
+	"id": 88,
+	"check_item": "机构名称",
+	"target_table": "机构信息",
+	"risk_market_item": "是",
+	"problem_type": "空值检核",
+	"check_sql": "select count(distinct org_id),count(distinct case when org_name is null then org_id end) from (\n    select org_id,org_name,parent_id\n    from tcmp.tsys_organization ) a",
+	"note": null
+}, {
+	"id": 89,
+	"check_item": "机构简称",
+	"target_table": "机构信息",
+	"risk_market_item": "否",
+	"problem_type": "空值检核",
+	"check_sql": null,
+	"note": null
+}, {
+	"id": 90,
+	"check_item": "上级机构名称",
+	"target_table": "机构信息",
+	"risk_market_item": "否",
+	"problem_type": "空值检核",
+	"check_sql": "select count(distinct org_id),count(distinct case when parent_id is null then org_id end) from ( select org_id,org_name,parent_id from tcmp.tsys_organization ) a",
+	"note": null
+}, {
+	"id": 91,
+	"check_item": "机构类型",
+	"target_table": "机构信息",
+	"risk_market_item": "否",
+	"problem_type": "空值检核",
+	"check_sql": null,
+	"note": null
+}, {
+	"id": 92,
+	"check_item": "投资类型",
+	"target_table": "机构信息",
+	"risk_market_item": "否",
+	"problem_type": "空值检核",
+	"check_sql": null,
+	"note": null
+}, {
+	"id": 93,
+	"check_item": "产品编号",
+	"target_table": "产品信息表",
+	"risk_market_item": "是",
+	"problem_type": "空值检核",
+	"check_sql": "select count(distinct c_projectcode),count(distinct case when c_projectcode is null then 1 end) from (\n    select a.c_projectcode,a.c_projectname,b.d_Setupdate,a.c_enddate,b.C_ISCONTRACTREPLENISH \n    from tcmp.tproject_info a,tcmp.tproject_collect b where a.c_projectcode=b.c_projectcode \n    and b.C_ISCONTRACTREPLENISH is null\n    )",
+	"note": null
+}, {
+	"id": 94,
+	"check_item": "产品名称",
+	"target_table": "产品信息表",
+	"risk_market_item": "否",
+	"problem_type": "空值检核",
+	"check_sql": "select count(distinct c_projectcode),count(distinct case when c_projectname is null then c_projectcode end) from ( select a.c_projectcode,a.c_projectname,b.d_Setupdate,a.c_enddate,b.C_ISCONTRACTREPLENISH from tcmp.tproject_info a,tcmp.tproject_collect b where a.c_projectcode=b.c_projectcode and b.C_ISCONTRACTREPLENISH is null ) t",
+	"note": null
+}, {
+	"id": 95,
+	"check_item": "上级产品单元",
+	"target_table": "产品信息表",
+	"risk_market_item": "否",
+	"problem_type": "空值检核",
+	"check_sql": null,
+	"note": null
+}, {
+	"id": 96,
+	"check_item": "产品开始日期",
+	"target_table": "产品信息表",
+	"risk_market_item": "是",
+	"problem_type": "空值检核",
+	"check_sql": "select count(distinct c_projectcode),count(distinct case when d_Setupdate is null then c_projectcode end) from (\n    select a.c_projectcode,a.c_projectname,b.d_Setupdate,a.c_enddate,b.C_ISCONTRACTREPLENISH \n    from tcmp.tproject_info a,tcmp.tproject_collect b where a.c_projectcode=b.c_projectcode \n    and b.C_ISCONTRACTREPLENISH is null) t",
+	"note": null
+}, {
+	"id": 97,
+	"check_item": "产品结束日期",
+	"target_table": "产品信息表",
+	"risk_market_item": "是",
+	"problem_type": "合法性检核",
+	"check_sql": "select count(distinct c_projectcode),count(distinct case when c_enddate is not null and c_enddate <= to_char(d_Setupdate, 'YYYY-MM-DD') then 1 end) from (select a.c_projectcode, a.c_projectname, b.d_Setupdate, a.c_enddate, b.C_ISCONTRACTREPLENISH from tcmp.tproject_info a, tcmp.tproject_collect b where a.c_projectcode = b.c_projectcode and b.C_ISCONTRACTREPLENISH is null) t",
+	"note": null
+}, {
+	"id": 98,
+	"check_item": "产品收益率",
+	"target_table": "产品信息表",
+	"risk_market_item": "是",
+	"problem_type": "空值检核",
+	"check_sql": "select count(distinct c_projectcode),0 from (     select a.c_projectcode,a.c_projectname,b.d_Setupdate,a.c_enddate,a.F_MANAGERFEE      from tcmp.tproject_info a,tcmp.tproject_collect b where a.c_projectcode=b.c_projectcode      and b.C_ISCONTRACTREPLENISH is null) t",
+	"note": "可从信托数据中心取数，已完善（2019Q2反馈）"
+}, {
+	"id": 99,
+	"check_item": "产品收益",
+	"target_table": "产品信息表",
+	"risk_market_item": "是",
+	"problem_type": "空值检核",
+	"check_sql": "select count(distinct c_projectcode),0 from (     select a.c_projectcode,a.c_projectname,b.d_Setupdate,a.c_enddate,a.F_MANAGERFEE      from tcmp.tproject_info a,tcmp.tproject_collect b where a.c_projectcode=b.c_projectcode      and b.C_ISCONTRACTREPLENISH is null) t",
+	"note": "可以通过计算出来，有取值计算逻辑（2019Q2反馈）"
+}, {
+	"id": 100,
+	"check_item": "存续标识",
+	"target_table": "产品信息表",
+	"risk_market_item": "是",
+	"problem_type": "空值检核",
+	"check_sql": "select count(distinct c_projectcode),count(distinct case when c_enddate is not null and c_enddate<=to_char(d_Setupdate,'YYYY-MM-DD') then 1 end) from (\n    select a.c_projectcode,a.c_projectname,b.d_Setupdate,a.c_enddate,b.C_ISCONTRACTREPLENISH \n    from tcmp.tproject_info a,tcmp.tproject_collect b where a.c_projectcode=b.c_projectcode \n    and b.C_ISCONTRACTREPLENISH is null) t",
+	"note": null
+}]}
