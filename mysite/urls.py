@@ -38,15 +38,15 @@ urlpatterns = [
     path('data/dashboard/subcompany',   dataView.dashboard_subcompany,        name='dashboard_subcompany'),
     path('data/report/',                dataView.report,                      name='report'),
     path('data/result_detail/',         dataView.result_detail,               name='result_detail'),
-    path('',                            RedirectView.as_view(url='data/dashboard/')),
-    path('data/',                       RedirectView.as_view(url='dashboard/')),
-    path('data/index/',                 RedirectView.as_view(url='../dashboard/')),
+    path('',            RedirectView.as_view(url='data/dashboard/')),
+    path('data/',       RedirectView.as_view(url='dashboard/')),
+    path('data/index/', RedirectView.as_view(url='../dashboard/')),
 
     # 登录身份验证
     path('authorize/login/',     authView.login,      name='login'),
     path('authorize/logout/',    authView.logout,     name='logout'),
     path('authorize/login_auth', authView.login_auth, name='login_auth'),
-    
+
     # 检核
     path('check/rule_list/',         checkView.rule_list,          name='rule_list'),
     path('check/rule_detail',        checkView.rule_detail,        name='rule_detail'),
@@ -60,29 +60,30 @@ urlpatterns = [
     path('check/show_crontab',       cronView.show_crontab,        name='show_crontab'),
     path('check/enable_crontab',     cronView.enable_crontab,      name='enable_crontab'),
     path('check/update_crontab',     cronView.update_crontab,      name='update_crontab'),
-    
+
     # 源系统改造需求
     path('demand/import_sheet', demandView.import_sheet, name='import_sheet'),
-    
+
     # 附件管理
     path('files/list', filesView.list, name='files_list'),
 
     # 数据标准
     path('datastandard/show',   stdView.show,   name='std_show'),
     path('datastandard/update', stdView.update, name='update'),
-    
+
     # API
+    path('api/data/subcompany_problem_count',        dataAPIView.subcompany_problem_count,    name='subcompany_problem_count'),
     path('api/demand/list_subcompany',               demandView.list_subcompany,              name='demand_list_subcompany'),
     path('api/files/download',                       api_filesView.download,                  name='files_download'),
 
-    path('api/dashboard/avg_problem_percentage',     api_dashView.avg_problem_percentage,     name='avg_problem_percentage'),    
+    path('api/dashboard/avg_problem_percentage',     api_dashView.avg_problem_percentage,     name='avg_problem_percentage'),
     path('api/dashboard/same_problem_top5',          api_dashView.same_problem_top5,          name='same_problem_top5'),
     path('api/dashboard/subcompany_data_percentage', api_dashView.subcompany_data_percentage, name='subcompany_data_percentage'),
     path('api/dashboard/count_db_rows',              api_dashView.count_db_rows,              name='count_db_rows'),
-    path('api/dashboard/data_overiew',               api_dashView.data_overiew,               name='data_overiew'),    
-    path('api/dashboard/total_trend',                api_dashView.total_trend,                name='total_trend'),    
-    path('api/dashboard/subcompany_problem_count',   api_dashView.subcompany_problem_count,    name='subcompany_problem_count'),
+    path('api/dashboard/data_overiew',               api_dashView.data_overiew,               name='data_overiew'),
+    path('api/dashboard/total_trend',                api_dashView.total_trend,                name='total_trend'),
 
-    path('api/datastandard/query',                   api_stdView.query,                       name='query'),    
-    path('api/datastandard/update',                  api_stdView.update,                      name='update'),    
+    path('api/datastandard/query/detail',            api_stdView.query_detail,                name='query_detail'),
+    path('api/datastandard/update',                  api_stdView.update,                      name='update'),
+    path('api/datastandard/query/index',             api_stdView.query_index,                 name='query_index'),
 ]

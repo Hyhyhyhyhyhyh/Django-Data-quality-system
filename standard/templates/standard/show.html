@@ -152,7 +152,7 @@
 <!-- footer -->
 <footer class="navbar-fixed-bottom" style="line-height: 10px;font-size:13px;">
     <div class="footer">
-        © 2019 Hyhyhyhyhyhyh
+        © 2019 广东粤财控股投资有限公司
     </div>
 </footer>
 </div>
@@ -190,55 +190,16 @@
             beforeClick: beforeClick,
             onClick: onClick
         },
+        async: {    //动态生成目录树
+            enable: true,
+            url:"../../api/datastandard/query/index",
+            autoParam:["id", "pId", "name", "t", "open"],
+            type: "get",
+            //otherParam:{"otherParam":"zTreeAsyncTest"},
+            //dataFilter: filter
+        },
 
     };
-
-    var zNodes =[
-        { id:1 ,pId:0,  name:"概述", t:"概述", open:true},
-        { id:2 ,pId:0,  name:"参考文献", t:"参考文献", open:true},
-        { id:3 ,pId:0,  name:"术语和定义", t:"术语和定义", open:true},
-        { id:4 ,pId:0,  name:"主题域分类", t:"主题域分类", open:true},
-        { id:41 ,pId:4,  name:"项目（协议）", t:"项目（协议）"},
-        { id:42 ,pId:4,  name:"交易", t:"交易"},
-        { id:43 ,pId:4,  name:"参与人（对公）", t:"参与人（对公）"},
-        { id:44 ,pId:4, name:"参与人（个人）", t:"参与人（个人）"},
-        { id:45 ,pId:4, name:"机构", t:"机构"},
-        { id:46 ,pId:4, name:"产品", t:"产品"},
-        { id:47 ,pId:4, name:"财务", t:"财务"},
-        { id:5 ,pId:0,  name:"数据项标准", t:"数据项标准", open:true},
-        { id:51 ,pId:5, name:"项目（协议）", t:"项目（协议）"},
-        { id:5101 ,pId:51, name:"项目编号", t:"项目编号"},
-        { id:5102 ,pId:51, name:"项目名称", t:"项目名称"},
-        { id:5103 ,pId:51, name:"项目类别", t:"项目类别"},
-        { id:5104 ,pId:51, name:"项目投向行业", t:"项目投向行业"},
-        { id:5105 ,pId:51, name:"项目投向行业（展业指引）", t:"项目投向行业（展业指引）"},
-        { id:5106 ,pId:51, name:"项目投向（按功能）", t:"项目投向（按功能）"},
-        { id:5107 ,pId:51, name:"项目资金用途", t:"项目资金用途"},
-        { id:5108 ,pId:51, name:"项目交易对手（投向）", t:"项目交易对手（投向）"},
-        { id:5109 ,pId:51, name:"项目来源", t:"项目来源"},
-        { id:52 ,pId:5, name:"交易", t:"交易"},
-        { id:5201 ,pId:52, name:"交易编号", t:"交易编号"},
-        { id:5202 ,pId:52, name:"交易类型", t:"交易类型"},
-        { id:53 ,pId:5, name:"参与人（对公）", t:"参与人（对公）"},
-        { id:5301 ,pId:53, name:"参与人类别", t:"参与人类别"},
-        { id:5302 ,pId:53, name:"参与人编号", t:"参与人编号"},
-        { id:5303 ,pId:53, name:"参与人名称", t:"参与人名称"},
-        { id:5341 ,pId:53, name:"投资轮次", t:"投资轮次"},
-        { id:5342 ,pId:53, name:"注册日期", t:"注册日期"},
-        { id:54 ,pId:5, name:"参与人（个人）", t:"参与人（个人）"},
-        { id:5401 ,pId:54, name:"参与人编号", t:"参与人编号"},
-        { id:5402 ,pId:54, name:"参与人名称", t:"参与人名称"},
-        { id:5423 ,pId:54, name:"户口性质", t:"户口性质"},
-        { id:5424 ,pId:54, name:"内部员工标志", t:"内部员工标志"},
-        { id:55 ,pId:5, name:"机构", t:"机构"},
-        { id:5501 ,pId:55, name:"机构编号", t:"机构编号"},
-        { id:56 ,pId:5, name:"产品", t:"产品"},
-        { id:5601 ,pId:56, name:"产品编号", t:"产品编号"},
-        { id:57 ,pId:5, name:"财务", t:"财务"},
-        { id:5701 ,pId:57, name:"期初借方余额", t:"期初借方余额"},
-        { id:5702 ,pId:57, name:"期初贷方余额", t:"期初贷方余额"},
-        { id:6 ,pId:0, name:"附录", t:"附录", open:true}
-    ];
 
     var log, className = "dark";
     function beforeClick(treeId, treeNode, clickFlag) {
@@ -252,7 +213,7 @@
             $.ajax({
                 type : "GET",
                 async : false,
-                url : "../../api/datastandard/query",
+                url : "../../api/datastandard/query/detail",
                 data: {
                     std_name: treeNode.t,
                     std_type: "desc"        //标准概述
@@ -272,7 +233,7 @@
             $.ajax({
                 type : "GET",
                 async : false,
-                url : "../../api/datastandard/query",
+                url : "../../api/datastandard/query/detail",
                 data: {
                     std_name: treeNode.t,
                     std_type: "detail"      //标准名
@@ -318,8 +279,9 @@
     }
 
     $(document).ready(function(){
-        $.fn.zTree.init($("#treeDemo"), setting, zNodes);   //初始化zTree
-        fuzzySearch('treeDemo','#key',null,null); //初始化模糊搜索方法
+        //$.fn.zTree.init($("#treeDemo"), setting, zNodes);   //初始化zTree
+        $.fn.zTree.init($("#treeDemo"), setting);
+        fuzzySearch('treeDemo','#key',null,null);           //初始化模糊搜索方法
         
         if (typeof(document.referrer.split('?')[1]) == "undefined"){
             var init_name = '概述';
@@ -347,7 +309,7 @@
         $.ajax({
             type : "GET",
             async : false,
-            url : "../../api/datastandard/query",
+            url : "../../api/datastandard/query/detail",
             data: {
                 std_name: init_name,
                 std_type: std_type,

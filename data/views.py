@@ -1,8 +1,10 @@
 from django.shortcuts import render,redirect
+
+import sys, os, math, datetime
+sys.path.insert(0, '..')
 from utils import report_data          #引用report_data.py获取数据质量报告的各项数据
 from utils import query                #引用query.py简便查询各种数据库信息
 
-import os,math,datetime
 
 #-------------------------------------------------------- 仪表盘 --------------------------------------------------------#
 # 说明：本模块分3部分在前端展示
