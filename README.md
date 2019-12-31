@@ -1,5 +1,5 @@
 # demo
-http://www.sghen.cn:9000
+http://data.sghen.cn
 登录用户名密码：admin/admin
 
 # 启停项目
