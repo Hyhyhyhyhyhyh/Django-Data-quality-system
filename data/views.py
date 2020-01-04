@@ -16,16 +16,10 @@ def dashboard(request):
     if request.session.get('is_login',None) is None:    #从session信息中判断登录状态，为None则跳转至登录页
         return redirect("../../authorize/login")
     
-    username = request.session['username']
-    if request.GET.get('quarter') is None:  #url没有传参的话，仪表盘显示上一季度数据
-        if request.session.get('selected_quarter',None) is None:
-            quarter = str(datetime.datetime.now().year)+"Q"+str(math.ceil(datetime.datetime.now().month/3.)-1)
-        else:
-            quarter = request.session['selected_quarter']
-    else:
-        quarter = request.GET.get('quarter')
-        request.session['selected_quarter'] = request.GET.get('quarter')
+    username        = request.session['username']
+    quarter         = query.get_user_quarter(request)
     db_quarter_list = query.get_quarter_list()   #获取检核结果库中所有季度的列表
+
     return render(request,"data/dashboard.html",{"quarter": quarter,
                                                  "db_quarter_list": db_quarter_list,
                                                  "username": username,
@@ -41,20 +35,12 @@ def dashboard_subcompany(request):
     if request.session.get('is_login',None) is None:
         return redirect("../../authorize/login")
 
-    username = request.session['username']
-    if request.GET.get('quarter') is None:  #url没有传参的话，仪表盘显示上一季度数据
-        if request.session.get('selected_quarter',None) is None:
-            quarter = str(datetime.datetime.now().year)+"Q"+str(math.ceil(datetime.datetime.now().month/3.)-1)
-        else:
-            quarter = request.session['selected_quarter']
-    else:
-        quarter = request.GET.get('quarter')
-        request.session['selected_quarter'] = request.GET.get('quarter')
-
-    company    = request.GET.get('name')
-    company_zh = request.GET.get('company_zh')
-
+    username        = request.session['username']
+    company         = request.GET.get('name')
+    company_zh      = request.GET.get('company')
+    quarter         = query.get_user_quarter(request)
     db_quarter_list = query.get_quarter_list()   #获取检核结果库中所有季度的列表
+
     #获取仪表盘数据
     return render(request,"data/dashboard_subcompany.html",{"company":company,
                                                             "company_zh": company_zh,
@@ -68,19 +54,10 @@ def result_detail(request):
     if request.session.get('is_login',None) is None:
         return redirect("../../authorize/login")
     
-    if request.GET.get('quarter') is None:  #url没有传参的话，仪表盘显示上一季度数据
-        if request.session.get('selected_quarter',None) is None:
-            quarter = str(datetime.datetime.now().year)+"Q"+str(math.ceil(datetime.datetime.now().month/3.)-1)
-        else:
-            quarter = request.session['selected_quarter']
-    else:
-        quarter = request.GET.get('quarter')
-        request.session['selected_quarter'] = request.GET.get('quarter')
-
-    company = request.GET.get('name')
-    username = request.session['username']
-
-    result = query.get_result_detail(company, quarter)  #获取检核结果Excel明细
+    quarter         = query.get_user_quarter(request)
+    company         = request.GET.get('name')
+    username        = request.session['username']
+    result          = query.get_result_detail(company,quarter)  #获取检核结果Excel明细
     db_quarter_list = query.get_quarter_list()         #获取检核结果库中所有季度的列表
 
     return render(request,"data/result_detail.html",{"quarter": quarter,
@@ -96,16 +73,8 @@ def report(request):
     if request.session.get('is_login',None) is None:
         return redirect("../../authorize/login")
 
-    if request.GET.get('quarter') is None:  #url没有传参的话，仪表盘显示上一季度数据
-        if request.session.get('selected_quarter',None) is None:
-            quarter = str(datetime.datetime.now().year)+"Q"+str(math.ceil(datetime.datetime.now().month/3.)-1)
-        else:
-            quarter = request.session['selected_quarter']
-    else:
-        quarter = request.GET.get('quarter')
-        request.session['selected_quarter'] = request.GET.get('quarter')
-
-    username = request.session['username']
+    username        = request.session['username']
+    quarter         = query.get_user_quarter(request)
     db_quarter_list = query.get_quarter_list()     #获取检核结果库中所有季度的列表
 
     #引用report_data.py获取数据质量报告的各项数据

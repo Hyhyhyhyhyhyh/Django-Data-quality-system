@@ -1,5 +1,5 @@
 #数据库连接配置，配置文件/data/pyweb/mysite/mysite/db_config.py
-import sys,MySQLdb
+import sys, MySQLdb, math, datetime
 sys.path.insert(0, '..')
 from mysite import db_config
 from itertools import chain
@@ -68,3 +68,27 @@ def query_check_progressbar(company, quarter):
         return value
     except Exception:
         return 0
+
+
+# 初始化仪表盘季度
+def get_user_quarter(request):
+     '''
+     传入参数：request
+          如果GET请求没有传入quarter参数，则先判断用户session是否有上一次选定的季度
+               - 如果上一次有选定季度，则显示上次选定的季度
+               - 没有选定季度，则默认显示上一季度数据
+          
+     返回参数：quarter
+     '''
+     if request.GET.get('quarter') is None:
+          if request.session.get('selected_quarter') is None:
+               if math.ceil(datetime.datetime.now().month/3.)-1 == 0:      # 如果季度=0，则显示去年Q4季度
+                    quarter = str(datetime.datetime.now().year-1) + "Q4"
+               else:
+                    quarter = str(datetime.datetime.now().year)+"Q"+str(math.ceil(datetime.datetime.now().month/3.)-1)
+          else:
+               quarter = request.session['selected_quarter']
+     else:
+          quarter = request.GET.get('quarter')
+          request.session['selected_quarter'] = request.GET.get('quarter')
+     return quarter
