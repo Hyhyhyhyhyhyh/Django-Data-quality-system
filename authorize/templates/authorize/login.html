@@ -39,16 +39,15 @@
                                 <form action="../login_auth" method="POST"> {% csrf_token %}
                                     <div class="form-group">
                                         <label>用户名称</label>
-                                        <input type="text" name="username" class="form-control" placeholder="OA账号名">
+                                        <input type="text" name="username" class="form-control" placeholder="账号名" value="admin">
                                     </div>
                                     <div class="form-group">
                                         <label>密码</label>
-                                        <input type="password" name="password" class="form-control"
-                                            placeholder="OA账号密码">
+                                        <input type="password" name="password" class="form-control" placeholder="密码" value="admin">
                                     </div>
                                     <div class="checkbox">
                                         <label>
-                                            <input type="checkbox" name="autologin">7天内记住我
+                                            <input type="checkbox" name="autologin" checked>7天内记住我
                                         </label>
                                         {{ alert|safe }}
                                     </div>
