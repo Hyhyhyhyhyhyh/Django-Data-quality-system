@@ -86,4 +86,5 @@ urlpatterns = [
     path('api/datastandard/query/detail',            api_stdView.query_detail,                name='query_detail'),
     path('api/datastandard/update',                  api_stdView.update,                      name='update'),
     path('api/datastandard/query/index',             api_stdView.query_index,                 name='query_index'),
+    path('api/datastandard/query/history',           api_stdView.query_update_history,        name='query_update_history'),
 ]
