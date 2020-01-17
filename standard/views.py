@@ -1,17 +1,18 @@
 from django.shortcuts import render, redirect
+from utils.functions import is_login
 
+
+@is_login
 def show(request):
-    if request.session.get('is_login',None) is None:
-        return redirect("../../authorize/login")
-    
-    return render(request,"standard/show.html",{"username": request.session.get('username'),
-                })
+    return render(request, "standard/show.html",
+                  {"username": request.session.get('username')})
 
+
+@is_login
 def update(request):
-    if request.session.get('is_login',None) is None:
-        return redirect("../../authorize/login")
-
-    return render(request,"standard/update.html",{"username": request.session.get('username'),
-                                                  "std_name": request.GET.get('std_name'),
-                                                  "std_type": request.GET.get('std_type'),
-                })
+    return render(
+        request, "standard/update.html", {
+            "username": request.session.get('username'),
+            "std_name": request.GET.get('std_name'),
+            "std_type": request.GET.get('std_type'),
+        })
