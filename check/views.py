@@ -106,21 +106,21 @@ def rule_config(request):
 def rule_exec(request):
     username = request.session['username']
     quarter = query.get_user_quarter(request)
+    
+    conn = db_config.mysql_connect()
+    curs = conn.cursor()
     try:
-        conn = db_config.mysql_connect()
-        curs = conn.cursor()
         # 判断是否已经检核过，检核过则查询进度，未检核过则显示0
         sql = f"select count(table_name) from information_schema.tables where table_name like 'check_result_%_{quarter}%'"
         curs.execute(sql)
         if_checked = [i for i in curs.fetchone()]
-
         if if_checked == 0:
             progressbar = [0, 0, 0, 0, 0, 0, 0]
         else:
+            progressbar = []
             for company in ('xt', 'zc', 'db', 'jk', 'jj1', 'jj2', 'jz'):
                 progressbar.append(query.query_check_progressbar(company, quarter))
-        curs.close()
-        conn.close()
+        
         return render(
             request, "check/rule_exec.html", {
                 "username": username,
@@ -133,8 +133,12 @@ def rule_exec(request):
                 "progressbar_jj2": progressbar[5],
                 "progressbar_jz":  progressbar[6]
             })
-    except:
-        return HttpResponse('error', status=500) 
+    except Exception as e:
+        print(e)
+        return HttpResponse('error', status=500)
+    finally:
+        curs.close()
+        conn.close()
 
 
 ################################################    以下是ajax POST请求的函数    ################################################
