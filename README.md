@@ -107,8 +107,9 @@ demo
 workon django-2.1
 
 # 启动项目
-gunicorn mysite.wsgi -c /data/pyweb/data-quality/gconfig.py
-
-# 停止项目
-gunicorn mysite.wsgi -c /data/pyweb/data-quality/gconfig.py
+gunicorn mysite.wsgi -c /data/pyweb/data-quality/gconfig.py &
 ```
+
+# todo
+- [ ] 使用pandas方法精细化检核逻辑
+- [ ] 数据标准编辑功能完善
