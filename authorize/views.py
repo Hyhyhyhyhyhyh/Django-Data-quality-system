@@ -1,7 +1,5 @@
 from django.shortcuts import render,redirect
 from django.views.decorators.http import require_http_methods
-from django.urls import reverse
-from django.views import generic
 # from ldap3 import Server, Connection, ALL, SUBTREE, ServerPool,ALL_ATTRIBUTES
 
 # 登录页面
@@ -21,8 +19,8 @@ def login_auth(request):
             request.session['is_login'] = True
             return redirect('../../data/index')
     else:
-        user_conn.unbind()
-        conn.unbind()
+        # user_conn.unbind()
+        # conn.unbind()
         alert = "<script>alert ('登录信息不正确');window.location.href='login';</script>"
         return render(request, 'authorize/login.html',{'alert':alert})
     

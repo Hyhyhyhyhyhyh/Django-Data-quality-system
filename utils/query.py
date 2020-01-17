@@ -49,25 +49,24 @@ def get_result_detail(company, quarter):
 
 
 def query_check_progressbar(company, quarter):
-    try:
-        conn = db_config.mysql_connect()
-        curs = conn.cursor()
-        sql  = "select count(*) from check_result_{0}_{1} where check_sql is not null and check_sql != '' ".format(company,quarter)
-        curs.execute(sql)
-        for i in curs.fetchone():
-            to_be_check_cnt = i
-            
-        sql  = "select count(*) from check_result_{0}_{1} where check_sql is not null and check_sql != '' and update_flag='Y'".format(company,quarter)
-        curs.execute(sql)
-        for i in curs.fetchone():
-            checked_cnt = i
-        
-        curs.close()
-        conn.close()
-        value = round(checked_cnt/to_be_check_cnt*100,2)
-        return value
-    except Exception:
-        return 0
+     conn = db_config.mysql_connect()
+     curs = conn.cursor()
+     try:
+          sql  = f"select count(*) from check_result_{company}_{quarter} where check_sql is not null and check_sql != '' "
+          curs.execute(sql)
+          to_be_check_cnt = curs.fetchone()[0]
+               
+          sql  = f"select count(*) from check_result_{company}_{quarter} where check_sql is not null and check_sql != '' and update_flag='Y'"
+          curs.execute(sql)
+          checked_cnt = curs.fetchone()[0]
+
+          return round(checked_cnt/to_be_check_cnt*100,2)
+     except Exception:
+          return 0
+     finally:
+          curs.close()
+          conn.close()
+     
 
 
 # 初始化仪表盘季度

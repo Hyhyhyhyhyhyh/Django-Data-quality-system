@@ -15,8 +15,8 @@ from utils.functions import is_login
 
 @is_login
 def dashboard(request):
-    username = request.session['username']
-    quarter = query.get_user_quarter(request)
+    username        = request.session['username']
+    quarter         = query.get_user_quarter(request)
     db_quarter_list = query.get_quarter_list()  #获取检核结果库中所有季度的列表
 
     return render(
@@ -36,10 +36,10 @@ def dashboard(request):
 
 @is_login
 def dashboard_subcompany(request):
-    username = request.session['username']
-    company = request.GET.get('name')
-    company_zh = request.GET.get('company')
-    quarter = query.get_user_quarter(request)
+    username        = request.session['username']
+    company         = request.GET.get('name')
+    company_zh      = request.GET.get('company')
+    quarter         = query.get_user_quarter(request)
     db_quarter_list = query.get_quarter_list()  #获取检核结果库中所有季度的列表
 
     #获取仪表盘数据
@@ -56,10 +56,10 @@ def dashboard_subcompany(request):
 #-------------------------------------------------------- 检核结果Excel明细 --------------------------------------------------------#
 @is_login
 def result_detail(request):
-    quarter = query.get_user_quarter(request)
-    company = request.GET.get('name')
-    username = request.session['username']
-    result = query.get_result_detail(company, quarter)  #获取检核结果Excel明细
+    quarter         = query.get_user_quarter(request)
+    company         = request.GET.get('name')
+    username        = request.session['username']
+    result          = query.get_result_detail(company, quarter)  #获取检核结果Excel明细
     db_quarter_list = query.get_quarter_list()  #获取检核结果库中所有季度的列表
 
     return render(
@@ -75,22 +75,18 @@ def result_detail(request):
 #-------------------------------------------------------- 检核报告Word --------------------------------------------------------#
 @is_login
 def report(request):
-    username = request.session['username']
-    quarter = query.get_user_quarter(request)
+    username        = request.session['username']
+    quarter         = query.get_user_quarter(request)
     db_quarter_list = query.get_quarter_list()  #获取检核结果库中所有季度的列表
 
     #引用report_data.py获取数据质量报告的各项数据
-    sum_item_cnt = report_data.risk_market_total_count(quarter)
-    sum_problem_cnt = report_data.risk_market_problem_count(quarter)
-    total_problem_per = str(round(sum_problem_cnt / sum_item_cnt * 100,
-                                  2)) + "%"
-    xt_detail = report_data.risk_market_problem_detail("xt", quarter)
-    zc_detail = report_data.risk_market_problem_detail("zc", quarter)
-    db_detail = report_data.risk_market_problem_detail("db", quarter)
-    jk_detail = report_data.risk_market_problem_detail("jk", quarter)
-    jj1_detail = report_data.risk_market_problem_detail("jj1", quarter)
-    jj2_detail = report_data.risk_market_problem_detail("jj2", quarter)
-    jz_detail = report_data.risk_market_problem_detail("jz", quarter)
+    sum_item_cnt        = report_data.risk_market_total_count(quarter)
+    sum_problem_cnt     = report_data.risk_market_problem_count(quarter)
+    total_problem_per   = str(round(sum_problem_cnt / sum_item_cnt * 100,2)) + "%"
+    detail = []
+    for company in ('xt', 'zc', 'db', 'jk', 'jj1', 'jj2', 'jz'):
+        detail.append(report_data.risk_market_problem_detail(company, quarter))
+
     return render(
         request, "data/report.html", {
             "quarter": quarter,
@@ -99,11 +95,11 @@ def report(request):
             "sum_item_cnt": sum_item_cnt,
             "sum_problem_cnt": sum_problem_cnt,
             "total_problem_per": total_problem_per,
-            "xt_detail": xt_detail,
-            "zc_detail": zc_detail,
-            "db_detail": db_detail,
-            "jk_detail": jk_detail,
-            "jj1_detail": jj1_detail,
-            "jj2_detail": jj2_detail,
-            "jz_detail": jz_detail
+            "xt_detail":  detail[0],
+            "zc_detail":  detail[1],
+            "db_detail":  detail[2],
+            "jk_detail":  detail[3],
+            "jj1_detail": detail[4],
+            "jj2_detail": detail[5],
+            "jz_detail":  detail[6]
         })

@@ -14,53 +14,39 @@ from utils.functions import is_login
 
 def list_subcompany(request):
     company = request.GET.get('company')
-    if company == 'xt':
-        company = '信托'
-    elif company == 'zc':
-        company = '资产'
-    elif company == 'db':
-        company = '担保'
-    elif company == 'jk':
-        company = '金科'
-    elif company == 'fd2':
-        company = '基金2'
-    elif company == 'fd1':
-        company = '基金1'
-    elif company == 'jz':
-        company = '金租'
     conn = db_config.mysql_connect()
     curs = conn.cursor()
-    sql = "select rownum,company,item_name,demand_name,demand_created,group_concat(quarter,status order by quarter asc separator'|') \
-            from source_system_demand \
-            where id in ( select max(id) from source_system_demand where company='{0}' group by company,item_name,quarter ) \
-            group by rownum,company;".format(company)
-    curs.execute(sql)
-    result = curs.fetchall()
-    result_list = []
-    for i in result:
-        result_list_tmp = []
-        result_list_tmp.append(i[0])
-        result_list_tmp.append(i[1])
-        result_list_tmp.append(i[2])
-        result_list_tmp.append(i[3])
-        result_list_tmp.append(i[4])
-        for t in i[5].split('|'):
-            result_list_tmp.append(t)
-        result_list.append(result_list_tmp)
-    curs.close()
-    conn.close()
-    return JsonResponse(result_list, safe=False)
 
+    try:
+        sql = f"""select rownum,
+                        company,
+                        item_name,
+                        demand_name,
+                        demand_created,
+                        group_concat(quarter,status order by quarter asc separator'|')
+                    from source_system_demand
+                    where id in ( select max(id) from source_system_demand where company='{company}' group by company,item_name,quarter )
+                    group by rownum,company"""
+        curs.execute(sql)
+        result = curs.fetchall()
 
-@is_login
-def query(request):
-    username = request.session['username']
-    conn = db_config.mysql_connect()
-    curs = conn.cursor()
-    sql = "select rownum,company,item_name,demand_name,demand_created,quarter,status from source_system_demand where id in ( select max(id) from source_system_demand group by company,item_name,quarter ) order by company,rownum asc"
-    return render(request, "demand/query.html", {
-        "username": username,
-    })
+        result_list = []
+        for i in result:
+            result_list_tmp = []
+            result_list_tmp.append(i[0])
+            result_list_tmp.append(i[1])
+            result_list_tmp.append(i[2])
+            result_list_tmp.append(i[3])
+            result_list_tmp.append(i[4])
+            for t in i[5].split('|'):
+                result_list_tmp.append(t)
+            result_list.append(result_list_tmp)
+        return JsonResponse(result_list, safe=False)
+    except:
+        return HttpResponse('error', status=500)
+    finally:
+        curs.close()
+        conn.close()
 
 
 class UploadFileForm(forms.Form):
