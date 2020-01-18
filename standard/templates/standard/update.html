@@ -199,7 +199,7 @@
                 $.ajax({
                     type : "GET",
                     async : false,
-                    url : "../../api/datastandard/query",
+                    url : "../../api/datastandard/query/detail",
                     data: {
                         std_name: "{{ std_name }}",
                         std_type: "desc"
@@ -222,7 +222,7 @@
                 $.ajax({
                     type : "GET",
                     async : false,
-                    url : "../../api/datastandard/query",    
+                    url : "../../api/datastandard/query/detail",    
                     data: {
                         std_name: "{{ std_name }}",
                         std_type: "detail"
@@ -265,9 +265,10 @@
 					type: "POST",
 					url: "../../api/datastandard/update",
 					data: {
-                        std_type: 'desc',
-						std_name: std_name,
-						content: content
+						username : "{{ username }}",
+                        std_type : 'desc',
+						std_name : std_name,
+						content  : content
 					},
 					success: function (data) {
 						console.log(data);
@@ -307,6 +308,7 @@
 					type: "POST",
 					url: "../../api/datastandard/update",
 					data: {
+						username		   : "{{ username }}"    ,
                         std_type           : 'detail',
 						std_name           : std_name            ,
 						en_name            : en_name             ,

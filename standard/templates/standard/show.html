@@ -23,11 +23,6 @@
         height: 30px;
         font-size: 14px;
     }
-
-    .update_info {
-        font-size: 13px;
-        color: gray;
-    }
 </style>
 
 <!-- 正文主体 -->
@@ -147,15 +142,6 @@
                             <td id="system"></td>
                         </tr>
                     </table>
-
-                    <div class="row" style="margin-top: 30px;">
-                        <div class="col-md-8 text-right">
-                            <h5 class="update_info">最后编辑：<span id="update_user"></span></h5>
-                        </div>
-                        <div class="col-lg-4 text-left">
-                            <h5 class="update_info">编辑时间：<span id="update_time"></span></h5>
-                        </div>
-                    </div>
                 </div>
             </div>
 
@@ -166,7 +152,7 @@
 <!-- footer -->
 <footer class="navbar-fixed-bottom" style="line-height: 10px;font-size:13px;">
     <div class="footer">
-        © 2019 广东粤财控股投资有限公司
+        © 2019 Hyhyhyhyhyhyh
     </div>
 </footer>
 </div>
@@ -227,7 +213,7 @@
             $.ajax({
                 type : "GET",
                 async : false,
-                url : "../../api/datastandard/query/detail",
+                url : "../../api/datastandard/query",
                 data: {
                     std_name: treeNode.t,
                     std_type: "desc"        //标准概述
@@ -247,7 +233,7 @@
             $.ajax({
                 type : "GET",
                 async : false,
-                url : "../../api/datastandard/query/detail",
+                url : "../../api/datastandard/query",
                 data: {
                     std_name: treeNode.t,
                     std_type: "detail"      //标准名
@@ -293,9 +279,8 @@
     }
 
     $(document).ready(function(){
-        //$.fn.zTree.init($("#treeDemo"), setting, zNodes);   //初始化zTree
-        $.fn.zTree.init($("#treeDemo"), setting);
-        fuzzySearch('treeDemo','#key',null,null);           //初始化模糊搜索方法
+        $.fn.zTree.init($("#treeDemo"), setting, zNodes);   //初始化zTree
+        fuzzySearch('treeDemo','#key',null,null); //初始化模糊搜索方法
         
         if (typeof(document.referrer.split('?')[1]) == "undefined"){
             var init_name = '概述';
@@ -319,11 +304,11 @@
         }
         document.getElementById("edit").href = "../../datastandard/update?std_name=" + init_name + "&std_type=" + std_type;
 
-        //初始化数据标准内容
+        //初始化页面
         $.ajax({
             type : "GET",
             async : false,
-            url : "../../api/datastandard/query/detail",
+            url : "../../api/datastandard/query",
             data: {
                 std_name: init_name,
                 std_type: std_type,
@@ -358,20 +343,6 @@
                     document.getElementById("edit").href = "../../datastandard/update?std_name=" + init_name + "&std_type=detail";
                 }
             },
-        })
-
-        $.ajax({
-            type : "GET",
-            async : false,
-            url : "../../api/datastandard/query/history",
-            data: {
-                std_name: init_name,
-            },
-            dataType : "json",
-            success : function(result) {
-                document.getElementById("update_user").innerText = result.username;
-                document.getElementById("update_time").innerText = result.last_update_time;
-            }
         })
     });
 </SCRIPT>
