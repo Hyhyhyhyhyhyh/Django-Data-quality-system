@@ -29,6 +29,7 @@ from standard import views as stdView
 from api import api_files as api_filesView
 from api import api_dashboard as api_dashView
 from api import api_datastandard as api_stdView
+from api import api_check as api_checkView
 
 urlpatterns = [
     url(r'^static/(?P<path>.*)$', serve, {'document_root': '/data/pyweb/data-quality/static'}, name='static'),
@@ -49,13 +50,8 @@ urlpatterns = [
 
     # 检核
     path('check/rule_list/',         checkView.rule_list,          name='rule_list'),
-    path('check/rule_detail',        checkView.rule_detail,        name='rule_detail'),
-    path('check/rule_status_modify', checkView.rule_status_modify, name='rule_status_modify'),
     path('check/rule_config/',       checkView.rule_config,        name='rule_config'),
-    path('check/rule_update',        checkView.rule_update,        name='rule_update'),
-    path('check/rule_add',           checkView.rule_add,           name='rule_add'),
     path('check/rule_exec',          checkView.rule_exec,          name='rule_exec'),
-    path('check/rule_execute',       checkView.rule_execute,       name='rule_execute'),
     # 检核定时任务
     path('check/show_crontab',       cronView.show_crontab,        name='show_crontab'),
     path('check/enable_crontab',     cronView.enable_crontab,      name='enable_crontab'),
@@ -72,7 +68,6 @@ urlpatterns = [
     path('datastandard/update', stdView.update, name='update'),
 
     # API
-    path('api/data/subcompany_problem_count',        dataAPIView.subcompany_problem_count,    name='subcompany_problem_count'),
     path('api/demand/list_subcompany',               demandView.list_subcompany,              name='demand_list_subcompany'),
     path('api/files/download',                       api_filesView.download,                  name='files_download'),
 
@@ -87,4 +82,10 @@ urlpatterns = [
     path('api/datastandard/update',                  api_stdView.update,                      name='update'),
     path('api/datastandard/query/index',             api_stdView.query_index,                 name='query_index'),
     path('api/datastandard/query/history',           api_stdView.query_update_history,        name='query_update_history'),
+    
+    path('api/check/rule/detail',                    api_checkView.rule_detail,               name='rule_detail'),
+    path('api/check/rule/update',                    api_checkView.rule_update,               name='rule_update'),
+    path('api/check/rule/add',                       api_checkView.rule_add,                  name='rule_add'),
+    path('api/check/rule/status_modify',             api_checkView.rule_status_modify,        name='rule_status_modify'),
+    path('api/check/rule/execute',                   api_checkView.rule_execute,              name='rule_execute'),
 ]

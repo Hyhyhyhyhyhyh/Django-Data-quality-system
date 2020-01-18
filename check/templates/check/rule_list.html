@@ -102,7 +102,7 @@
 		function fun_status(id, status) { //下拉框触发事件
 			$.ajax({
 				type: "POST",
-				url: "../rule_status_modify",
+				url: "../../api/check/rule/status_modify",
 				data: {
 					id: id,
 					status: status,
@@ -135,7 +135,7 @@
 		$(document).ready(function () {
 			var table = $('#example').DataTable({
 				"ajax": {
-					"url": "../rule_detail",
+					"url": "../../api/check/rule/detail",
 					"type": "GET",
 					"data": function (d) {
 						return $.extend({}, d, {
