@@ -1,5 +1,6 @@
 import os
-from django.http import HttpResponse, Http404, StreamingHttpResponse, FileResponse
+
+from django.http import Http404, FileResponse
 from django.utils.encoding import escape_uri_path
 
 

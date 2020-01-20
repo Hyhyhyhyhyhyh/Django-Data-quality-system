@@ -1,39 +1,39 @@
 from django.http.response import JsonResponse, HttpResponse
 from django.views.decorators.http import require_http_methods
+from crontab import CronTab
 
 import sys, MySQLdb
+
 sys.path.insert(0, '..')
 from mysite import db_config
 from check.autocheck import Check, MyThread
 
+
 @require_http_methods(['GET'])
 def rule_detail(request):
-    '''获取检核规则详情
-    '''
+    """
+    获取检核规则详情
+    """
     company = request.GET.get('name')
-    filter  = request.GET.get('risk_market_filter')
+    filter = request.GET.get('risk_market_filter')
 
     conn = db_config.mysql_connect()
     curs = conn.cursor()
     curs.execute('set autocommit=0')
     try:
-        sql = f"select id,check_item,target_table,risk_market_item,problem_type,db,check_sql,note,status,source_system from check_result_template where source_system in ('{company}') and risk_market_item like '%{filter}%' order by id"
+        sql = f"""select id,check_item,target_table,risk_market_item,problem_type,db,check_sql,note,status,source_system
+from check_result_template
+where source_system in ('{company}')
+and risk_market_item like '%{filter}%'
+order by id"""
         curs.execute(sql)
         result = curs.fetchall()
-        #构造json
+        # 构造json
         result_list = []
         for i in result:
-            result_dict = {}
-            result_dict["id"] = i[0]
-            result_dict["check_item"] = i[1]
-            result_dict["target_table"] = i[2]
-            result_dict["risk_market_item"] = i[3]
-            result_dict["problem_type"] = i[4]
-            result_dict["db"] = i[5]
-            result_dict["check_sql"] = i[6]
-            result_dict["note"] = i[7]
-            result_dict["status"] = i[8]
-            result_dict["source_system"] = i[9]
+            result_dict = {"id": i[0], "check_item": i[1], "target_table": i[2], "risk_market_item": i[3],
+                           "problem_type": i[4], "db": i[5], "check_sql": i[6], "note": i[7], "status": i[8],
+                           "source_system": i[9]}
             result_list.append(result_dict)
         json_data = {'data': result_list}
         return JsonResponse(json_data)
@@ -46,22 +46,23 @@ def rule_detail(request):
 
 @require_http_methods(['POST'])
 def rule_update(request):
-    '''执行修改检核规则
-    '''
-    id              = request.POST.get('id')
-    source_system   = request.POST.get('source_system')
-    check_item      = request.POST.get('check_item')
-    target_table    = request.POST.get('target_table')
-    risk_market     = request.POST.get('risk_market')
-    problem_type    = request.POST.get('problem_type')
-    db              = request.POST.get('db')
-    check_sql       = request.POST.get('code')
-    note            = request.POST.get('note')
-    status          = request.POST.get('status')
+    """
+    执行修改检核规则
+    """
+    id = request.POST.get('id')
+    source_system = request.POST.get('source_system')
+    check_item = request.POST.get('check_item')
+    target_table = request.POST.get('target_table')
+    risk_market = request.POST.get('risk_market')
+    problem_type = request.POST.get('problem_type')
+    db = request.POST.get('db')
+    check_sql = request.POST.get('code')
+    note = request.POST.get('note')
+    status = request.POST.get('status')
 
-    #把"转义为'，再把'转义为''
+    # 把"转义为'，再把'转义为''
     check_sql = MySQLdb.escape_string(check_sql).decode('utf-8')
-    #print(check_sql)
+    # print(check_sql)
     try:
         conn = db_config.mysql_connect()
         curs = conn.cursor()
@@ -88,30 +89,31 @@ def rule_update(request):
 
 @require_http_methods(['POST'])
 def rule_add(request):
-    '''新增检核规则
-    '''
-    source_system   = request.POST.get('source_system')
-    check_item      = request.POST.get('check_item')
-    target_table    = request.POST.get('target_table')
-    risk_market     = request.POST.get('risk_market')
-    problem_type    = request.POST.get('problem_type')
-    db              = request.POST.get('db')
-    code            = request.POST.get('code')
-    note            = request.POST.get('note')
-    status          = request.POST.get('status')
+    """
+    新增检核规则
+    """
+    source_system = request.POST.get('source_system')
+    check_item = request.POST.get('check_item')
+    target_table = request.POST.get('target_table')
+    risk_market = request.POST.get('risk_market')
+    problem_type = request.POST.get('problem_type')
+    db = request.POST.get('db')
+    code = request.POST.get('code')
+    note = request.POST.get('note')
+    status = request.POST.get('status')
 
-    #处理检核SQL中含有''的情况
+    # 处理检核SQL中含有''的情况
     check_sql = MySQLdb.escape_string(code).decode('utf-8')
     # print(check_sql)
     try:
-        #连接数据库
+        # 连接数据库
         conn = db_config.mysql_connect()
         curs = conn.cursor()
         curs.execute('set autocommit=0')
         sql = "select max(id)+1 from check_result_template where source_system in ('" + source_system + "')"
         curs.execute(sql)
         result = curs.fetchone()
-        new_id = str(result[0])  #获取新增的id
+        new_id = str(result[0])  # 获取新增的id
         sql = f"""insert into check_result_template(id,
                                                     source_system,
                                                     check_item,
@@ -145,16 +147,16 @@ def rule_add(request):
 
 @require_http_methods(['POST'])
 def rule_status_modify(request):
-    '''修改检核规则状态，禁用/启用 规则的状态
-    '''
-    id          = request.POST.get('id')
+    """修改检核规则状态，禁用/启用 规则的状态
+    """
+    id = request.POST.get('id')
     post_status = request.POST.get('status')
-    company     = request.POST.get('company')
+    company = request.POST.get('company')
 
     conn = db_config.mysql_connect()
     curs = conn.cursor()
     curs.execute('set autocommit=0')
-    #修改状态
+    # 修改状态
     try:
         if post_status == '已启用':
             sql = f"update check_result_template set status='已停用' where id={id} and source_system='{company}'"
@@ -175,24 +177,25 @@ def rule_status_modify(request):
 
 @require_http_methods(['POST'])
 def rule_execute(request):
-    '''执行检核
-    '''
-    company  = request.POST.get('company')
+    """执行检核
+    """
+    company = request.POST.get('company')
     username = request.POST.get('username')
-    quarter  = request.POST.get('quarter')
+    quarter = request.POST.get('quarter')
+    source_system = company
 
     if company == 'xt':
         check = Check()
         if check.init_table(company, source_system, quarter):
             # 初始化3个线程
             thread1 = MyThread(func=check.run_check,
-                               args=(company, source_system, quarter,'oracle'))
+                               args=(company, source_system, quarter, 'oracle'))
             thread2 = MyThread(func=check.run_check,
-                               args=(company, source_system, quarter,'sqlserver'))
-            thread3 = MyThread(func=check.xt_spec, args=(quarter, ))
+                               args=(company, source_system, quarter, 'sqlserver'))
+            thread3 = MyThread(func=check.xt_spec, args=(quarter,))
             thread4 = MyThread(func=check.run_check,
                                args=(company, source_system, quarter, 'mysql'))
-            #开启3个线程
+            # 开启3个线程
             thread1.start()
             thread2.start()
             thread3.start()
@@ -211,12 +214,12 @@ def rule_execute(request):
                         else:
                             return JsonResponse({
                                 "status":
-                                "检核过程发生错误：" + str(thread4.get_result())
+                                    "检核过程发生错误：" + str(thread4.get_result())
                             })
                     else:
                         return JsonResponse({
                             "status":
-                            "检核过程发生错误：" + str(thread3.get_result())
+                                "检核过程发生错误：" + str(thread3.get_result())
                         })
                 else:
                     return JsonResponse(
@@ -287,7 +290,7 @@ def rule_execute(request):
         else:
             return JsonResponse({"status": "初始化检核表发生错误"})
 
-    if run == True:
+    if run is True:
         conn = db_config.mysql_connect()
         curs = conn.cursor()
         curs.execute('set autocommit=0')
@@ -302,3 +305,37 @@ def rule_execute(request):
             "status": "success",
             "msg": source_system + "公司检核成功！"
         })
+
+
+def enable_crontab(request):
+    """修改crontab状态
+    """
+    status = request.POST.get('status')
+
+    cron = CronTab(user=True)
+    job = list(cron.find_comment('自动进行数据质量检核'))[0]
+
+    if status == 'false':
+        # job.enable(False)
+        # cron.write()
+        return JsonResponse({"msg": "操作成功"})
+    elif status == 'true':
+        # job.enable()
+        # cron.write()
+        return JsonResponse({"msg": "操作成功"})
+    else:
+        return JsonResponse({"msg": "操作失败"})
+
+
+def update_crontab(request):
+    """更新crontab命令
+    """
+    job_time = request.POST.get('job_time')
+
+    try:
+        # cron  = CronTab(user=True)
+        # job = list(cron.find_comment('自动进行数据质量检核'))[0]
+        # job.setall(job_time)
+        return JsonResponse({"msg": "操作成功"})
+    except Exception as e:
+        return JsonResponse({"msg": "操作失败", "reason": e})

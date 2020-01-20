@@ -22,7 +22,6 @@ from django.conf.urls import url
 from data import views as dataView
 from authorize import views as authView
 from check import views as checkView
-from check import crontab as cronView
 from demand import views as demandView
 from files import views as filesView
 from standard import views as stdView
@@ -53,9 +52,7 @@ urlpatterns = [
     path('check/rule_config/',       checkView.rule_config,        name='rule_config'),
     path('check/rule_exec',          checkView.rule_exec,          name='rule_exec'),
     # 检核定时任务
-    path('check/show_crontab',       cronView.show_crontab,        name='show_crontab'),
-    path('check/enable_crontab',     cronView.enable_crontab,      name='enable_crontab'),
-    path('check/update_crontab',     cronView.update_crontab,      name='update_crontab'),
+    path('check/show_crontab',       checkView.show_crontab,       name='show_crontab'),
 
     # 源系统改造需求
     path('demand/import_sheet', demandView.import_sheet, name='import_sheet'),
@@ -88,4 +85,6 @@ urlpatterns = [
     path('api/check/rule/add',                       api_checkView.rule_add,                  name='rule_add'),
     path('api/check/rule/status_modify',             api_checkView.rule_status_modify,        name='rule_status_modify'),
     path('api/check/rule/execute',                   api_checkView.rule_execute,              name='rule_execute'),
+    path('check/enable_crontab',                     api_checkView.enable_crontab,            name='enable_crontab'),
+    path('check/update_crontab',                     api_checkView.update_crontab,            name='update_crontab'),
 ]

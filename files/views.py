@@ -1,7 +1,7 @@
-from django.shortcuts import render, redirect
-from django.http import HttpResponse
-
 import os
+
+from django.shortcuts import render
+
 from utils.functions import is_login
 
 
@@ -19,7 +19,7 @@ def list(request):
     all_files = []
     for i in file_name:
         file_type = i.split('.')
-        file_type = file_type[len(file_type) - 1]  #获取文件扩展名
+        file_type = file_type[len(file_type) - 1]  # 获取文件扩展名
         if file_type in ['xls', 'xlsx', 'xlsm', 'csv', 'xml']:
             file_type = 'excel'
         elif file_type in ['txt']:

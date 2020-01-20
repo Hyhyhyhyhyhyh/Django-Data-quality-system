@@ -11,3 +11,4 @@ standard/migrations/__pycache__/
 files/migrations/__pycache__/
 demand/migrations/__pycache__/
 check/migrations/__pycache__/
+.idea/

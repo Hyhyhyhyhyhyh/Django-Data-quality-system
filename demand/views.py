@@ -1,15 +1,14 @@
-from django.shortcuts import render, redirect
-from django.http import HttpResponse, HttpResponseRedirect, HttpResponseBadRequest
-from django.http.response import JsonResponse
-from django import forms
-#import django_excel as excel
+import json
+import sys
 
-# 引入自定义函数
-import sys, MySQLdb, json
+from django import forms
+from django.http import HttpResponse, HttpResponseBadRequest
+from django.http.response import JsonResponse
+from django.shortcuts import render
+
+# import django_excel as excel
 sys.path.insert(0, '..')
-from utils import query  #获取所有季度名
-from mysite import db_config  #连接数据库
-from utils.functions import is_login
+from mysite import db_config
 
 
 def list_subcompany(request):
@@ -32,12 +31,7 @@ def list_subcompany(request):
 
         result_list = []
         for i in result:
-            result_list_tmp = []
-            result_list_tmp.append(i[0])
-            result_list_tmp.append(i[1])
-            result_list_tmp.append(i[2])
-            result_list_tmp.append(i[3])
-            result_list_tmp.append(i[4])
+            result_list_tmp = [i[0], i[1], i[2], i[3], i[4]]
             for t in i[5].split('|'):
                 result_list_tmp.append(t)
             result_list.append(result_list_tmp)

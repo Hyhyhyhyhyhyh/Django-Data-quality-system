@@ -1,16 +1,15 @@
-from django.http.response import JsonResponse
-import numpy as np
-# np.set_printoptions(precision=2, suppress=True)
+import sys
 
-# 引入自定义函数
-from utils import query        #获取所有季度名
-import sys,MySQLdb
+import numpy as np
+from django.http.response import JsonResponse
+
+# np.set_printoptions(precision=2, suppress=True)
 sys.path.insert(0, '..')
-from mysite import db_config  #连接数据库
+
 
 def avg_problem_percentage(request):
-    '''各公司平均问题占比
-    '''
+    """各公司平均问题占比
+    """
     data = [
         ["quarter", "2019Q1", "2019Q2", "2019Q3", "2019Q4"],
         ["信托",  round(np.random.rand(), 2), round(np.random.rand(), 2), round(np.random.rand(), 2), round(np.random.rand(), 2)],
@@ -25,8 +24,8 @@ def avg_problem_percentage(request):
 
 
 def same_problem_top5(request):
-    '''各公司同类问题Top 5统计
-    '''
+    """各公司同类问题Top 5统计
+    """
     quarter = request.GET.get('quarter')
 
     if quarter == '2019Q1':
@@ -45,8 +44,8 @@ def same_problem_top5(request):
 
 
 def subcompany_data_percentage(request):
-    '''各公司数据量占比
-    '''
+    """各公司数据量占比
+    """
     quarter = request.GET.get('quarter')
 
     data = [
@@ -82,8 +81,8 @@ def subcompany_data_percentage(request):
 
 
 def count_db_rows(request):
-    '''统计各类数据库数据量
-    '''
+    """统计各类数据库数据量
+    """
     quarter = request.GET.get('quarter')
     
     data = [{
@@ -107,8 +106,8 @@ def count_db_rows(request):
 
 
 def data_overiew(request):
-    '''统计风险集市相关 总数据量、总问题数据量、总问题占比
-    '''
+    """统计风险集市相关 总数据量、总问题数据量、总问题占比
+    """
     quarter = request.GET.get('quarter')
     
     all_cnt     = np.random.randint(555550,999999)
@@ -122,8 +121,8 @@ def data_overiew(request):
     
     
 def total_trend(request):
-    '''显示集团总问题占比走势
-    '''
+    """显示集团总问题占比走势
+    """
     data = {"quarter": ["2019Q1", "2019Q2", "2019Q3", "2019Q4"], "value": [round(i,2) for i in np.random.rand(4).tolist()]}
     return JsonResponse(data)
 
