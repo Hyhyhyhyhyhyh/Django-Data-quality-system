@@ -12,44 +12,15 @@
 
     <title>数据质量检核平台</title>
 
-    <link rel="icon" type="image/png" sizes="16x16" href="{% static 'img/favicon.ico' %}" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/static/img/favicon.ico" />
     <!-- Bootstraore CSS -->
-    <link rel="stylesheet" href="{% static 'css/lib/bootstrap/bootstrap.min.css' %}" />
+    <link rel="stylesheet" href="/static/css/lib/bootstrap/bootstrap.min.css" />
     <!-- Custom CSS-->
-    <link rel="stylesheet" href="{% static 'css/helper.css' %}" />
-    <link rel="stylesheet" href="{% static 'css/style.css' %}" />
+    <link rel="stylesheet" href="/static/css/helper.css" />
+    <link rel="stylesheet" href="/static/css/style.css" />
 
     <!-- Echarts js如果放在二级模板延迟加载,会出现始化空白 -->
-    <script src="{% static 'js/Echarts/echarts.js' %}"></script>
-    <script>
-        function setAvatar(name) {
-            let bgColor = [ //from  https://www.google.com/design/spec/style/color.html
-                '#F44336', // red 500
-                '#E91E63', // pink 500
-                '#9C27B0', // purple 500,
-                '#673AB7', // deep purple 500
-                '#3F51B5', // indigo 500
-                '#2196F3', // blue 500
-                '#03A9F4', // light blue 500
-                '#00BCD4', // cyan 500
-                '#009688', // teal 500
-                '#4CAF50', // green 500
-                '#8BC34A', // light green 500
-                '#CDDC39', // lime 500
-                '#FFEB3B', // yellow 500
-                '#FFC107', // amber 500
-                '#FF9800', // orange 500
-                '#FF5722', // deep orange 500
-                '#795548', // brown 500
-                '#9E9E9E', // grey 500
-                '#607D8B', // blue grey 500
-            ];
-            let myAvatar = document.getElementById('avatar');
-            let index = Math.floor(Math.random() * bgColor.length);
-            myAvatar.style.backgroundColor = bgColor[index];
-            myAvatar.innerHTML = name.substr(0,1).toLocaleUpperCase();
-        }
-    </script>
+    <script src="/static/js/Echarts/echarts.js"></script>
 </head>
 
 <style>
@@ -95,7 +66,7 @@
     }
 </style>
 
-<body class="fix-header fix-sidebar" onload="setAvatar('{{ username }}');">
+<body class="fix-header fix-sidebar" onload="init();">
     <!-- 加载图 spinners.css -->
     <div class="preloader">
         <svg class="circular" viewBox="25 25 50 50">
