@@ -19,6 +19,8 @@ def login_auth(request):
     if username == 'admin' and password == 'admin':
         request.session['username'] = username
         request.session['is_login'] = True
+        if request.POST.get('autologin') == 'on':
+                request.session.set_expiry(7*24*60*60)  #session过期时间为7天
         return redirect('../../data/index')
     else:
         # user_conn.unbind()

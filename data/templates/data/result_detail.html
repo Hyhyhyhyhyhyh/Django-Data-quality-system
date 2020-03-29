@@ -1,13 +1,9 @@
 {% include "data/template-ui.html" %}
-{% load staticfiles %}
 <!-- DataTables CSS -->
-<link rel="stylesheet" type="text/css" href="{% static 'css/datatables/foundation.min.css' %}" />
-<link rel="stylesheet" type="text/css" href="{% static 'css/datatables/dataTables.bootstrap4.min.css' %}" />
-<!-- <link rel="stylesheet" type="text/css" href="{% static 'css/datatables/dataTables.foundation.min.css' %}"/> -->
-<!-- <link rel="stylesheet" type="text/css" href="{% static 'css/datatables/jquery.dataTables.css' %}"/> -->
-<link rel="stylesheet" type="text/css" href="{% static 'css/datatables/fixedHeader.foundation.min.css' %}" />
-<link rel="stylesheet" type="text/css" href="{% static 'css/datatables/buttons.foundation.min.css' %}" />
-<!-- <link rel="stylesheet" type="text/css" href="{% static 'css/datatables/datatables-site.css' %}"/> -->
+<link rel="stylesheet" type="text/css" href="/static/css/datatables/foundation.min.css" />
+<link rel="stylesheet" type="text/css" href="/static/css/datatables/dataTables.bootstrap4.min.css" />
+<link rel="stylesheet" type="text/css" href="/static/css/datatables/fixedHeader.foundation.min.css" />
+<link rel="stylesheet" type="text/css" href="/static/css/datatables/buttons.foundation.min.css" />
 
 <style>
     .button-group .button {
@@ -27,36 +23,71 @@
     table {
         font-size: 14px;
     }
+
+    select{
+        border: 0 none;
+        border-bottom: 1px solid;
+        -moz-appearance:none; /* Firefox */
+        -webkit-appearance:none; /* Safari 和 Chrome */
+        padding: unset;
+        height: unset;
+        padding-left: 2%;
+        padding-right: 1%;
+        /*padding-top: 0.8rem;*/
+        margin: unset;
+    }
+    select:focus{
+        border: 0 none;
+        border-bottom: 1px solid;
+        box-shadow: unset;
+    }
+
+    .grid-x {
+        padding-left: 30px;
+    }
+    .dataTables_wrapper {
+        padding-top: unset;
+    }
+
+    /* 超长文字单元格省略号显示 */
+    .gridtitle{
+        text-overflow: ellipsis;    /*超长部分以...代替*/
+        white-space: nowrap;/*文本不换行*/
+        max-width: 150px;/*最大宽度*/
+        overflow: hidden;/*超长部分隐藏掉*/
+　　}
 </style>
 
 <div class="page-wrapper">
-    <div class="container-fluid animated fadeInUp">
+    <!-- 标题 -->
+    <div class="row page-titles">
+        <div class="col-md-4 align-self-center">
+            <h3 class="text-primary">数据质量检核报告</h3>
+        </div>
+
+        <div class="col-md-5 align-self-center">
+            <div class="row">
+                数据日期：
+                <select id="data_year" onchange="GetQuarter();" style="width: 60px;"></select><span style="padding-right: 5px;">年</span>
+                <span>· 第</span><select id="data_quarter" onchange="GetMonth();" style="width: 30px;"></select><span style="padding-right: 5px;">季度 ·</span>
+                <select id="data_month" onchange="GetDay();" style="width: 40px;"></select><span style="padding-right: 5px;">月</span>
+                <select id="data_day" style="width: 40px;"></select><span style="padding-right: 15px;">日</span>
+                <button type="button" class="btn btn-primary btn-xs p310" onclick="ChangeDataDate();" style="border-radius: .25rem;"><i class="fa fa-search"></i></button>
+            </div>
+        </div>
+
+        <div class="col-md-3 align-self-center">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="../../data/index">主页</a></li>
+                <li class="breadcrumb-item active">检核报告</li>
+            </ol>
+        </div>
+    </div>
+
+        <div class="container-fluid animated fadeInUp">
         <div class="row">
             <div class="col-lg-12">
                 <div class="card">
-                    <!-- 标题 -->
-                    <div class="row">
-                        <div class="col-md-4">
-                            <div class="card-title">
-                                <h4 class="text-primary">数据质量检核报告</h4>
-                            </div>
-                        </div>
-
-                        <div class="col-md-8">
-                            <div class="btn-group">
-                                <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown"
-                                    style="border-radius: 4px;">
-                                    当前显示季度:{{ quarter }} <span class="caret"></span></button>
-                                <ul class="dropdown-menu" role="menu">
-                                    {% for quarter_list in db_quarter_list %}
-                                    <li><a href="?name={{ company }}&quarter={{ quarter_list }}">{{ quarter_list }}</a>
-                                    </li>
-                                    {% endfor %}
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-
                     <!-- 正文 -->
                     <div class="card-content">
                         <table id="example" class="table-bordered" style="width:100%">
@@ -75,23 +106,7 @@
                                     <th>备注</th>
                                 </tr>
                             </thead>
-                            <tbody>
-                                {% for i in result_tab %}
-                                <tr>
-                                    <td>{{ i.0 | default_if_none:"" }}</td>
-                                    <td>{{ i.1 | default_if_none:"" }}</td>
-                                    <td data-toggle="popover" id="{{ i.2 }}">{{ i.2 | default_if_none:"" }}</td>
-                                    <td>{{ i.3 | default_if_none:"" }}</td>
-                                    <td>{{ i.4 | default_if_none:"" }}</td>
-                                    <td>{{ i.5 | default_if_none:"" }}</td>
-                                    <td>{{ i.6 | default_if_none:"" }}</td>
-                                    <td>{{ i.7 | default_if_none:"" }}</td>
-                                    <td>{{ i.8 | default_if_none:"" }}</td>
-                                    <td>{{ i.9 | default_if_none:"" }}</td>
-                                    <td>{{ i.10| default_if_none:"" }}</td>
-                                </tr>
-                                {% endfor %}
-                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
@@ -99,48 +114,90 @@
     </div>
 </div>
 
-<!-- <footer class="footer"> © 2019 广东粤财控股投资有限公司</footer> -->
-
-
-<!-- Jquery -->
-<script src="{% static 'js/lib/jquery/jquery.min.js' %}"></script>
-<!-- Bootstrap tether Core JavaScript -->
-<script src="{% static 'js/lib/bootstrap/js/popper.min.js' %}"></script>
-<script src="{% static 'js/lib/bootstrap/js/bootstrap.min.js' %}"></script>
-<!-- slimscrollbar scrollbar JavaScript -->
-<script src="{% static 'js/jquery.slimscroll.js' %}"></script>
-<!--Menu sidebar -->
-<script src="{% static 'js/sidebarmenu.js' %}"></script>
-<!--stickey kit -->
-<script src="{% static 'js/lib/sticky-kit-master/dist/sticky-kit.min.js' %}"></script>
-<script src="{% static 'js/custom.min.js' %}"></script>
+<!-- footer -->
+<footer class="navbar-fixed-bottom" style="line-height: 10px;font-size:13px;">
+    <div class="footer">
+        © 2019 Hyhyhyhyhyhyh
+    </div>
+</footer>
+</div>
 
 <!-- DataTables JS -->
-<script type="text/javascript" src="{% static 'js/DataTables/DataTables-1.10.18/js/jquery.dataTables.min.js' %}"></script>
-<script type="text/javascript" src="{% static 'js/DataTables/DataTables-1.10.18/js/dataTables.foundation.min.js' %}"></script>
-<script type="text/javascript" src="{% static 'js/DataTables/ColReorder-1.5.0/js/dataTables.colReorder.min.js' %}"></script>
-<script type="text/javascript" src="{% static 'js/DataTables/Buttons-1.5.6/js/dataTables.buttons.min.js' %}"></script>
-<script type="text/javascript" src="{% static 'js/DataTables/Buttons-1.5.6/js/buttons.foundation.min.js' %}"></script>
-<script type="text/javascript" src="{% static 'js/DataTables/Buttons-1.5.6/js/buttons.html5.min.js' %}"></script>
-<script type="text/javascript" src="{% static 'js/DataTables/Buttons-1.5.6/js/buttons.print.min.js' %}"></script>
-<script type="text/javascript" src="{% static 'js/DataTables/Buttons-1.5.6/js/buttons.colVis.min.js' %}"></script>
-<script type="text/javascript" src="{% static 'js/DataTables/JSZip-2.5.0/jszip.min.js' %}"></script>
-<script type="text/javascript" src="{% static 'js/DataTables/pdfmake-0.1.36/pdfmake.min.js' %}"></script>
-<script type="text/javascript" src="{% static 'js/DataTables/pdfmake-0.1.36/vfs_fonts.js' %}"></script>
-<script type="text/javascript" src="{% static 'js/DataTables/FixedHeader-3.1.4/js/dataTables.fixedHeader.min.js' %}"></script>
+<script type="text/javascript" src="/static/js/DataTables/DataTables-1.10.18/js/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="/static/js/DataTables/DataTables-1.10.18/js/dataTables.foundation.min.js"></script>
+<script type="text/javascript" src="/static/js/DataTables/ColReorder-1.5.0/js/dataTables.colReorder.min.js"></script>
+<script type="text/javascript" src="/static/js/DataTables/Buttons-1.5.6/js/dataTables.buttons.min.js"></script>
+<script type="text/javascript" src="/static/js/DataTables/Buttons-1.5.6/js/buttons.foundation.min.js"></script>
+<script type="text/javascript" src="/static/js/DataTables/Buttons-1.5.6/js/buttons.html5.min.js"></script>
+<script type="text/javascript" src="/static/js/DataTables/Buttons-1.5.6/js/buttons.print.min.js"></script>
+<script type="text/javascript" src="/static/js/DataTables/Buttons-1.5.6/js/buttons.colVis.min.js"></script>
+<script type="text/javascript" src="/static/js/DataTables/JSZip-2.5.0/jszip.min.js"></script>
+<script type="text/javascript" src="/static/js/DataTables/pdfmake-0.1.36/pdfmake.min.js"></script>
+<script type="text/javascript" src="/static/js/DataTables/pdfmake-0.1.36/vfs_fonts.js"></script>
+<script type="text/javascript" src="/static/js/DataTables/FixedHeader-3.1.4/js/dataTables.fixedHeader.min.js"></script>
+
+<!-- 设置头像 / 设置日期 -->
+<script src="/static/js/init.js"></script>
 
 <script type="text/javascript" class="init">
     $(document).ready(function () {
         var table = $('#example').DataTable({
-            paging: false,
-            fixedHeader: true, // 固定表头
-            colReorder: true, // 可拖动列
-            stateSave: true,
-            buttons: [{
-                    'extend': 'copy',
-                    'text': '复制',
-                    'className': 'btn btn-primary',
+            //使用ajax请求检核结果明细，填充datatables
+            "ajax": {
+                "url": "../../api/quality/detail",
+                "type": "GET",
+                "async": false,     //默认为true即异步加载接口数据，会导致buttons不显示
+                "data": function (d) {
+                    return $.extend({}, d, {
+                        "company": "{{ company }}",
+                        "year": localStorage.getItem("selected_year"),
+                        "quarter": localStorage.getItem("selected_quarter"),
+                        "month": localStorage.getItem("selected_month"),
+                        "day": localStorage.getItem("selected_day"),
+                    });
+                }
+            },
+
+            "columns": [
+                {"data": "id"},
+                {"data": "source_system"},
+                {"data": "check_item"},
+                {"data": "target_table"},
+                {"data": "risk_market_item"},
+                {"data": "problem_type"},
+                {"data": "check_sql", "className":"gridtitle",
+                    "createdCell": function (td, cellData, rowData, row, col) {
+                        $(td).attr('title', cellData);//设置单元格title，鼠标移上去时悬浮框展示全部内容
+                    }
                 },
+                {"data": "item_count"},
+                {"data": "problem_count"},
+                {"data": "problem_per"},
+                {"data": "note", "className":"gridtitle",
+                    "createdCell": function (td, cellData, rowData, row, col) {
+                        $(td).attr('title', cellData);//设置单元格title，鼠标移上去时悬浮框展示全部内容
+                    }
+                },
+            ],
+
+            "createdRow": function (row, data, dataIndex) {
+                //设置数据标准项浮窗
+                $('td:eq(2)', row).attr("data-toggle", "popover");
+                $('td:eq(2)', row).attr("id", data["check_item"]);
+
+                //若问题占比大于0，则把表格问题占比列'td:eq(-2)'标红
+                if (data['problem_per'] != null){
+                    if (data['problem_per'].replace(/\%/g, '') > 0) {
+                        $('td:eq(-2)', row).css('color', 'red');
+                    }
+                }
+            },
+
+            "paging": false,
+            "fixedHeader": true, // 固定表头
+            "colReorder": true, // 可拖动列
+            "stateSave": true,
+            "buttons": [
                 {
                     'extend': 'excel',
                     'text': '导出Excel',
@@ -156,14 +213,8 @@
                 "info": "显示第 _START_ 至 _END_ 项结果，共 _TOTAL_ 项",
                 "sSearch": "搜索:",
             },
-
-            "createdRow": function (row, data, dataIndex) {
-                if (Number(data[9].replace(/\%/g, '')) > 50) { //对第9列问题占比，大于50则把表格最后一列'td:eq(-2)'标红
-                    $('td:eq(-2)', row).css('color', 'red');
-                }
-            },
         });
-
+        
         table.buttons().container().appendTo('#example_wrapper .small-6.columns:eq(0)');
     });
 
@@ -182,13 +233,13 @@
         });
     });
 
-    //加载内容
+    //动态查询数据标准项的定义
     function content(value) {
         var hover_data;
         $.ajax({
             type : "GET",
             async : false,
-            url : "../../api/datastandard/query",
+            url : "../../api/datastandard/query/detail",
             data: {
                 std_name: value,    //标准名
                 std_type: "detail"

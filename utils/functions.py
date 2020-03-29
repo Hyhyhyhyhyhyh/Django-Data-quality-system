@@ -131,3 +131,97 @@ def get_user_quarter(request):
         quarter = request.GET.get('quarter')
         request.session['selected_quarter'] = request.GET.get('quarter')
     return quarter
+
+
+
+def query_data_year():
+    try:
+        conn = db_config.mysql_connect()
+        curs = conn.cursor()
+        sql = """select date_format(execute_date,'%Y'),count(distinct company) as cnt from check_execute_log
+                where status='success'
+                group by date_format(execute_date,'%Y')
+                having count(distinct company)>=7
+                order by 1 asc"""
+        curs.execute(sql)
+        year = curs.fetchall()
+        year = [y[0] for y in year]
+        return year
+    except Exception as e:
+        print('获取年份错误:', e)
+        return False
+    finally:
+        curs.close()
+        conn.close()
+        
+
+def query_data_quarter(year):
+    try:
+        conn = db_config.mysql_connect()
+        curs = conn.cursor()
+        sql = f"""select b.quarter,count(distinct company),b.year from check_execute_log a,dim_date b
+                where DATE_FORMAT(execute_date,'%Y%m%d') = b.day_id
+                and b.year={year}
+                group by b.year,b.quarter
+                having count(distinct company)>=7
+                order by 1 asc"""
+        curs.execute(sql)
+        quarter = curs.fetchall()
+        quarter = [q[0] for q in quarter]
+        return quarter
+    except Exception as e:
+        print('获取季度错误:', e)
+        return False
+    finally:
+        curs.close()
+        conn.close()
+
+
+def query_data_month(year, quarter):
+    try:
+        conn = db_config.mysql_connect()
+        curs = conn.cursor()
+        sql = f"""select distinct b.month,count(distinct company),b.year,b.day from check_execute_log a,dim_date b
+                where DATE_FORMAT(execute_date,'%Y%m%d') = b.day_id
+                and b.year={year}
+                and b.quarter={quarter}
+                group by b.year,b.month,b.day
+                having count(distinct company)>=7
+                order by 1 asc"""
+        curs.execute(sql)
+        month = curs.fetchall()
+        month = [m[0] for m in month]
+        return month
+    except Exception as e:
+        print('获取月份错误:', e)
+        return False
+    finally:
+        curs.close()
+        conn.close()
+
+
+def query_data_day(year, quarter, month):
+    try:
+        conn = db_config.mysql_connect()
+        curs = conn.cursor()
+        sql = f"""select date_format(d,'%d') from (
+                    select date_format(a.execute_date,'%Y%m%d') d,count(distinct company) from check_execute_log a,dim_date b
+                                    where DATE_FORMAT(execute_date,'%Y%m%d') = b.day_id
+                                    and b.year={year}
+                                    and b.quarter={quarter}
+                                    and b.month={month}
+                                    group by date_format(a.execute_date,'%Y%m%d')
+                                    having count(distinct company)>=7
+                                    
+                ) a
+                order by 1 asc"""
+        curs.execute(sql)
+        day = curs.fetchall()
+        day = [d[0] for d in day]
+        return day
+    except Exception as e:
+        print('获取天错误:', e)
+        return False
+    finally:
+        curs.close()
+        conn.close()

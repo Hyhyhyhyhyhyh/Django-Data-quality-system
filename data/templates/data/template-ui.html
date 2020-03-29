@@ -19,6 +19,20 @@
     <link rel="stylesheet" href="/static/css/helper.css" />
     <link rel="stylesheet" href="/static/css/style.css" />
 
+    <!-- Jquery -->
+    <script src="/static/js/jquery/jquery.min.js"></script>
+    <!-- slimscrollbar scrollbar JavaScript -->
+    <script src="/static/js/jquery/jquery.slimscroll.js"></script>
+
+    <!-- Bootstrap tether Core JavaScript -->
+    <script src="/static/js/bootstrap/js/popper.min.js"></script>
+    <script src="/static/js/bootstrap/js/bootstrap.min.js"></script>
+    <!--Menu sidebar -->
+    <script src="/static/js/sidebarmenu.js"></script>
+    <!--stickey kit -->
+    <script src="/static/js/sticky-kit-master/dist/sticky-kit.min.js"></script>
+    <script src="/static/js/custom.min.js"></script>
+
     <!-- Echarts js如果放在二级模板延迟加载,会出现始化空白 -->
     <script src="/static/js/Echarts/echarts.js"></script>
 </head>
@@ -204,9 +218,13 @@
                                 <li><a href="../../check/rule_list?name=金租&risk_market="> 金租 </a></li>
                             </ul>
                         </li>
+
+                        <li> <a class="has-arrow" href="../../check/blood_analyze" aria-expanded="false"><i class="fa fa-map-o"></i>
+                            <span class="hide-menu">血缘分析</span>
+                            </a>
+                        </li>
                         <hr></hr>
                         
-                        {% if username != 'OASSO' %}
                         <li class="nav-label">自动生成Word报告</li>
                         <li> <a class="has-arrow" href="../../data/report" aria-expanded="false"><i class="fa fa-file-text"></i>
                             <span class="hide-menu">风险集市相关</span></a>
@@ -227,7 +245,6 @@
                             </a>
                         </li>
                         <hr></hr>
-                        {% endif %}
 
                         <li class="nav-label">知识管理</li>
                         <li> <a class="has-arrow" href="../../files/list" aria-expanded="false"><i class="fa fa-database"></i>

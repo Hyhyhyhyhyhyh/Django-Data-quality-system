@@ -79,7 +79,7 @@ $.ajax({
     },
     dataType : "json",
     success : function(result) {
-        let company = ["ycxt", "yczc", "gdzdb", "ycjk", "fdct", "zyyc", "jz"]
+        let company = ["xt", "zc", "db", "jk", "jj1", "jj2", "jz"]
         for(let i in company){
             InsertTable(company[i], result[i]);
         }
@@ -102,12 +102,12 @@ $.ajax({
                 data: []
             }]
         };
-        var CompanyChart1 = echarts.init(document.getElementById('overview_chart_ycxt'));
-        var CompanyChart2 = echarts.init(document.getElementById('overview_chart_yczc'));
-        var CompanyChart3 = echarts.init(document.getElementById('overview_chart_gdzdb'));
-        var CompanyChart4 = echarts.init(document.getElementById('overview_chart_ycjk'));
-        var CompanyChart5 = echarts.init(document.getElementById('overview_chart_fdct'));
-        var CompanyChart6 = echarts.init(document.getElementById('overview_chart_zyyc'));
+        var CompanyChart1 = echarts.init(document.getElementById('overview_chart_xt'));
+        var CompanyChart2 = echarts.init(document.getElementById('overview_chart_zc'));
+        var CompanyChart3 = echarts.init(document.getElementById('overview_chart_db'));
+        var CompanyChart4 = echarts.init(document.getElementById('overview_chart_jk'));
+        var CompanyChart5 = echarts.init(document.getElementById('overview_chart_jj1'));
+        var CompanyChart6 = echarts.init(document.getElementById('overview_chart_jj2'));
         var CompanyChart7 = echarts.init(document.getElementById('overview_chart_jz'));
         CompanyChart1.setOption(option);
         CompanyChart2.setOption(option);
@@ -286,7 +286,7 @@ var option = {
         orient: 'vertical',
         x: 'left',
         y: 'bottom',
-        data:['粤财信托','粤财资产','广东再担保','粤财金科','基金创投','中银粤财','金租']
+        data:['信托','资产','担保','金科','基金1','基金2','金租']
     },
     series: [
         {
