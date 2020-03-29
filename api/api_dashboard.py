@@ -349,7 +349,7 @@ def total_trend(request):
                 union
                 select 'jz' company,item_count,problem_count,check_date from check_result_jz where risk_market_item='是'
                 ) a
-                group by DATE_FORMAT(a.check_date,'%Y%m%d')
+                group by DATE_FORMAT(a.check_date,'%Y-%m-%d')
                 having count(distinct company)=7
                 order by 1 asc"""
         curs.execute(sql)

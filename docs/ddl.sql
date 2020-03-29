@@ -91,3 +91,26 @@ create table data_standard_desc(
 	name text,
 	content text
 );
+
+-- 日期维度表
+CREATE TABLE `dim_date` (
+  `date` datetime DEFAULT NULL,
+  `day_id` int(11) NOT NULL,
+  `year` int(11) DEFAULT NULL,
+  `month` int(11) DEFAULT NULL,
+  `day` int(11) DEFAULT NULL,
+  `quarter` int(11) DEFAULT NULL,
+  `day_name` text,
+  `weekofyear` bigint(20) DEFAULT NULL,
+  `dayofyear` int(11) DEFAULT NULL,
+  `daysinmonth` int(11) DEFAULT NULL,
+  `dayofweek` int(11) DEFAULT NULL,
+  `is_leap_year` tinyint(1) DEFAULT NULL,
+  `is_month_end` tinyint(1) DEFAULT NULL,
+  `is_month_start` tinyint(1) DEFAULT NULL,
+  `is_quarter_end` tinyint(1) DEFAULT NULL,
+  `is_quarter_start` tinyint(1) DEFAULT NULL,
+  `is_year_end` tinyint(1) DEFAULT NULL,
+  `is_year_start` tinyint(1) DEFAULT NULL,
+  PRIMARY KEY (`day_id`)
+);

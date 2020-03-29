@@ -5,95 +5,46 @@ http://data.sghen.cn
 # 项目结构
 ```
 项目
-│  gconfig.py                               gunicorn配置文件
-│  manage.py                                Django管理文件
-│  README.md                                readme
-|  nginx.conf                               nginx.conf
+│  gconfig.py           gunicorn配置文件
+│  manage.py            Django管理文件
+│  README.md            readme
+|  nginx.conf           nginx.conf
 │
-├─api
-│     api_dashboard.py                      仪表盘api接口
-│     api_datastandard.py                   数据标准api接口
-│     api_files.py                          文件下载api接口
+├─api                   ajax接口
 │
-├─authorize
-│  │  views.py                              登录验证模块代码
-│  └─templates
-│      └─authorize
-│              login.html                   前端HTML模板
-│
-├─check
-│  │  autocheck.py                          执行自动检核代码
-│  │  crontab.py                            自动检核定时任务管理代码
-│  │  crontab_autocheck.py                  执行自动检核定时任务代码
-│  │  functions.py                          查询检核进度
-│  │  views.py                              检核模块代码
-│  └─templates
-│      └─check
-│              rule_add.html                添加检核规则页面模板
-│              rule_config.html             编辑检核规则页面模板
-│              rule_exec.html               手工执行检核页面模板
-│              rule_list.html               查看检核规则列表页面模板
-│              show_crontab.html            查看自动检核定时任务页面模板
-│
-├─data
-│  │  views.py                              仪表盘+检核结果显示模板代码
-│  └─templates
-│      └─data
-│              dashboard.html               集团仪表盘页面模板
-│              dashboard_subcompany.html    子公司仪表盘页面模板
-│              index.html
-│              report.html                  自动生成的word检核报告页面模板
-│              result_detail.html           检核报告excel页面模板
-│              template-ui.html             ***UI模板***
-│
-├─demand
-│  │  insert_excel.sql
-│  │  views.py                              源系统改造需求excel模块代码
-│  └─templates
-│      └─demand
-│              upload_form.html             源系统改造需求excel表上传页面
-│
-├─docs                                      文档目录
-│      api_views.md
-│      authorize_views.md
-│      check_views.md
-│      data_views.md
-│      ddl.sql                              一些数据库表的DDL语句
-│      demand_views.md
-│      files_views.md
-│      部署文档.md
-│      requirements.txt                     python项目的库列表
-│
-├─files
-│  │  views.py                             数据治理知识库模块代码 
-│  └─templates
-│      └─files
-│              file_list.html               数据治理知识库页面模板
-│
-├─logs                                      错误日志
-├─mysite
-│      db_config.py                         记录检核结果的本地数据库配置文件
-│      settings.py                          Django框架配置文件
-│      source_db_config.py                  源系统数据库配置文件
-│      urls.py                              url路由配置文件
-│      wsgi.py
-│
-├─standard
-│  │  views.py                              数据标准模块代码
-│  └─templates
-│      └─standard
-│              show.html                    查看数据标准页面
-│              update.html                  编辑数据标准页面
+├─authorize             身份认证模块
 |
-├─utils                                     一些复用的函数
-│     query.py
-|     report_data.py
+├─check                 自动检核模块
+|
+├─data                  仪表盘、检核明细模块
+|
+├─demand                更新源系统改造需求
+|
+├─docs                  文档目录
 │
-└─static                                    css、js、附件等静态文件目录
+├─files                 上传下载文件模块
+│
+├─logs                  日志目录
+|
+├─mysite                Django配置目录
+│
+├─standard              查看、更新数据标准模块
+|
+├─utils                 一些复用的函数
+│
+└─static                css、js、附件等静态文件目录
 ```
 
 
 # 更新记录
+## 2020-03-29
+1. 后端
+    - 检核结果由按季度存放改在按日存放，记录检核版本方便查看历史变化趋势
+    - 根据check_execute_log检核日志表为前端提供日期选择接口；api代码更新为正式代码（代替随机数据）
+    - 添加日期维度表
+2. 前端：在仪表盘添加各公司质量总览及全期趋势图；添加日期选择控件等
+3. 进一步前后分离，减少后端渲染模板
+
 ## 2019-12-29
 实际部署demo
 
@@ -113,3 +64,4 @@ gunicorn mysite.wsgi -c /data/pyweb/data-quality/gconfig.py &
 # todo
 - [ ] 使用pandas方法精细化检核逻辑
 - [ ] 数据标准编辑功能完善
+- [ ] 血缘分析
