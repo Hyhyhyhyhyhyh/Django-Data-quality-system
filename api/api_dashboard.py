@@ -302,12 +302,12 @@ def data_overview_company_trend(request):
     try:
         conn = db_config.mysql_connect()
         curs = conn.cursor()
-        sql = f"""select round(sum(problem_count)/sum(item_count)*100,2)
+        sql = f"""select round(sum(problem_count)/sum(item_count)*100,2),check_version
                     from check_result_{company}
                     where risk_market_item='是'
                     and check_date < date_add('{year}-{month}-{day}',interval 1 day)
-                    group by check_date
-                    order by check_date asc"""
+                    group by check_version
+                    order by check_version asc"""
         curs.execute(sql)
         result = curs.fetchall()
         result = [r[0] for r in result]
