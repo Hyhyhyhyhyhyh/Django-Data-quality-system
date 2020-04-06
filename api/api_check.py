@@ -339,3 +339,41 @@ def update_crontab(request):
         return JsonResponse({"msg": "操作成功"})
     except Exception as e:
         return JsonResponse({"msg": "操作失败", "reason": e})
+    
+    
+@require_http_methods(['GET'])
+def query_check_progress(request):
+    """
+    查询正在运行的检核任务执行进度
+    :param request:
+    :return:
+    """
+    company = request.GET.get('company')
+    
+    try:
+        conn = db_config.mysql_connect()
+        curs = conn.cursor()
+        sql  = f"""select count(*) from check_result_{company} a,(select max(check_version) check_version from check_result_{company}) b
+                    where a.check_sql is not null
+                    and a.check_sql != ''
+                    and a.check_version=b.check_version"""
+        curs.execute(sql)
+        result = curs.fetchone()
+        to_be_check_cnt = result[0]
+            
+        sql  = f"""select count(*) from check_result_{company} a,(select max(check_version) check_version from check_result_{company}) b
+                    where a.check_sql is not null
+                    and a.check_sql != ''
+                    and a.check_version=b.check_version
+                    and a.update_flag='Y'"""
+        curs.execute(sql)
+        result = curs.fetchone()
+        checked_cnt = result[0]
+        
+        value = round(checked_cnt/to_be_check_cnt*100,2)
+        return JsonResponse({"data": value})
+    except Exception as e:
+        return JsonResponse({"msg": "查询失败", "reason": e})
+    finally:
+        curs.close()
+        conn.close()

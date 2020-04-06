@@ -1,0 +1,72 @@
+{% include "data/template-ui.html" %}
+<!-- 正文主体 -->
+<div class="page-wrapper">
+    <!-- 标题 -->
+    <div class="row page-titles">
+        <div class="col-md-4 align-self-center">
+            <h3 class="text-primary" id="page_title">血缘分析（信托公司）</h3>
+        </div>
+
+        <div class="col-md-5 align-self-center">
+            <div class="row">
+                选择公司：
+                <select id="company_list">
+                    <option>信托</option>
+                    <option>资产</option>
+                    <option>担保</option>
+                    <option>金科</option>
+                    <option>基金1</option>
+                    <option>基金2</option>
+                    <option>金租</option>
+                </select>
+                <button type="button" class="btn btn-primary btn-xs p310" onclick="ChangeCompany();"><i class="fa fa-search"></i></button>
+            </div>
+        </div>
+
+        <div class="col-md-3 align-self-center">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="../../data/index">主页</a></li>
+                <li class="breadcrumb-item active">血缘分析</li>
+            </ol>
+        </div>
+    </div>
+    
+    <div class="container-fluid animated fadeInUp">
+        <div class="row">
+            <div class="card" style="height: 600px;width: 100%;">
+                <div id="myDiagramDiv" style="width:100%; height:600px"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- footer -->
+<footer class="navbar-fixed-bottom" style="line-height: 10px;font-size:13px;">
+    <div class="footer">
+        © 2019 Hyhyhyhyhyhyh
+    </div>
+</footer>
+
+</div>
+
+
+<!-- 设置头像 / 设置gojs-->
+<script src="/static/js/init.js"></script>
+<!-- gojs库 -->
+<script src="/static/js/gojs/go.js"></script>
+<script src="/static/js/gojs/Buttons.js"></script>
+
+<script>
+    function ChangeCompany(){
+        var obj = document.getElementById("company_list");
+        var value = obj.options[obj.selectedIndex].value; // 选中值
+        localStorage.setItem('selected_company', value);
+
+        var title = document.getElementById("page_title");
+        title.innerHTML = "血缘分析（" + value + "公司）";
+    }
+</script>
+
+</body>
+
+</html>
