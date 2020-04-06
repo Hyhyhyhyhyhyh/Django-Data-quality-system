@@ -1,14 +1,13 @@
 <!DOCTYPE html>
 <html lang="zh-cmn-Hans">
-{% load staticfiles %}
 
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,Chrome=1" />
-    <!-- Tell the browser to be responsive to screen width -->
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="">
     <meta name="author" content="">
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests" />
 
     <title>数据质量检核平台</title>
 
@@ -34,7 +33,7 @@
     <script src="/static/js/custom.min.js"></script>
 
     <!-- Echarts js如果放在二级模板延迟加载,会出现始化空白 -->
-    <script src="/static/js/Echarts/echarts.js"></script>
+    <script src="https://cdn.bootcss.com/echarts/4.7.0/echarts.min.js"></script>
 </head>
 
 <style>

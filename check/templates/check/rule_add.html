@@ -1,4 +1,3 @@
-{% load staticfiles %}
 <!DOCTYPE html>
 <html lang="zh-cmn-Hans">
 
@@ -13,14 +12,15 @@
 	<title>数据质量检核平台</title>
 
 
-	<link rel="stylesheet" type="text/css" href="{% static 'check/css/admin/bootstrap.min.css' %}" />
-	<link rel="stylesheet" type="text/css" href="{% static 'check/css/admin/style.css' %}" />
-	<link rel="stylesheet" type="text/css" href="{% static 'css/animate.css' %}" />
-	<link rel="stylesheet" type="text/css" href="{% static 'css/fonts.css' %}" />
-	<link rel="stylesheet" type="text/css" href="{% static 'css/icons.css' %}" />
+	<link rel="stylesheet" type="text/css" href="/static/check/css/admin/bootstrap.min.css"/>
+	<link rel="stylesheet" type="text/css" href="/static/check/css/admin/style.css"/>
+	<link rel="stylesheet" type="text/css" href="/static/css/animate.css"/>
+	<link rel="stylesheet" type="text/css" href="/static/css/fonts.css"/>
+	<link rel="stylesheet" type="text/css" href="/static/css/icons.css"/>
 
-	<link rel="stylesheet" type="text/css" href="{% static 'CodeMirror/lib/codemirror.css' %}" />
-	<link rel="stylesheet" type="text/css" href="{% static 'CodeMirror/theme/eclipse.css' %}" />
+	<link rel="stylesheet" type="text/css" href="/static/CodeMirror/lib/codemirror.css"/>
+	<link rel="stylesheet" type="text/css" href="/static/CodeMirror/theme/eclipse.css"/>
+	<link rel="stylesheet" type="text/css" href="/static/css/sweetalert.css"/>
 
 	<style>
 		.dataTables_filter {
@@ -140,11 +140,12 @@
 		</div>
 	</footer>
 
-	<script type="text/javascript" src="{% static 'js/lib/jquery/jquery.min.js' %}"></script>
-	<script type="text/javascript" src="{% static 'js/lib/bootstrap/js/bootstrap.min.js' %}"></script>
+	<script type="text/javascript" src="/static/js/lib/jquery/jquery.min.js"></script>
+	<script type="text/javascript" src="/static/js/lib/bootstrap/js/bootstrap.min.js"></script>
 
-	<script type="text/javascript" src="{% static 'CodeMirror/lib/codemirror.js' %}"></script>
-	<script type="text/javascript" src="{% static 'CodeMirror/mode/sql.js' %}"></script>
+	<script type="text/javascript" src="/static/CodeMirror/lib/codemirror.js"></script>
+	<script type="text/javascript" src="/static/CodeMirror/mode/sql.js"></script>
+	<script type="text/javascript" src="/static/js/sweetalert.min.js"></script>
 
 	<script>
 		$(function () {
