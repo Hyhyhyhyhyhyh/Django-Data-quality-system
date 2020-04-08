@@ -159,12 +159,15 @@ def query_data_quarter(year):
     try:
         conn = db_config.mysql_connect()
         curs = conn.cursor()
-        sql = f"""select b.quarter,count(distinct company),b.year from check_execute_log a,dim_date b
-                where DATE_FORMAT(execute_date,'%Y%m%d') = b.day_id
-                and b.year={year}
-                group by b.year,b.quarter
-                having count(distinct company)>=7
-                order by 1 asc"""
+        sql = f"""select distinct quarter from (
+                    select b.quarter,count(distinct company),b.year from check_execute_log a,dim_date b
+                                    where DATE_FORMAT(execute_date,'%Y%m%d') = b.day_id
+                                    and a.status='success'
+                                    and b.year={year}
+                                    group by b.year,b.quarter
+                                    having count(distinct company)>=7
+                    ) a
+                    order by 1 asc"""
         curs.execute(sql)
         quarter = curs.fetchall()
         quarter = [q[0] for q in quarter]
@@ -181,13 +184,16 @@ def query_data_month(year, quarter):
     try:
         conn = db_config.mysql_connect()
         curs = conn.cursor()
-        sql = f"""select distinct b.month,count(distinct company),b.year,b.day from check_execute_log a,dim_date b
-                where DATE_FORMAT(execute_date,'%Y%m%d') = b.day_id
-                and b.year={year}
-                and b.quarter={quarter}
-                group by b.year,b.month,b.day
-                having count(distinct company)>=7
-                order by 1 asc"""
+        sql = f"""select distinct month from (
+                    select b.month,count(distinct company),b.year,b.day from check_execute_log a,dim_date b
+                                    where DATE_FORMAT(execute_date,'%Y%m%d') = b.day_id
+                                    and a.status='success'
+                                    and b.year={year}
+                                    and b.quarter={quarter}
+                                    group by b.year,b.month,b.day
+                                    having count(distinct company)>=7
+                    ) a
+                    order by month asc"""
         curs.execute(sql)
         month = curs.fetchall()
         month = [m[0] for m in month]
@@ -204,17 +210,17 @@ def query_data_day(year, quarter, month):
     try:
         conn = db_config.mysql_connect()
         curs = conn.cursor()
-        sql = f"""select date_format(d,'%d') from (
+        sql = f"""select distinct date_format(d,'%d') from (
                     select date_format(a.execute_date,'%Y%m%d') d,count(distinct company) from check_execute_log a,dim_date b
                                     where DATE_FORMAT(execute_date,'%Y%m%d') = b.day_id
+                                    and a.status='success'
                                     and b.year={year}
                                     and b.quarter={quarter}
                                     and b.month={month}
                                     group by date_format(a.execute_date,'%Y%m%d')
                                     having count(distinct company)>=7
-                                    
-                ) a
-                order by 1 asc"""
+                    ) a
+                    order by 1 asc"""
         curs.execute(sql)
         day = curs.fetchall()
         day = [d[0] for d in day]
