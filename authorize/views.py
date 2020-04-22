@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
 from django.views.decorators.http import require_http_methods
+from django.http.response import JsonResponse
 
 
 # from ldap3 import Server, Connection, ALL, SUBTREE, ServerPool,ALL_ATTRIBUTES
@@ -21,12 +22,11 @@ def login_auth(request):
         request.session['is_login'] = True
         if request.POST.get('autologin') == 'on':
                 request.session.set_expiry(7*24*60*60)  #session过期时间为7天
-        return redirect('../../data/index')
+        return JsonResponse({'status': 'success'})
     else:
         # user_conn.unbind()
         # conn.unbind()
-        alert = "<script>alert ('登录信息不正确');window.location.href='login';</script>"
-        return render(request, 'authorize/login.html', {'alert': alert})
+        return JsonResponse({'status': 'failed'})
 
     """
     使用openLDAP进行用户身份验证

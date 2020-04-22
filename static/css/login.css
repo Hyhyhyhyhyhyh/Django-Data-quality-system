@@ -1,0 +1,163 @@
+.input-group {
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+/* @font-face {
+    font-family: title-speed;
+    src: url('/fonts/LobsterTwo-Regular.otf');
+} */
+
+.navbar-brand {
+    font-family: title-speed;
+    font-size: 1.2rem;
+    font-weight: 500;
+
+}
+
+#bg {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    background-color: #000;
+}
+
+#bg>div:nth-child(1) {
+    animation-delay: 10s;
+}
+
+#bg>div:nth-child(2) {
+    animation-delay: 20s;
+}
+
+#bg>div {
+    background-size: cover;
+    background-position: center center;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 3s ease, visibility 3s;
+    animation: bg 30s linear infinite;
+}
+
+@keyframes bg {
+    0% {
+        -webkit-transform: scale(1, 1);
+        -moz-transform: scale(1, 1);
+        -ms-transform: scale(1, 1);
+        -o-transform: scale(1, 1);
+        transform: scale(1, 1);
+        visibility: visible;
+        opacity: 0;
+    }
+
+    5% {
+        opacity: 0.5;
+    }
+
+    33% {
+        opacity: 0.5;
+    }
+
+    38% {
+        transform: scale(1.2, 1.2);
+        opacity: 0;
+    }
+
+    39% {
+        visibility: hidden;
+    }
+
+    100% {
+        visibility: hidden;
+        opacity: 0;
+    }
+}
+
+/* .login {
+    background-color: #1a237e;
+    background-image: url(static/svg/motif-blocks.svg);
+    background-repeat: repeat;
+    background-size: 200px;
+    width: 100%;
+    height: 100%;
+    -webkit-animation: loginBgReveal 20s linear infinite;
+    animation: loginBgReveal 20s linear infinite;
+}
+
+.login:before {
+    content: "";
+    position: absolute;
+    background-image: url(static/svg/motif-overlay.svg);
+    background-attachment: fixed;
+    background-size: cover;
+    opacity: .001;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+}
+
+@keyframes loginBgReveal {
+    0% {
+        background-position-y: 0;
+    }
+
+    100% {
+        background-position-y: 800px;
+    }
+} */
+
+.form-control,
+.form-group .form-control {
+    background-position: center bottom;
+}
+
+.btn.btn-rose.btn-simple, .navbar .navbar-nav>li>a.btn.btn-rose.btn-simple {
+    background-color: #1976d2;
+    color: #fff;
+    box-shadow: 0 2px 2px 0 rgba(0, 123, 255, 0.14), 0 3px 1px -2px rgba(0, 123, 255, 0.2), 0 1px 5px 0 rgba(0, 123, 255, 0.12);
+}
+
+.btn.btn-lg, .btn-group-lg .btn, .navbar .navbar-nav>li>a.btn.btn-lg, .btn-group-lg .navbar .navbar-nav>li>a.btn {
+    padding: unset;
+}
+
+.card [data-background-color="rose"] {
+    background: linear-gradient(60deg, #0091ea, #1976d2);
+    box-shadow: 0 4px 20px 0px rgba(0, 0, 0, 0.14), 0 7px 10px -5px rgba(233, 30, 99, 0.4);
+}
+
+.btn.btn-rose.btn-simple:hover, .btn.btn-rose.btn-simple:focus, .btn.btn-rose.btn-simple:active, .navbar .navbar-nav>li>a.btn.btn-rose.btn-simple:hover, .navbar .navbar-nav>li>a.btn.btn-rose.btn-simple:focus, .navbar .navbar-nav>li>a.btn.btn-rose.btn-simple:active {
+    background-color: #1976d2;
+    color: #fff;
+    box-shadow: 0 2px 2px 0 rgba(0, 123, 255, 0.14), 0 3px 1px -2px rgba(0, 123, 255, 0.2), 0 1px 5px 0 rgba(0, 123, 255, 0.12);
+}
+
+#login {
+    line-height: 0px;
+}
+
+#forget-password {
+    float: right;
+    margin-top: -10px;
+}
+
+#forget-password:hover {
+    color: #039be5;
+}
+
+#forget-password:focus {
+    color: #039be5;
+}
+
+nav ul li.active {
+    background-color: unset;
+}

@@ -1,3 +1,6 @@
+# 说明
+登录页面背景图来自https://pixabay.com
+
 # demo
 http://data.sghen.cn
 登录用户名密码：admin/admin

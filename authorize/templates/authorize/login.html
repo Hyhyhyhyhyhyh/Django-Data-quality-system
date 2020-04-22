@@ -1,81 +1,186 @@
-{% load staticfiles %}
+<!DOCTYPE html>
 <html lang="zh-cmn-Hans">
 
 <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <!-- Tell the browser to be responsive to screen width -->
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="">
-    <meta name="author" content="">
-    <link rel="icon" type="image/png" sizes="16x16" href="/static/img/favicon.ico" />
+    <meta charset="UTF-8">
+    <meta content="IE=edge" http-equiv="X-UA-Compatible">
+    <meta content="initial-scale=1.0, maximum-scale=1.0, user-scalable=no, width=device-width" name="viewport">
+    <!-- <meta name="theme-color" content="#3f51b5"> -->
     <title>数据质量检核平台</title>
-    <!-- Bootstrap Core CSS -->
-    <link rel="stylesheet" href="/static/css/lib/bootstrap/bootstrap.min.css" />
-    <!-- Custom CSS -->
-    <link rel="stylesheet" href="/static/css/helper.css" />
-    <link rel="stylesheet" href="/static/css/style.css" />
+
+    <link href="https://cdn.bootcss.com/twitter-bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/static/css/material-dash.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="https://cdn.bootcss.com/materialize/1.0.0/css/materialize.min.css" rel="stylesheet">
+
+    <link rel="shortcut icon" href="/static/img/favicon.ico" type="image/x-icon" />
+    <link href="/static/css/login.css" rel="stylesheet">
+
+    <style>
+        .nav>li>a {
+            padding-top: unset !important;
+            padding-bottom: unset !important;
+        }
+        nav i, nav [class^="mdi-"], nav [class*="mdi-"], nav i.material-icons {
+            display: unset;
+        }
+        [type="checkbox"]:not(:checked), [type="checkbox"]:checked {
+            position: unset;
+            opacity: unset;
+            pointer-events: unset;
+        }
+    </style>
 </head>
 
-<body class="fix-header fix-sidebar">
-    <!-- Preloader - style you can find in spinners.css -->
-    <div class="preloader">
-        <svg class="circular" viewBox="25 25 50 50">
-            <circle class="path" cx="50" cy="50" r="20" fill="none" stroke-width="2" stroke-miterlimit="10" /> </svg>
+<body class="off-canvas-sidebar" onload="Onload();">
+    <!-- Begin 背景动画 -->
+    <div id="bg">
     </div>
+    <!-- End 背景动画 -->
 
-    <script color="92,74,199" pointColor="92,74,199" opacity="0.7" src="/static/js/canvas-nest.js"></script>
-
-    <!-- Main wrapper  -->
-    <div id="main-wrapper">
-
-        <div class="unix-login">
-            <div class="container-fluid">
-                <div class="row justify-content-center">
-                    <div class="col-lg-4">
-                        <div class="login-content card">
-                            <div class="login-form">
-                                <h4>用户登录</h4>
-                                <form action="../login_auth" method="POST"> {% csrf_token %}
-                                    <div class="form-group">
-                                        <label>用户名称</label>
-                                        <input type="text" name="username" class="form-control" placeholder="账号名" value="admin">
+    <nav class="navbar navbar-primary navbar-transparent navbar-absolute">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navigation-example-2">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="/">数据质量检核平台</a>
+            </div>
+            <div class="collapse navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li id="home">
+                        <a href="/">
+                            <i class="material-icons">dashboard</i> 首页
+                        </a>
+                    </li>
+                    <li id="bind-mobile">
+                        <a href="#">
+                            <i class="material-icons">person_add</i> 绑定手机号
+                        </a>
+                    </li>
+                    <li id="login-page" class="active">
+                        <a href="#" onclick="SwitchTab('InputForm');">
+                            <i class="material-icons">fingerprint</i> 登录
+                        </a>
+                    </li>
+                    <li id="reset-pwd" class="">
+                        <a href="#" onclick="SwitchTab('ResetForm');">
+                            <i class="material-icons">verified_user</i> 重置密码
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <div class="wrapper wrapper-full-page">
+        <div class="full-page login-page">
+            <div class="content">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-4 col-sm-6 col-md-offset-4 col-sm-offset-3">
+                            <form method="#" action="#" _lpchecked="1">
+                                <div class="card card-login">
+                                    <div class="card-header text-center" data-background-color="rose">
+                                        <div class="card-title">
+                                            <span>
+                                                <!-- <img src="/static/img/logo.png" /> -->
+                                                数据质量检核平台
+                                            </span>
+                                        </div>
+    
+                                        <div class="social-line">
+                                            <a href="#账号登录" class="btn btn-just-icon btn-simple" onclick="SwitchTab('InputForm');">
+                                                <span style="font-size: 14px;">账号登录</span>
+                                            </a>
+                                        </div>
                                     </div>
-                                    <div class="form-group">
-                                        <label>密码</label>
-                                        <input type="password" name="password" class="form-control" placeholder="密码" value="admin">
+                                    
+                                    <!-- Begin 账号登录 -->
+                                    <div class="card-content" id="InputForm">
+                                        <div class="input-group" onkeydown="NextElement('username');">
+                                            <span class="input-group-addon"><i class="material-icons">face</i></span>
+                                            <div class="form-group label-floating">
+                                                <label class="control-label">账号名</label>
+                                                <input class="form-control" style="cursor: auto;" type="text" id="username" value="admin">
+                                                <span class="material-input"></span>
+                                            </div>
+                                        </div>
+    
+                                        <div class="input-group" onkeydown="NextElement('password');">
+                                            <span class="input-group-addon"><i class="material-icons">lock_outline</i></span>
+                                            <div class="form-group label-floating">
+                                                <label class="control-label">密码</label>
+                                                <input class="form-control" style="cursor: auto;" type="password" id="password" value="admin">
+                                                <span class="material-input"></span>
+                                            </div>
+                                        </div>
+    
+                                        <a id="forget-password" href="javascript:void(0)" onclick="SwitchTab('ResetForm');">忘记密码？</a>
                                     </div>
-                                    <div class="checkbox">
-                                        <label>
-                                            <input type="checkbox" name="autologin" checked>7天内记住我
-                                        </label>
-                                        {{ alert|safe }}
+                                    <!-- End 账号登录 -->
+    
+                                    <!-- Begin 重置密码 -->
+                                    <div class="card-content" id="ResetForm" style="display: none;">
+                                        <div class="input-group">
+                                            <span class="input-group-addon"><i class="material-icons">phone_iphone</i></span>
+                                            <div class="form-group label-floating">
+                                                <label class="control-label">手机号</label>
+                                                <input class="form-control" style="cursor: auto;" type="text" id="mobile">
+                                                <span class="material-input"></span>
+                                            </div>
+                                        </div>
+    
+                                        <div class="input-group" onkeydown="NextElement('send-sms');">
+                                            <span class="input-group-addon">
+                                                <button id="send-sms" type="button" onclick="SendSMSCode();" class="btn  btn-md">获取验证码</button>
+                                            </span>
+                                            <div class="form-group label-floating">
+                                                <label class="control-label">短信验证码</label>
+                                                <input class="form-control" style="cursor: auto;" type="text" id="sms-code">
+                                                <span class="material-input"></span>
+                                            </div>
+                                        </div>
+    
+                                        <div class="input-group" onkeydown="NextElement('new-password');">
+                                            <span class="input-group-addon"><i class="material-icons">lock_outline</i></span>
+                                            <div class="form-group label-floating">
+                                                <label class="control-label">新密码</label>
+                                                <input class="form-control" style="cursor: auto;" type="password" id="new-password">
+                                                <span class="material-input"></span>
+                                            </div>
+                                        </div>
+    
+                                        <a id="forget-password" href="javascript:void(0)" onclick="SwitchTab('InputForm');">返回账号登录</a>
                                     </div>
-                                    <button type="submit" class="btn btn-primary btn-flat m-b-30 m-t-30">登录</button>
-                                </form>
-                            </div>
+                                    <!-- End 重置密码 -->
+    
+                                    <!-- 登录按钮 -->
+                                    <div class="text-center">
+                                        <button type="button" id="login" onclick="Login();" class="btn btn-rose btn-simple btn-wd btn-lg">登录</button>
+                                        <button type="button" id="reset" onclick="ModifyPassword();" class="btn btn-rose btn-simple btn-wd btn-lg" style="display: none;">重置密码并登陆</button>
+                                    </div>
+    
+                                </div>
+                            </form>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-
+        
     </div>
-    <!-- End Wrapper -->
-    <!-- All Jquery -->
-    <script src="/static/js/jquery/jquery.min.js"></script>
-    <!-- Bootstrap tether Core JavaScript -->
-    <script src="/static/js/bootstrap/js/popper.min.js"></script>
-    <script src="/static/js/bootstrap/js/bootstrap.min.js"></script>
-    <!-- slimscrollbar scrollbar JavaScript -->
-    <script src="/static/js/jquery.slimscroll.js"></script>
-    <!--Menu sidebar -->
-    <script src="/static/js/sidebarmenu.js"></script>
-    <!--stickey kit -->
-    <script src="/static/js/sticky-kit-master/dist/sticky-kit.min.js"></script>
-    <!--Custom JavaScript -->
-    <script src="/static/js/custom.min.js"></script>
+    <footer class="navbar-fixed-bottom" style="line-height: 10px;font-size:13px;color:gray;text-align: right;">
+        <div class="footer">
+                © 1984-2020 Hyhyhyhyhyhyh
+        </div>
+    </footer>
 
+    <script type="text/javascript" src="https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js"></script>
+    <script type="text/javascript" src="/static/js/login.js"></script>
+    <script type="text/javascript" src="/static/js/sweetalert.min.js"></script>
 </body>
 
 </html>
