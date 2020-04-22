@@ -51,7 +51,7 @@ urlpatterns = [
     # 检核
     path('check/rule_list/',         checkView.rule_list,          name='rule_list'),
     path('check/rule_config/',       checkView.rule_config,        name='rule_config'),
-    path('check/rule_exec',          checkView.rule_exec,          name='rule_exec'),
+    path('check/rule_exec',          checkView.rule_execute_manual,          name='rule_execute_manual'),
     # 检核定时任务
     path('check/show_crontab',       checkView.show_crontab,       name='show_crontab'),
     # 血缘分析
