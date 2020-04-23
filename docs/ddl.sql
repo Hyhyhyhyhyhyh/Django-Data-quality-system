@@ -114,3 +114,19 @@ CREATE TABLE `dim_date` (
   `is_year_start` tinyint(1) DEFAULT NULL,
   PRIMARY KEY (`day_id`)
 );
+
+-- 数据源记录表
+CREATE TABLE `source_db_info` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `company` varchar(10) DEFAULT NULL,
+  `name` varchar(40) DEFAULT NULL,
+  `ip` varchar(16) DEFAULT NULL,
+  `user` varchar(32) DEFAULT NULL,
+  `passwd` varchar(200) DEFAULT NULL,
+  `db` varchar(32) DEFAULT NULL,
+  `port` int(11) DEFAULT NULL,
+  `db_type` varchar(32) DEFAULT NULL,
+  `charset` varchar(10) DEFAULT NULL,
+  `note` varchar(200) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+);

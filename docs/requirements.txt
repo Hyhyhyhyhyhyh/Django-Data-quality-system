@@ -47,6 +47,7 @@ redis==3.3.8
 requests==2.22.0
 simplejson==3.16.0
 six==1.12.0
+SQLAlchemy==1.3.16
 sqlparse==0.3.0
 supervisor==4.0.4
 tablib==0.13.0
