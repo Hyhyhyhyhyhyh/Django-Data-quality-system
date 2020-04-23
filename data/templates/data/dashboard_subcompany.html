@@ -67,6 +67,14 @@
         50% {opacity: 0.5;}  
         100% {opacity: 1;}  
     }  
+    select{
+        border: 0 none;
+        border-bottom: 1px solid;
+        -moz-appearance:none; /* Firefox */
+        -webkit-appearance:none; /* Safari 和 Chrome */
+        padding-left: 2%;
+        padding-right: 1%;
+    }
 </style>
 
 <!-- 正文主体 -->
@@ -74,7 +82,7 @@
     <!-- 标题 -->
     <div class="row page-titles">
         <div class="col-md-4 align-self-center">
-            <h3 class="text-primary">风险集市数据质量仪表盘</h3>
+            <h3 class="text-primary">{{ company }}公司-数据质量仪表盘</h3>
         </div>
 
         <div class="col-md-5 align-self-center">

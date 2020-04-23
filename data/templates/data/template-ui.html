@@ -91,7 +91,7 @@
             <nav class="navbar top-navbar navbar-expand-md navbar-light">
                 <!-- 左上角Logo -->
                 <div class="navbar-header">
-                    <a class="navbar-brand" href="../../data/index">
+                    <a class="navbar-brand" href="../../data/dashboard/">
                         <span style="margin-left:-30px;color:#fff;">数据质量检核平台</span>
                     </a>
                 </div>
@@ -155,101 +155,115 @@
             <div class="scroll-sidebar">
                 <nav class="sidebar-nav">
                     <ul id="sidebarnav">
-                        <li class="nav-devider"></li>
-                        <li> <a class="has-arrow" href="../../data/index" aria-expanded="false"><i class="fa fa-home"></i>
-                            <span class="hide-menu">主页</span></a>
-                        </li>
-                        <hr></hr>
-
-                        <li class="nav-label">风险集市数据质量仪表盘</li>
-                        <!-- <li class="active"> -->
+                        <li class="nav-label">质量管理</li>
                         <li>
                             <a class="has-arrow" href="#" aria-expanded="false">
                                 <i class="fa fa-bar-chart-o"></i>
-                                <span class="hide-menu">仪表盘<span class="label label-rouded label-info pull-right">9</span>
+                                <span class="hide-menu">仪表盘<span class="label label-rouded label-info pull-right">8</span>
                             </a>
                             <ul aria-expanded="false" class="collapse">
                                 <li><a href="../../data/dashboard">集团 </a></li>
-                                <li><a href="../../data/dashboard/subcompany?name=xt&company_zh=信托">信托 </a></li>
-                                <li><a href="../../data/dashboard/subcompany?name=zc&company_zh=资产">资产 </a></li>
-                                <li><a href="../../data/dashboard/subcompany?name=db&company_zh=担保">担保 </a></li>
-                                <li><a href="../../data/dashboard/subcompany?name=jk&company_zh=金科">金科 </a></li>
-                                <li><a href="../../data/dashboard/subcompany?name=jj1&company_zh=基金1">基金1 </a></li>
-                                <li><a href="../../data/dashboard/subcompany?name=jj2&company_zh=基金2">基金2 </a></li>
-                                <li><a href="../../data/dashboard/subcompany?name=jz&company_zh=金租">金租 </a></li>
+                                <li><a href="../../data/dashboard/subcompany?company=xt&company_zh=信托">信托 </a></li>
+                                <li><a href="../../data/dashboard/subcompany?company=zc&company_zh=资产">资产 </a></li>
+                                <li><a href="../../data/dashboard/subcompany?company=db&company_zh=担保">担保 </a></li>
+                                <li><a href="../../data/dashboard/subcompany?company=jk&company_zh=金科">金科 </a></li>
+                                <li><a href="../../data/dashboard/subcompany?company=jj1&company_zh=基金1">基金1 </a></li>
+                                <li><a href="../../data/dashboard/subcompany?company=jj2&company_zh=基金2">基金2 </a></li>
+                                <li><a href="../../data/dashboard/subcompany?company=jz&company_zh=金租">金租 </a></li>
                             </ul>
                         </li>
-                        <hr></hr>
                         
-                        <li class="nav-label">数据质量检核报告</li>
                         <li> <a class="has-arrow" href="#" aria-expanded="false">
                             <i class="fa fa-table"></i>
-                            <span class="hide-menu">风险集市相关-Excel<span class="label label-rouded label-danger pull-right">7</span>
+                            <span class="hide-menu">检核结果明细<span class="label label-rouded label-danger pull-right">7</span>
                             </a>
                             <ul aria-expanded="false" class="collapse">
-                                <li><a href="../../data/result_detail?name=xt">信托 </a></li>
-                                <li><a href="../../data/result_detail?name=zc">资产 </a></li>
-                                <li><a href="../../data/result_detail?name=db">担保 </a></li>
-                                <li><a href="../../data/result_detail?name=jk">金科 </a></li>
-                                <li><a href="../../data/result_detail?name=jj1">基金2 </a></li>
-                                <li><a href="../../data/result_detail?name=jj2">基金1 </a></li>
-                                <li><a href="../../data/result_detail?name=jz">金租 </a></li>
+                                <li><a href="../../data/result_detail?company=xt">信托 </a></li>
+                                <li><a href="../../data/result_detail?company=zc">资产 </a></li>
+                                <li><a href="../../data/result_detail?company=db">担保 </a></li>
+                                <li><a href="../../data/result_detail?company=jk">金科 </a></li>
+                                <li><a href="../../data/result_detail?company=jj1">基金2 </a></li>
+                                <li><a href="../../data/result_detail?company=jj2">基金1 </a></li>
+                                <li><a href="../../data/result_detail?company=jz">金租 </a></li>
                             </ul>
                         </li>
                         <hr></hr>
 
-                        <li class="nav-label">数据质量检核标准</li>
-                        <li> <a class="has-arrow" href="../../datastandard/show" aria-expanded="false"><i class="fa fa-flag-o"></i>
-                            <span class="hide-menu">风险集市数据标准</span>
+                        <!-- 标准管理 -->
+                        <li class="nav-label">标准管理</li>
+                        <li> <a class="has-arrow" href="../../datastandard/show" aria-expanded="false"><i class="fa fa-check-square-o"></i>
+                            <span class="hide-menu">数据标准</span>
                             </a>
                         </li>
 
-                        <li> <a class="has-arrow" href="#" aria-expanded="false"><i class="fa fa-check-square-o"></i>
+                        <li> <a class="has-arrow" href="#" aria-expanded="false">
+                            <i class="fa">
+                                <img src="/static/icons/db-icons/sql.svg" style="width: 27px;margin-left: -5px;" />
+                            </i>
                             <span class="hide-menu">检核规则库<span class="label label-rouded label-warning pull-right">7</span>
                             </a>
                             <ul aria-expanded="false" class="collapse">
-                                <li><a href="../../check/rule_list?name=信托&risk_market="> 信托 </a></li>
-                                <li><a href="../../check/rule_list?name=资产&risk_market="> 资产 </a></li>
-                                <li><a href="../../check/rule_list?name=担保&risk_market=">担保 </a></li>
-                                <li><a href="../../check/rule_list?name=金科&risk_market="> 金科 </a></li>
-                                <li><a href="../../check/rule_list?name=基金2&risk_market="> 基金2 </a></li>
-                                <li><a href="../../check/rule_list?name=基金1&risk_market="> 基金1 </a></li>
-                                <li><a href="../../check/rule_list?name=金租&risk_market="> 金租 </a></li>
+                                <li><a href="../../check/rule_list?company=信托&risk_market="> 信托 </a></li>
+                                <li><a href="../../check/rule_list?company=资产&risk_market="> 资产 </a></li>
+                                <li><a href="../../check/rule_list?company=担保&risk_market=">担保 </a></li>
+                                <li><a href="../../check/rule_list?company=金科&risk_market="> 金科 </a></li>
+                                <li><a href="../../check/rule_list?company=基金2&risk_market="> 基金2 </a></li>
+                                <li><a href="../../check/rule_list?company=基金1&risk_market="> 基金1 </a></li>
+                                <li><a href="../../check/rule_list?company=金租&risk_market="> 金租 </a></li>
                             </ul>
                         </li>
 
-                        <li> <a class="has-arrow" href="../../check/blood_analyze" aria-expanded="false"><i class="fa fa-map-o"></i>
+                        <li> <a class="has-arrow" href="../../check/blood_analyze" aria-expanded="false"><i class="fa fa-sitemap"></i>
                             <span class="hide-menu">血缘分析</span>
                             </a>
                         </li>
                         <hr></hr>
                         
-                        <li class="nav-label">自动生成Word报告</li>
-                        <li> <a class="has-arrow" href="../../data/report" aria-expanded="false"><i class="fa fa-file-text"></i>
-                            <span class="hide-menu">风险集市相关</span></a>
+                        <!-- 知识管理 -->
+                        <li class="nav-label">知识管理</li>
+                        <li> <a class="has-arrow" href="../../files/list" aria-expanded="false"><i class="fa fa-book"></i>
+                            <span class="hide-menu">数据治理知识库</span>
+                            </a>
                         </li>
-                        <hr></hr>
 
+                        <!-- 后台管理 -->
                         <li class="nav-label">后台管理</li>
-                        <li> <a class="has-arrow" href="../../check/show_crontab" aria-expanded="false"><i class="fa fa-terminal"></i>
-                            <span class="hide-menu">自动检核（定时任务）</span>
+                        <li>
+                            <a class="has-arrow" href="../../backend/database" aria-expanded="false">
+                                <i class="fa fa-database" style="width: 27px;"></i>
+                                <span class="hide-menu">数据源</span>
                             </a>
                         </li>
-                        <li> <a class="has-arrow" href="../../check/rule_exec" aria-expanded="false"><i class="fa fa-male"></i>
-                            <span class="hide-menu">手工检核</span>
+
+                        <li>
+                            <a class="has-arrow" href="#" aria-expanded="false">
+                                <i class="fa fa-tv" style="width: 27px;"></i>
+                                <span class="hide-menu">任务调度<span class="label btn-primary label-rouded pull-right">2</span>
+                            </a>
+                            <ul aria-expanded="false" class="collapse">
+                                <li> <a class="has-arrow" href="../../check/show_crontab" aria-expanded="false">
+                                    <span class="hide-menu">自动检核(定时任务)</span>
+                                    </a>
+                                </li>
+                                <li> <a class="has-arrow" href="../../check/rule_exec" aria-expanded="false">
+                                    <span class="hide-menu">手动检核</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+
+                        <li>
+                            <a class="has-arrow" href="../../data/report" aria-expanded="false">
+                                <i class="fa fa-file-text" style="width: 27px;"></i>
+                                <span class="hide-menu">生成Word报告模板</span>
                             </a>
                         </li>
+                        
                         <li> <a class="has-arrow" href="../../demand/import_sheet" target="_blank" aria-expanded="false"><i class="fa fa-tags"></i>
                             <span class="hide-menu">更新源系统改造需求进度表</span>
                             </a>
                         </li>
-                        <hr></hr>
-
-                        <li class="nav-label">知识管理</li>
-                        <li> <a class="has-arrow" href="../../files/list" aria-expanded="false"><i class="fa fa-database"></i>
-                            <span class="hide-menu">数据治理知识库</span>
-                            </a>
-                        </li>
+                        
                     </ul>
                 </nav>
             </div>

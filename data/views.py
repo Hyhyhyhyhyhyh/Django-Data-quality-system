@@ -23,7 +23,7 @@ def dashboard_subcompany(request):
     2. 子公司问题数据项的排序报表
     3. 改造进度
     """
-    company = request.GET.get('name')
+    company = request.GET.get('company')
     company_zh = request.GET.get('company')
     return render(request, "data/dashboard_subcompany.html", {"company": company,
                                                               "company_zh": company_zh,
