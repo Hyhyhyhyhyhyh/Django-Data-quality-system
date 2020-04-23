@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'files',
     'api',
     'standard',
+    'backend',
 ]
 
 MIDDLEWARE = [

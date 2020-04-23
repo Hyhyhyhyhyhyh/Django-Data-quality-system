@@ -1,0 +1,106 @@
+{% include "data/template-ui.html" %}
+<link rel="stylesheet" type="text/css" href="/static/css/icons.css" />
+<style>
+    table {
+        border-collapse: collapse;
+        width: 100%;
+        font-size: 13px;
+    }
+    .table > tbody > tr > td, .table > tbody > tr > th, .table > tfoot > tr > td, .table > tfoot > tr > th, .table > thead > tr > td, .table > thead > tr > th {
+        line-height: unset;
+        vertical-align: middle;
+    }
+</style>
+
+<div class="page-wrapper">
+    <!-- 标题 -->
+    <div class="row page-titles">
+        <div class="col-md-1 align-self-center">
+            <h3 class="text-primary" style="font-family: 'Open Sans', sans-serif;">数据源</h3>
+        </div>
+
+        <div class="col-md-7">
+            <a href="../backend/database/add" target="_blank" class="btn btn-primary"><i class="im-plus-circle"></i> 添加数据源</a>
+        </div>
+
+        <div class="col-md-4 align-self-center">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="../../data/dashboard/">主页</a></li>
+                <li class="breadcrumb-item active">数据源</li>
+            </ol>
+        </div>
+    </div>
+
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card" id="page-content">
+                    <div class="table-responsive">
+                        <table class="table table-hover overview_table">
+                            <thead>
+                                <tr>
+                                    <th>所属公司</th>
+                                    <th>#</th>
+                                    <th>类型</th>
+                                    <th>源系统名称</th>
+                                    <th>IP</th>
+                                    <th>说明</th>
+                                    <th>详情</th>
+                                </tr>
+                            </thead>
+                            <tbody id="database">
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- footer -->
+<footer class="navbar-fixed-bottom" style="line-height: 10px;font-size:13px;">
+    <div class="footer">
+        © 2019-2020 Hyhyhyhyhyhyh
+    </div>
+</footer>
+</div>
+
+
+<!-- 设置头像 / 设置日期 -->
+<script src="/static/js/init.js"></script>
+
+<script>
+    $.ajax({
+        type : "GET",
+        async : true,
+        url : "../../api/backend/database/query",    
+        data: {},
+        dataType : "json",
+        success : function(result) {
+            let tab = document.getElementById("database");
+            let html = "";
+            for(let i in result.data.company){
+                html += "<tr>";
+                html += "<td>" + result.data.company[i] + "</td>";
+                html += '<td><img src="../../static/icons/db-icons/'+ result.data.db_type[i] +'.svg" style="height:25px;width:40px;"></img></td>';
+                html += "<td>" + result.data.db_type[i] + "</td>";
+                html += "<td>" + result.data.db[i] + "</td>";
+                html += "<td>" + result.data.ip[i] + "</td>";
+                if(result.data.note[i] == null){
+                    html += "<td></td>";
+                }
+                else{
+                    html += "<td>" + result.data.note[i] + "</td>";
+                }
+                html += '<td><a href="../backend/database/detail?id='+ result.data.rowid[i] +'" target="_blank" style="color:#1779ba;">详情</a></td>';
+                html += "</tr>";
+            }
+            tab.innerHTML = html;
+        },
+    })
+</script>
+
+</body>
+
+</html>

@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<!-- Tell the browser to be responsive to screen width -->
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="description" content="">
+	<meta name="author" content="">
+	<link rel="icon" type="image/png" sizes="16x16" href="/static/img/favicon.ico" />
+	<title>数据质量检核平台</title>
+
+
+	<link rel="stylesheet" type="text/css" href="/static/check/css/admin/bootstrap.min.css" />
+	<link rel="stylesheet" type="text/css" href="/static/check/css/admin/style.css" />
+	<link rel="stylesheet" type="text/css" href="/static/css/fonts.css" />
+	<link rel="stylesheet" type="text/css" href="/static/css/icons.css" />
+
+	<link rel="stylesheet" type="text/css" href="/static/css/sweetalert.css" />
+
+	<style>
+        .table {
+            color:black;
+        }
+        .table > thead > tr > th, .table > tbody > tr > th, .table > tfoot > tr > th, .table > thead > tr > td, .table > tbody > tr > td, .table > tfoot > tr > td {
+            vertical-align: middle;
+        }
+        .ibox-tools{
+            float: unset;
+        }
+        .ibox-title h5{
+            margin: unset;
+            padding-top: 8px;
+            margin-right: 30px;
+        }
+	</style>
+</head>
+
+<body>
+	<!-- head star -->
+	<div class="tnav row wrapper border-bottom white-bg page-heading">
+		<div class="col-sm-4">
+			<h2 class="fl" style="color: #007bff;font-size: 21px;font-weight:500">数据源：{{ db }} 详情</h2>
+			<ol class="breadcrumb fl">
+				<li><a href="../../data/dashboard/">主页</a></li>
+				<li><strong>数据源详情</strong></li>
+			</ol>
+		</div>
+	</div>
+	<!-- head end -->
+
+	<!-- table star -->
+	<div class="row col-lg-8">
+		<div class="wrapper wrapper-content">
+			<div class="ibox">
+				<div class="ibox-title">
+					<h5>{{ name }}公司 - {{ db }}数据库 - 详情</h5>
+					<div class="ibox-tools rboor">
+                        <button class="btn btn-primary" onclick="Commit();"><i class="im-checkmark"></i> 提交修改</button>
+					</div>
+				</div>
+
+				<div class="ibox-content">
+                    <table class="table table-hover overview_table">
+                        <tbody>
+                            <tr>
+                                <td style="width: 130px;">公司简称</td>
+                                <td>{{ company }}</td>
+                            </tr>
+                            <tr>
+                                <td>所属公司</td>
+                                <td>{{ name }}</td>
+                            </tr>
+                            <tr>
+                                <td>数据库类型</td>
+                                <td><input id="db_type" type="text" class="form-control" value='{{ db_type|default_if_none:"" }}' required="required"></td>
+                            </tr>
+                            <tr>
+                                <td>IP</td>
+                                <td><input id="ip" type="text" class="form-control" value='{{ ip|default_if_none:"" }}' required="required"></td>
+                            </tr>
+                            <tr>
+                                <td>端口号</td>
+                                <td><input id="port" type="text" class="form-control" value='{{ port|default_if_none:"" }}' required="required"></td>
+                            </tr>
+                            <tr>
+                                <td>数据库名/实例名</td>
+                                <td><input id="db" type="text" class="form-control" value='{{ db|default_if_none:"" }}' required="required"></td>
+                            </tr>
+                            <tr>
+                                <td>数据库用户</td>
+                                <td><input id="user" type="text" class="form-control" value='{{ user|default_if_none:"" }}' required="required"></td>
+                            </tr>
+                            <tr>
+                                <td>密码</td>
+                                <td><input id="password" type="password" class="form-control" value="" required="required"></td>
+                            </tr>
+                            <tr>
+                                <td>字符集</td>
+                                <td><input id="charset" type="text" class="form-control" value='{{ charset|default_if_none:"" }}' required="required"></td>
+                            </tr>
+                            <tr>
+                                <td>备注说明</td>
+                                <td><input id="note" type="text" class="form-control" value='{{ note|default_if_none:"" }}' required="required"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- table end -->
+	<footer class="navbar-fixed-bottom" style="line-height: 10px;font-size:13px;">
+		<div class="footer">
+			© 2019-2020 Hyhyhyhyhyhyh
+		</div>
+	</footer>
+
+	<script type="text/javascript" src="/static/js/jquery/jquery.min.js"></script>
+	<script type="text/javascript" src="/static/js/bootstrap/js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="/static/js/sweetalert.min.js"></script>
+
+	<script>
+        function Commit(){
+            var ip = document.getElementById("ip");
+            var user = document.getElementById("user");
+            var password = document.getElementById("password");
+            var db = document.getElementById("db");
+            var port = document.getElementById("port");
+            var db_type = document.getElementById("db_type");
+            var note = document.getElementById("note");
+
+            // 判断数据源信息是否存在空值，存在空值则出现提示
+            var obj_id = ["ip", "user", "password", "db", "port", "db_type"];
+            var objs = [ip, user, password, db, port, db_type];
+            var null_cnt = 0;
+            for(let i in objs){
+                console.log(obj_id[i], objs[i].value);
+                if (objs[i].value == null || objs[i].value.length == 0){
+                    document.getElementById(obj_id[i]).style.borderBottomColor = "#ff0000";
+                    null_cnt += 1;
+                }
+            }
+            if(null_cnt > 0){
+                swal({
+                    text: "存在空值！",
+                    icon: "error",
+                    buttons: false,
+                    timer: 1000
+                });
+                return;
+            }
+
+            swal({
+                text: "是否确定更新数据源信息？修改操作可能会导致检核任务失败",
+                icon: "warning",
+                buttons: ["取消", "确定"],
+                dangerMode: true,
+              })
+              .then((value) => {
+                  //更新数据库
+                    $.ajax({
+                        type: "POST",
+                        url: "../../api/backend/database/update",
+                        data: {
+                            id: "{{ id }}",
+                            ip: ip.value,
+                            user: user.value,
+                            password: password.value,
+                            db: db.value,
+                            port: port.value,
+                            db_type: db_type.value,
+                            note: note.value
+                        },
+                        success: function (data) {
+                            console.log(data);
+                            swal({
+                                    text: "数据源更新成功...",
+                                    icon: "success",
+                                    buttons: false,
+                                    timer: 1000
+                                }).then(function(){
+                                    window.history.back(-1) || window.close();
+                                });
+                        },
+                        error: function (e) {
+                            swal({
+                                title: "发生错误",
+                                text: e,
+                                icon: "error",
+                            })
+                        }
+                    })
+              });
+        };
+	</script>
+
+</body>
+
+</html>

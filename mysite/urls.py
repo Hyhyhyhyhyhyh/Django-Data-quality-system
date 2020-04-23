@@ -25,6 +25,7 @@ from check import views as checkView
 from demand import views as demandView
 from files import views as filesView
 from standard import views as stdView
+from backend import views as beView
 from api import api_files as api_filesView
 from api import api_dashboard as api_dashView
 from api import api_datastandard as api_stdView
@@ -32,6 +33,7 @@ from api import api_check as api_checkView
 from api import api_date as api_dateView
 from api import api_quality as api_qualityView
 from api import api_blood as api_bloodView
+from api import api_backend as api_beView
 
 urlpatterns = [
     url(r'^static/(?P<path>.*)$', serve, {'document_root': '/data/pyweb/data-quality/static'}, name='static'),
@@ -42,6 +44,7 @@ urlpatterns = [
     path('data/report',                dataView.report,                      name='report'),
     path('data/result_detail',         dataView.result_detail,               name='result_detail'),
     path('',            RedirectView.as_view(url='data/dashboard/')),
+    path('data/index',            RedirectView.as_view(url='data/dashboard/')),
 
     # 登录身份验证
     path('authorize/login/',     authView.login,      name='login'),
@@ -66,6 +69,11 @@ urlpatterns = [
     # 数据标准
     path('datastandard/show',   stdView.show,   name='std_show'),
     path('datastandard/update', stdView.update, name='update'),
+    
+    # 后台管理
+    path('backend/database',   beView.database,    name='database'),
+    path('backend/database/detail',   beView.database_detail,    name='database_detail'),
+    path('backend/database/add',   beView.database_add,    name='database_add'),
 
     # API
     path('api/date/year',       api_dateView.year_list,     name='year_list'),
@@ -104,4 +112,8 @@ urlpatterns = [
     # 检核结果明细
     path('api/quality/detail',                       api_qualityView.quality_detail,          name='quality_detail'),
     path('api/quality/report',                       api_qualityView.report_detail,           name='report_detail'),
+    
+    path('api/backend/database/query',           api_beView.db_query,        name='db_query'),
+    path('api/backend/database/update',           api_beView.db_update,        name='db_update'),
+    path('api/backend/database/insert',           api_beView.db_insert,        name='db_insert'),
 ]
