@@ -1,5 +1,5 @@
 {% include "data/template-ui.html" %}
-<link rel="stylesheet" href='../static/zTree/css/zTreeStyle.css'>
+<link rel="stylesheet" href='/static/zTree/css/zTreeStyle.css'>
 <style>
     #std td {
         font-size: 15px;
@@ -29,12 +29,12 @@
 <div class="page-wrapper">
     <div class="row page-titles">
         <div class="col-md-6 align-self-center">
-            <h3 class="text-primary">集团风险数据集市-数据标准</h3>
+            <h3 class="text-primary">数据标准</h3>
         </div>
 
         <div class="col-md-6 align-self-center">
             <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="../../data/index">主页</a></li>
+                <li class="breadcrumb-item"><a href="../../data/dashboard/">主页</a></li>
                 <li class="breadcrumb-item active">数据标准</li>
             </ol>
         </div>
@@ -142,6 +142,16 @@
                             <td id="system"></td>
                         </tr>
                     </table>
+
+                    <div class="row" style="margin-top: 30px;">
+                        <div class="col-md-8 text-right">
+                            <h5 class="update_info">最后编辑：<span id="update_user"></span></h5>
+                        </div>
+                        <div class="col-lg-4 text-left">
+                            <h5 class="update_info">编辑时间：<span id="update_time"></span></h5>
+                        </div>
+                    </div>
+
                 </div>
             </div>
 
@@ -157,24 +167,12 @@
 </footer>
 </div>
 
+<!-- 设置头像 / 设置日期 -->
+<script src="/static/js/init.js"></script>
 
-{% load staticfiles %}
-<!-- Jquery -->
-<script src="{% static 'js/lib/jquery/jquery.min.js' %}"></script>
-<!-- Bootstrap tether Core JavaScript -->
-<script src="{% static 'js/lib/bootstrap/js/popper.min.js' %}"></script>
-<script src="{% static 'js/lib/bootstrap/js/bootstrap.min.js' %}"></script>
-<!-- slimscrollbar scrollbar JavaScript -->
-<script src="{% static 'js/jquery.slimscroll.js' %}"></script>
-<!--Menu sidebar -->
-<script src="{% static 'js/sidebarmenu.js' %}"></script>
-<!--stickey kit -->
-<script src="{% static 'js/lib/sticky-kit-master/dist/sticky-kit.min.js' %}"></script>
-<script src="{% static 'js/custom.min.js' %}"></script>
-
-<script type="text/javascript" src='../static/zTree/js/jquery.ztree.core.min.js'></script>
-<script type="text/javascript" src='../static/zTree/js/fuzzysearch.js'></script>
-<script type="text/javascript" src='../static/zTree/js/jquery.ztree.exhide.min.js'></script>
+<script src='/static/zTree/js/jquery.ztree.core.min.js'></script>
+<script src='/static/zTree/js/fuzzysearch.js'></script>
+<script src='/static/zTree/js/jquery.ztree.exhide.min.js'></script>
 
 <SCRIPT type="text/javascript">
     var setting = {
@@ -208,12 +206,12 @@
         return (treeNode.click != false);
     }
     function onClick(event, treeId, treeNode, clickFlag) {
-        console.log(treeNode);
+        //console.log(treeNode);
         if (treeNode.level < 2){
             $.ajax({
                 type : "GET",
                 async : false,
-                url : "../../api/datastandard/query",
+                url : "../../api/datastandard/query/detail",
                 data: {
                     std_name: treeNode.t,
                     std_type: "desc"        //标准概述
@@ -233,7 +231,7 @@
             $.ajax({
                 type : "GET",
                 async : false,
-                url : "../../api/datastandard/query",
+                url : "../../api/datastandard/query/detail",
                 data: {
                     std_name: treeNode.t,
                     std_type: "detail"      //标准名
@@ -279,8 +277,9 @@
     }
 
     $(document).ready(function(){
-        $.fn.zTree.init($("#treeDemo"), setting, zNodes);   //初始化zTree
-        fuzzySearch('treeDemo','#key',null,null); //初始化模糊搜索方法
+        //$.fn.zTree.init($("#treeDemo"), setting, zNodes);   //初始化zTree
+        $.fn.zTree.init($("#treeDemo"), setting);
+        fuzzySearch('treeDemo','#key',null,null);           //初始化模糊搜索方法
         
         if (typeof(document.referrer.split('?')[1]) == "undefined"){
             var init_name = '概述';
@@ -298,17 +297,13 @@
             }
         }
 
-        //初始化编辑按钮
-        if ("{{username}}" == 'OASSO'){
-            document.getElementById("edit").style.display="none";
-        }
         document.getElementById("edit").href = "../../datastandard/update?std_name=" + init_name + "&std_type=" + std_type;
 
-        //初始化页面
+        //初始化数据标准内容
         $.ajax({
             type : "GET",
             async : false,
-            url : "../../api/datastandard/query",
+            url : "../../api/datastandard/query/detail",
             data: {
                 std_name: init_name,
                 std_type: std_type,
@@ -343,6 +338,20 @@
                     document.getElementById("edit").href = "../../datastandard/update?std_name=" + init_name + "&std_type=detail";
                 }
             },
+        })
+
+        $.ajax({
+            type : "GET",
+            async : false,
+            url : "../../api/datastandard/query/history",
+            data: {
+                std_name: init_name,
+            },
+            dataType : "json",
+            success : function(result) {
+                document.getElementById("update_user").innerText = result.username;
+                document.getElementById("update_time").innerText = result.last_update_time;
+            }
         })
     });
 </SCRIPT>

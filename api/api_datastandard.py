@@ -34,9 +34,10 @@ def db_query(std_name, std_type):
             system                  数据使用系统
         '''
         sql = f"""select id,std_id,name,en_name,business_definition,business_rule,std_source,data_type,data_format,
-code_rule,code_range,code_meaning,business_range,dept,system
+code_rule,code_range,code_meaning,business_range,dept,`system`
 from data_standard_detail
-where name='{std_name}' """
+where name='{std_name}'"""
+        print(sql)
         curs.execute(sql)
         result = curs.fetchone()
         return {
@@ -198,7 +199,7 @@ def update(request):
                                                     code_meaning = '{code_meaning}',
                                                     business_range = '{business_range}',
                                                     dept = '{dept}',
-                                                    system = '{system}'
+                                                    `system` = '{system}'
                     where name='{std_name}'"""
                 curs.execute(sql)
                 conn.commit()
