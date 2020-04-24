@@ -10,10 +10,11 @@ from mysite import db_config
 def db_query(request):
     try:
         conn = db_config.sqlalchemy_conn()
-        db = pd.read_sql("select name,db_type,db,ip,note,id from source_db_info order by name,db_type", con=conn)
+        db = pd.read_sql("select name,db_type,alias,db,ip,note,id from source_db_info order by name,db_type", con=conn)
         data = {
             'company': db['name'].values.tolist(),
             'db_type': db['db_type'].values.tolist(),
+            'alias': db['alias'].values.tolist(),
             'db': db['db'].values.tolist(),
             'ip': db['ip'].values.tolist(),
             'note': db['note'].values.tolist(),
@@ -30,6 +31,7 @@ def db_query(request):
 def db_update(request):
     id = request.POST.get('id')
     ip = request.POST.get('ip')
+    alias = request.POST.get('alias')
     user = request.POST.get('user')
     password = request.POST.get('password')
     db = request.POST.get('db')
@@ -41,8 +43,8 @@ def db_update(request):
         conn = db_config.mysql_connect()
         # with conn.cursor() as curs:
         #     sql = f"""update source_db_info
-        #                 set ip='{ip}',
-        #                 user='{user}',
+        #                set alias='{alias}',
+        #                 ip='{ip}',
         #                 passwd='{password}',
         #                 db='{db}',
         #                 port={port},
@@ -63,6 +65,7 @@ def db_update(request):
 def db_insert(request):
     company = request.POST.get('company')
     name = request.POST.get('name')
+    alias = request.POST.get('alias')
     ip = request.POST.get('ip')
     user = request.POST.get('user')
     password = request.POST.get('password')
@@ -74,8 +77,8 @@ def db_insert(request):
     try:
         conn = db_config.mysql_connect()
         # with conn.cursor() as curs:
-        #     sql = f"""insert into source_db_info(company,name,ip,user,passwd,db,port,db_type,note)
-        #                 values('{company}','{name}','{ip}','{user}','{password}','{db}',{port},'{db_type}','{note}')"""
+        #     sql = f"""insert into source_db_info(company,name,alias,ip,user,passwd,db,port,db_type,note)
+        #                 values('{company}','{name}','{alias}','{ip}','{user}','{password}','{db}',{port},'{db_type}','{note}')"""
         #     curs.execute(sql)
         # conn.commit()
         return JsonResponse({'data': '新增成功', 'code': 1000})
