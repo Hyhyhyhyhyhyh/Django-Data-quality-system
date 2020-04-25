@@ -1,6 +1,7 @@
-from django.http.response import JsonResponse, HttpResponse
+from django.http.response import JsonResponse, HttpResponse, HttpResponseBadRequest
 from django.views.decorators.http import require_http_methods
 from crontab import CronTab
+import pandas as pd
 
 import sys, MySQLdb
 
@@ -10,9 +11,9 @@ from check.autocheck import Check, MyThread
 
 
 @require_http_methods(['GET'])
-def rule_detail(request):
+def rule(request):
     """
-    获取检核规则详情
+    根据公司名查询所有检核规则详情
     """
     company = request.GET.get('name')
     filter = request.GET.get('risk_market_filter')
@@ -22,10 +23,10 @@ def rule_detail(request):
     curs.execute('set autocommit=0')
     try:
         sql = f"""select id,check_item,target_table,risk_market_item,problem_type,db,check_sql,note,status,source_system
-from check_result_template
-where source_system in ('{company}')
-and risk_market_item like '%{filter}%'
-order by id"""
+                    from check_result_template
+                    where source_system in ('{company}')
+                    and risk_market_item like '%{filter}%'
+                    order by id"""
         curs.execute(sql)
         result = curs.fetchall()
         # 构造json
@@ -42,6 +43,52 @@ order by id"""
     finally:
         curs.close()
         conn.close()
+        
+        
+@require_http_methods(['GET'])
+def rule_detail(request):
+    """
+    根据公司名、id查询单条规则详情
+    """
+    company = request.GET.get('company')
+    id =  request.GET.get('id')
+    
+    data = {
+        "id": None,
+        "source_system": None,
+        "check_item": None,
+        "target_table": None,
+        "risk_market_item": None,
+        "problem_type": None,
+        "db": None,
+        "check_sql": None,
+        "note": None,
+        "status": None,
+    }
+    if id == 'null':
+        return JsonResponse(data)
+    
+    sql = f"""select id,check_item,target_table,risk_market_item,problem_type,db,check_sql,note,status
+    from check_result_template
+    where source_system in ('{company}') and id={id}"""
+    conn = db_config.sqlalchemy_conn()
+    try:
+        result = pd.read_sql(sql, con=conn)
+        data = {
+            "check_item": result['check_item'].values.tolist()[0],
+            "target_table": result['target_table'].values.tolist()[0],
+            "risk_market_item": result['risk_market_item'].values.tolist()[0],
+            "problem_type": result['problem_type'].values.tolist()[0],
+            "db": result['db'].values.tolist()[0],
+            "check_sql": result['check_sql'].values.tolist()[0],
+            "note": result['note'].values.tolist()[0],
+            "status": result['status'].values.tolist()[0],
+        }
+        return JsonResponse(data)
+    except Exception as e:
+        return HttpResponseBadRequest(e)
+    finally:
+        conn.dispose()
 
 
 @require_http_methods(['POST'])
@@ -56,7 +103,7 @@ def rule_update(request):
     risk_market = request.POST.get('risk_market')
     problem_type = request.POST.get('problem_type')
     db = request.POST.get('db')
-    check_sql = request.POST.get('code')
+    check_sql = request.POST.get('check_sql')
     note = request.POST.get('note')
     status = request.POST.get('status')
 
@@ -98,12 +145,12 @@ def rule_add(request):
     risk_market = request.POST.get('risk_market')
     problem_type = request.POST.get('problem_type')
     db = request.POST.get('db')
-    code = request.POST.get('code')
+    check_sql = request.POST.get('check_sql')
     note = request.POST.get('note')
     status = request.POST.get('status')
 
     # 处理检核SQL中含有''的情况
-    check_sql = MySQLdb.escape_string(code).decode('utf-8')
+    check_sql = MySQLdb.escape_string(check_sql).decode('utf-8')
     # print(check_sql)
     try:
         # 连接数据库

@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="description" content="">
+	<meta name="author" content="">
+	<link rel="icon" type="image/png" sizes="16x16" href="/static/img/favicon.ico" />
+	<title>数据质量检核平台</title>
+
+
+	<link rel="stylesheet" type="text/css" href="/static/check/css/admin/bootstrap.min.css"/>
+	<link rel="stylesheet" type="text/css" href="/static/check/css/admin/style.css"/>
+	<link rel="stylesheet" type="text/css" href="/static/CodeMirror/lib/codemirror.css"/>
+	<link rel="stylesheet" type="text/css" href="/static/CodeMirror/theme/eclipse.css"/>
+	<link rel="stylesheet" type="text/css" href="/static/css/sweetalert.css"/>
+	<link rel="stylesheet" type="text/css" href="/static/css/icons.css"/>
+	<link href="https://cdn.bootcss.com/bootstrap-select/2.0.0-beta1/css/bootstrap-select.min.css" rel="stylesheet">
+
+
+	<style>
+		.modal.fade.in{
+			top: 180px;
+		}
+		.table > thead > tr > th, .table > tbody > tr > th, .table > tfoot > tr > th, .table > thead > tr > td, .table > tbody > tr > td, .table > tfoot > tr > td {
+			vertical-align: middle;
+		}
+		.btn-default:hover, .btn-default:focus, .btn-default:active, .btn-default.active, .open .dropdown-toggle.btn-default {
+			background-color: unset;
+			border-color: unset;
+			color: unset;
+		}
+		.btn-default.active, .btn-default.focus, .btn-default:active, .btn-default:focus, .btn-default:hover, .open>.dropdown-toggle.btn-default {
+			background-color: unset;
+			border-color: unset;
+			color: unset;
+		}
+		.popover{
+			max-width: 100%;
+		}
+	</style>
+</head>
+
+<body onload="OnLoad();">
+	<!-- head star -->
+	<div class="tnav row wrapper border-bottom white-bg page-heading">
+		<div class="col-sm-4">
+			<h2 class="fl" style="color: #007bff;font-size: 21px;font-weight:500">数据质量检核规则库</h2>
+			<ol class="breadcrumb fl">
+				<li><a href="../../data/index">主页</a></li>
+				<li><strong>检核规则库</strong></li>
+			</ol>
+		</div>
+	</div>
+	<!-- head end -->
+
+	<!-- table star -->
+	<div class="row col-lg-10">
+		<div class="wrapper wrapper-content animated fadeInUp">
+			<div class="ibox">
+				<div class="ibox-title">
+					<h5 id="page-title"></h5>
+					<div class="ibox-tools rboor" style="bottom: 5px;">
+						<button onclick="Commit();" class="btn btn-primary btn-sm">
+							<i class="fa fa-check-square-o"></i> 提交
+						</button>
+					</div>
+				</div>
+
+				<div class="ibox-content">
+					<table class="table table-hover">
+						<tr>
+							<td style="width: 150px;">
+								<label class="form-label">数据标准</label>
+							</td>
+							<td>
+								<input id="check_item" type="text" class="form-control" style="width: 400px;">
+							</td>
+						</tr>
+
+						<tr>
+							<td>
+								<label class="form-label">目标表</label>
+							</td>
+							<td>
+								<input id="target_table" type="text" class="form-control" style="width: 400px;">
+							</td>
+						</tr>
+
+						<tr>
+							<td>
+								<label class="form-label">是否风险集市</label>
+							</td>
+							<td>
+								<select id="risk_market" class="selectpicker form-control" style="width: 400px;">
+									<option value="是">是</option>
+									<option value="否">否</option>
+								</select>
+							</td>
+						</tr>
+
+						<tr>
+							<td>
+								<label class="form-label">问题分类</label>
+							</td>
+							<td>
+								<select id="problem_type" type="text" class="selectpicker form-control">
+									<option>-- 请选择 --</option>
+									<option value="完整性检验">完整性检验</option>
+									<option value="准确性检验">准确性检验</option>
+									<option value="合理性检验">合理性检验</option>
+									<option value="一致性检验">一致性检验</option>
+									<option value="及时性检验">及时性检验</option>
+								</select>
+							</td>
+							<td>
+								<i class="fa fa-question-circle" style="color: #ffab00;font-size:15px;" data-toggle="popover"></i>
+							</td>
+						</tr>
+
+						<tr>
+							<td>
+								<label class="form-label">源系统数据库</label>
+							</td>
+							<td style="width: 150px;">
+								<select id="db" class="selectpicker form-control" disabled></select>
+							</td>
+							<td>
+								<button class="btn btn-primary btn-sm" onclick="QueryDB();">查询</button>
+							</td>
+						</tr>
+
+						<tr>
+							<td>
+								<label class="form-label">检核逻辑</label>
+							</td>
+							<td colspan="2">
+								<textarea id="check_sql" name="code" type="text" class="form-control"></textarea>
+							</td>
+						</tr>
+
+						<tr>
+							<td>
+								<label class="form-label">备注</label>
+							</td>
+							<td colspan="2">
+								<textarea id="note" type="text" class="form-control" style="width: 800px;"></textarea>
+							</td>
+						</tr>
+
+						<tr>
+							<td>
+								<label class="form-label">状态</label>
+							</td>
+							<td>
+								<select id="status" class="selectpicker" >
+									<option value="已启用">已启用</option>
+									<option value="已停用">已停用</option>
+								</select>
+							</td>
+						</tr>
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- table end -->
+	<footer class="navbar-fixed-bottom" style="line-height: 10px;font-size:13px;">
+		<div class="footer">
+			© 2019 Hyhyhyhyhyhyh
+		</div>
+	</footer>
+
+	<script src="/static/js/jquery/jquery.min.js"></script>
+	<script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+	<script src="/static/CodeMirror/lib/codemirror.js"></script>
+	<script src="/static/CodeMirror/mode/sql.js"></script>
+	<script src="/static/js/sweetalert.min.js"></script>
+	<script src="https://cdn.bootcss.com/bootstrap-select/2.0.0-beta1/js/bootstrap-select.min.js"></script>
+
+
+	<script>
+		var company = "{{ source_system }}";
+		var id = "{{ id }}";
+		
+		// 初始化CodeMirror编辑框
+		var textarea = document.getElementById('check_sql');
+		var editor = CodeMirror.fromTextArea(textarea, {
+			lineNumbers: true,
+			autofocus: true,
+			mode: 'text/x-plsql',
+			theme: 'eclipse',
+			matchBrackets: true,
+			autoCloseBrackets: true,
+			extraKeys: {
+				"Ctrl": "autocomplete"
+			},
+		});
+		editor.setSize('1000px', 'auto');
+
+		// 填充现有检核规则信息
+		function OnLoad(){
+			$(".selectpicker").selectpicker({
+				noneSelectedText: '-- 请选择 --' //默认显示内容  
+			 });
+
+			if(id == "null"){
+				$("#page-title").html(company + "公司-新增检核规则");
+			}
+			else{
+				$("#page-title").html(company + "公司-修改检核规则");
+				QueryDetail();
+			}
+		}
+
+		function QueryDetail(){
+			$.ajax({
+				type: "GET",
+				url: "../../api/check/rule/detail",
+				data: {
+					company: company,
+					id: id,
+				},
+				success: function (result) {
+					$("#check_item").val(result.check_item);
+					$("#target_table").val(result.target_table);
+					$("#risk_market_item").val(result.risk_market_item);
+					$("#problem_type").val(result.problem_type);
+					$("#db").append($("<option value='"+ result.db +"'></option>"));
+					$("#check_sql").val(result.check_sql);
+					editor.replaceSelection(result.check_sql);
+					$("#note").val(result.note);
+					$("#status").val(result.status);
+
+					$("#problem_type").selectpicker("refresh");
+					$("#db").selectpicker("refresh");
+					$("#status").selectpicker("refresh");
+				}
+			})
+		}
+
+		// popover气泡提示窗
+		$(function() {
+			$("[data-toggle='popover']").popover({
+				html : true,
+				placement: "right",
+				trigger: "hover focus",
+				container: "body",
+				title: "说明",
+				delay:{show:100, hide:200},
+				content: "<ul>\
+				<li>完整性：主要包括实体缺失、属性缺失、记录缺失和字段值缺失四个方面；</li>\
+				<li>准确性：一个数据值与设定为准确的值之间的一致程度，或与可接受程度之间的差异；</li>\
+				<li>合理性：主要包括格式、类型、值域和业务规则的合理有效；</li>\
+				<li>一致性：系统之间的数据差异和相互矛盾的一致性，业务指标统一定义，数据逻辑加工结果一致性；</li>\
+				<li>及时性：数据仓库ETL、应用展现的及时和快速性，Jobs运行耗时、运行质量、依赖运行及时性。</li>\
+				</ul>"
+			});
+		});
+
+		function QueryDB(){
+			$.ajax({
+				type: "GET",
+					url: "../../api/backend/database/query",
+					data: {},
+					success: function (result) {
+						// 根据公司名从接口数据获取对应的数据库名
+						let db = [];
+						for(let i in result.data.company){
+							if(result.data.company[i] == company){
+								db.push(result.data.alias[i]);
+							}
+						}
+						// 清除原有option
+						$("#db").empty();
+						// 设置显示内容
+						for(i of db){
+							$("#db").append($("<option value='"+i+"'>"+i+"</option>"));
+						}
+						// 取消下拉框的禁用状态
+						$('#db').prop('disabled', false);
+						// 刷新下拉框状态
+						$("#db").selectpicker("refresh");
+					}
+			})
+		}
+
+		function Commit(){
+			// 获取检核逻辑代码框中修改后的value
+			editor.save();
+			var check_sql = editor.getValue();
+
+			if(id == 'null'){
+				// 新增检核规则
+				$.ajax({
+					type: "POST",
+					url: "../../api/check/rule/add",
+					data: {
+						source_system:	company,
+						check_item: 	$("#check_item").val(),
+						target_table: 	$("#target_table").val(),
+						risk_market:	$("#risk_market").val(),
+						problem_type:	$("#problem_type").val(),
+						db: 			$("#db").val(),
+						check_sql: 		check_sql,
+						note: 			$("#note").val(),
+						status: 		$("#status").val(),
+					},
+					success: function (data) {
+						swal({
+							text: "检核规则新增成功，正在返回上一页...",
+							icon: "success",
+							buttons: false,
+							timer: 1000
+						}).then(function(){
+							window.history.back(-1) || window.close();
+						});
+					},
+					error: function (e) {
+						swal({
+							title: "发生错误",
+							text: e,
+							icon: "error",
+						})
+					}
+				})
+			}
+			else{
+				// 更新检核规则
+				$.ajax({
+					type: "POST",
+					url: "../../api/check/rule/update",
+					data: {
+						id:				id,
+						source_system:	company,
+						check_item: 	$("#check_item").val(),
+						target_table: 	$("#target_table").val(),
+						risk_market:	$("#risk_market").val(),
+						problem_type:	$("#problem_type").val(),
+						db: 			$("#db").val(),
+						check_sql: 		check_sql,
+						note: 			$("#note").val(),
+						status: 		$("#status").val(),
+					},
+					success: function (data) {
+						swal({
+							text: "检核规则修改成功，正在返回上一页...",
+							icon: "success",
+							buttons: false,
+							timer: 1000
+						}).then(function(){
+							window.history.back(-1) || window.close();
+						});
+					},
+					error: function (e) {
+						swal({
+							title: "发生错误",
+							text: e,
+							icon: "error",
+						})
+					}
+				})
+			}
+		}
+	</script>
+
+</body>
+
+</html>

@@ -52,11 +52,11 @@ urlpatterns = [
     path('authorize/login_auth', authView.login_auth, name='login_auth'),
 
     # 检核
-    path('check/rule_list/',         checkView.rule_list,          name='rule_list'),
-    path('check/rule_config/',       checkView.rule_config,        name='rule_config'),
-    path('check/rule_exec',          checkView.rule_execute_manual,          name='rule_execute_manual'),
+    path('check/rule',          checkView.rule_list,            name='rule'),
+    path('check/rule/edit',     checkView.rule_edit,            name='rule_edit'),
+    path('check/rule/exec',     checkView.rule_execute_manual,  name='rule_execute_manual'),
     # 检核定时任务
-    path('check/show_crontab',       checkView.show_crontab,       name='show_crontab'),
+    path('check/crontab',       checkView.show_crontab,       name='show_crontab'),
     # 血缘分析
     path('check/blood_analyze',  checkView.blood_analyze,  name='blood_analyze'),
 
@@ -99,13 +99,14 @@ urlpatterns = [
     path('api/datastandard/query/index',             api_stdView.query_index,                 name='query_index'),
     path('api/datastandard/query/history',           api_stdView.query_update_history,        name='query_update_history'),
     
+    path('api/check/rule',                           api_checkView.rule,                      name='api_rule'),
     path('api/check/rule/detail',                    api_checkView.rule_detail,               name='rule_detail'),
     path('api/check/rule/update',                    api_checkView.rule_update,               name='rule_update'),
     path('api/check/rule/add',                       api_checkView.rule_add,                  name='rule_add'),
     path('api/check/rule/status_modify',             api_checkView.rule_status_modify,        name='rule_status_modify'),
     path('api/check/rule/execute',                   api_checkView.rule_execute,              name='rule_execute'),
-    path('check/enable_crontab',                     api_checkView.enable_crontab,            name='enable_crontab'),
-    path('check/update_crontab',                     api_checkView.update_crontab,            name='update_crontab'),
+    path('api/check/crontab/enable',                 api_checkView.enable_crontab,            name='enable_crontab'),
+    path('api/check/crontab/update',                 api_checkView.update_crontab,            name='update_crontab'),
     path('api/check/progress',                       api_checkView.query_check_progress,      name='query_check_progress'),
     path('api/check/blood_analyze',                  api_bloodView.blood_analyze,             name='api_blood_analyze'),
     

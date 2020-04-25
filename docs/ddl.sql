@@ -120,6 +120,7 @@ CREATE TABLE `source_db_info` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `company` varchar(10) DEFAULT NULL,
   `name` varchar(40) DEFAULT NULL,
+  `alias` varchar(50) DEFAULT NULL,
   `ip` varchar(16) DEFAULT NULL,
   `user` varchar(32) DEFAULT NULL,
   `passwd` varchar(200) DEFAULT NULL,

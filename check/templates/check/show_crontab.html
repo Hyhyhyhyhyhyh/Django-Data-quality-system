@@ -106,7 +106,7 @@
 
     el.onchange = function() {
         $.ajax({
-            url: 'enable_crontab',
+            url: '../../api/check/crontab/enable',
             type: 'POST',
             data:{
                 status: el.checked
@@ -128,7 +128,7 @@
     function update_crontab() {
         var job_time = document.getElementById("job_time").value;
         $.ajax({
-            url: 'update_crontab',
+            url: '../../api/check/crontab/update',
             type: 'POST',
             data:{
                 job_time: job_time
