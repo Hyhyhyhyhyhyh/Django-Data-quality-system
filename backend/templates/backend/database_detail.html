@@ -74,7 +74,15 @@
                             </tr>
                             <tr>
                                 <td>数据库类型</td>
-                                <td><input id="db_type" type="text" class="form-control" value='{{ db_type|default_if_none:"" }}' required="required"></td>
+                                <td>
+                                    <select id="db_type" class="selectpicker">
+                                        <option>-- 请选择 --</option>
+                                        <option value="mysql">mysql</option>
+                                        <option value="oracle">oracle</option>
+                                        <option value="sqlserver">sqlserver</option>
+                                        <option value="postgresql">postgresql</option>
+                                    </select>
+                                </td>
                             </tr>
                             <tr>
                                 <td>IP</td>

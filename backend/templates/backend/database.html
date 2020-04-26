@@ -42,8 +42,8 @@
                                     <th>所属公司</th>
                                     <th>#</th>
                                     <th>类型</th>
-                                    <th>源系统名称</th>
-                                    <th>IP</th>
+                                    <th>源系统名</th>
+                                    <th>连接串</th>
                                     <th>说明</th>
                                     <th>详情</th>
                                 </tr>
@@ -85,8 +85,8 @@
                 html += "<td>" + result.data.company[i] + "</td>";
                 html += '<td><img src="../../static/icons/db-icons/'+ result.data.db_type[i] +'.svg" style="height:25px;width:40px;"></img></td>';
                 html += "<td>" + result.data.db_type[i] + "</td>";
-                html += "<td>" + result.data.db[i] + "</td>";
-                html += "<td>" + result.data.ip[i] + "</td>";
+                html += "<td>" + result.data.alias[i] + "</td>";
+                html += "<td>" + result.data.connection_string[i] + "</td>";
                 if(result.data.note[i] == null){
                     html += "<td></td>";
                 }
