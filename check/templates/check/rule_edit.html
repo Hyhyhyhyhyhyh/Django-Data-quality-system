@@ -228,7 +228,7 @@
 					$("#target_table").val(result.target_table);
 					$("#risk_market_item").val(result.risk_market_item);
 					$("#problem_type").val(result.problem_type);
-					$("#db").append($("<option value='"+ result.db +"'></option>"));
+					$("#db").selectpicker({noneSelectedText: result.db});
 					$("#check_sql").val(result.check_sql);
 					editor.replaceSelection(result.check_sql);
 					$("#note").val(result.note);
