@@ -41,6 +41,7 @@ where name='{std_name}'"""
         curs.execute(sql)
         result = curs.fetchone()
         return {
+            'std_id': result[1],
             'name': result[2],
             'en_name': result[3],
             'business_definition': result[4],
