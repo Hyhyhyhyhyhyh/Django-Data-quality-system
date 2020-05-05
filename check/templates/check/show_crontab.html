@@ -68,9 +68,13 @@
                             <tr>
                                 <td>调度时间:</td>
                                 <td>
-                                    <input id="job_time" type="text" value="{{ job_time }}" />
-                                    <button class="btn" onclick="update_crontab();">提交修改</button>
-                                    <hr></hr>
+                                    <div class="row">
+                                        <input id="job_time" type="text" class="form-control" style="margin-left: 30%; width:150px;" value="{{ job_time }}" />
+                                        <button class="btn" onclick="update_crontab();" style="margin-left: 5px;">
+                                            提交修改
+                                        </button>
+                                    </div>
+                                    
                                     <h6 style="font-weight:550;">说明：</h6>
                                     <h6>此处的“调度时间”为Linux crontab的调度设置，* * * * * 五位星号从左到右分别为：分、时、日、月、周</h6>
                                     <h6>更多用法请参考：https://www.cnblogs.com/huchong/p/9323502.html</h6>

@@ -27,6 +27,7 @@
     select{
         border: 0 none;
         border-bottom: 1px solid;
+        appearance:none;
         -moz-appearance:none; /* Firefox */
         -webkit-appearance:none; /* Safari 和 Chrome */
         padding: unset;
@@ -36,6 +37,7 @@
         /*padding-top: 0.8rem;*/
         margin: unset;
     }
+    select::-ms-expand { display: none; }
     select:focus{
         border: 0 none;
         border-bottom: 1px solid;

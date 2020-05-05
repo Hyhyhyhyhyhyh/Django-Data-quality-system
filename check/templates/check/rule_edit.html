@@ -276,8 +276,8 @@
 						// 清除原有option
 						$("#db").empty();
 						// 设置显示内容
-						for(i of db){
-							$("#db").append($("<option value='"+i+"'>"+i+"</option>"));
+						for(i in db){
+							$("#db").append($("<option value='"+db[i]+"'>"+db[i]+"</option>"));
 						}
 						// 取消下拉框的禁用状态
 						$('#db').prop('disabled', false);

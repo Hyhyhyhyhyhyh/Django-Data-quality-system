@@ -22,11 +22,14 @@
     select{
         border: 0 none;
         border-bottom: 1px solid;
+        appearance: none;
         -moz-appearance:none; /* Firefox */
         -webkit-appearance:none; /* Safari 和 Chrome */
+        -ms-appearance: none;
         padding-left: 2%;
         padding-right: 1%;
     }
+    select::-ms-expand { display: none; }
     .overview_table tr td{
         font-size: 14px;
         line-height: 31px;
