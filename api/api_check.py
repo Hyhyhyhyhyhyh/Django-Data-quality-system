@@ -396,31 +396,57 @@ def query_check_progress(request):
     :return:
     """
     company = request.GET.get('company')
+    db = request.GET.get('db')
     
+    data = {}
     try:
         conn = db_config.mysql_connect()
-        curs = conn.cursor()
-        sql  = f"""select count(*) from check_result_{company} a,(select max(check_version) check_version from check_result_{company}) b
-                    where a.check_sql is not null
-                    and a.check_sql != ''
-                    and a.check_version=b.check_version"""
-        curs.execute(sql)
-        result = curs.fetchone()
-        to_be_check_cnt = result[0]
+        for company in ('xt', 'zc', 'db', 'jk', 'jj1', 'jj2', 'jz'):
+            data[company] = {}
             
-        sql  = f"""select count(*) from check_result_{company} a,(select max(check_version) check_version from check_result_{company}) b
-                    where a.check_sql is not null
-                    and a.check_sql != ''
-                    and a.check_version=b.check_version
-                    and a.update_flag='Y'"""
-        curs.execute(sql)
-        result = curs.fetchone()
-        checked_cnt = result[0]
-        
-        value = round(checked_cnt/to_be_check_cnt*100,2)
-        return JsonResponse({"data": value})
+            with conn.cursor() as curs:
+                # 已检核指标总数
+                sql  = f"""select a.db,count(*)
+                            from check_result_{company} a,
+                            (
+                                select max(check_version) check_version,db from check_result_{company}
+                                where db in (select distinct alias from source_db_info where company='{company}')
+                                group by db
+                            ) b
+                            where a.check_sql is not null
+                            and a.check_sql != ''
+                            and a.check_version=b.check_version
+                            and a.db=b.db
+                            and a.update_flag='Y'
+                            group by a.db"""
+                curs.execute(sql)
+                result = curs.fetchall()
+                for i in result:
+                    data[company][i[0]] = i[1]
+                    
+                # 待检核指标总数
+                sql  = f"""select a.db,count(*)
+                            from check_result_{company} a,
+                            (
+                                select max(check_version) check_version,db from check_result_{company}
+                                where db in (select distinct alias from source_db_info where company='{company}')
+                                group by db
+                            ) b
+                            where a.check_sql is not null
+                            and a.check_sql != ''
+                            and a.check_version=b.check_version
+                            and a.db=b.db
+                            group by a.db"""
+                curs.execute(sql)
+                result = curs.fetchall()
+                for i in result:
+                    if i[1] == 0:
+                        data[company][i[0]] = 0
+                    else:
+                        data[company][i[0]] = round(data[company][i[0]]/i[1]*100, 2)
+                    
+        return JsonResponse(data)
     except Exception as e:
-        return JsonResponse({"msg": "查询失败", "reason": e})
+        return HttpResponseBadRequest(e)
     finally:
-        curs.close()
         conn.close()

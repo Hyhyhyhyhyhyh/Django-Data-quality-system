@@ -56,19 +56,43 @@ def show_crontab(request):
     :param request:
     :return:
     """
+    conn = db_config.mysql_connect()
+    with conn.cursor() as curs:
+        # 查询各个公司检核规则配置的数据库、上次检核任务的运行情况
+        sql = """select distinct b.name,
+                                a.company,
+                                a.db,
+                                CAST(c.execute_date as char),
+                                c.status
+                from check_result_template a,
+                source_db_info b,
+                (select db,company,execute_date,status from check_execute_log  where id in 
+                    (
+                        select id from (select max(id) id,company,db from check_execute_log where db is not null group by company,db) a
+                    )
+                ) c
+                where a.db=b.alias
+                and a.db=c.db
+                and a.company=c.company
+                order by 1,2,3"""
+        curs.execute(sql)
+        jobs = curs.fetchall()
+        
+    # 根据数据源中的公司和数据库信息匹配crontab定时任务
     cron = CronTab(user=True)
-    job = list(cron.find_comment('自动进行数据质量检核'))[0]  # 根据comment查询crontab
-    if job.is_enabled() is True:
-        job_time = str(job).split('#')[0][0:9]
-    else:
-        job_time = str(job).split('#')[1][1:10]
-    return render(request, "check/show_crontab.html", {"status": str(job.is_enabled()),
-                                                       "job_name": job.comment,
-                                                       "job_command": job.command,
-                                                       "job_time": job_time,
-                                                       "last_run": str(job.last_run),
-                                                       }
-                  )
+    data = []
+    for i in jobs:
+        job = list(cron.find_comment(f'autocheck-{i[1]}-{i[2]}'))
+        t = list(i)
+        if len(job) > 0:
+            enable = job[0].is_enabled()                                # 获取crontab启用状态
+            job_time = job[0].description(use_24hour_time_format=True, locale_code='zh_CN') # 获取crontab的调度周期 
+            t.extend([enable, job_time])
+        else:
+            t.append(None)
+        data.append(t)
+    
+    return render(request, "check/crontab.html", {"jobs": data})
 
 
 @is_login
