@@ -6,7 +6,7 @@
     <meta content="IE=edge" http-equiv="X-UA-Compatible">
     <meta content="initial-scale=1.0, maximum-scale=1.0, user-scalable=no, width=device-width" name="viewport">
     <!-- <meta name="theme-color" content="#3f51b5"> -->
-    <title>数据质量检核平台</title>
+    <title>数据质量管理平台</title>
 
     <link href="https://cdn.bootcss.com/twitter-bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet">
     <link href="/static/css/material-dash.css" rel="stylesheet">
@@ -24,7 +24,7 @@
         nav i, nav [class^="mdi-"], nav [class*="mdi-"], nav i.material-icons {
             display: unset;
         }
-        [type="checkbox"]:not(:checked), [type="checkbox"]:checked {
+        input[type="checkbox"]:not(:checked), [type="checkbox"]:checked {
             position: unset;
             opacity: unset;
             pointer-events: unset;
@@ -47,7 +47,7 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="/">数据质量检核平台</a>
+                <a class="navbar-brand" href="/">数据质量管理平台</a>
             </div>
             <div class="collapse navbar-collapse">
                 <ul class="nav navbar-nav navbar-right">
@@ -81,90 +81,88 @@
                 <div class="container">
                     <div class="row">
                         <div class="col-md-4 col-sm-6 col-md-offset-4 col-sm-offset-3">
-                            <form method="#" action="#" _lpchecked="1">
-                                <div class="card card-login">
-                                    <div class="card-header text-center" data-background-color="rose">
-                                        <div class="card-title">
-                                            <span>
-                                                <!-- <img src="/static/img/logo.png" /> -->
-                                                数据质量检核平台
-                                            </span>
-                                        </div>
-    
-                                        <div class="social-line">
-                                            <a href="#账号登录" class="btn btn-just-icon btn-simple" onclick="SwitchTab('InputForm');">
-                                                <span style="font-size: 14px;">账号登录</span>
-                                            </a>
-                                        </div>
+                            <div class="card card-login">
+                                <div class="card-header text-center" data-background-color="rose">
+                                    <div class="card-title">
+                                        <span>
+                                            <!-- <img src="/static/img/logo.png" /> -->
+                                            数据质量管理平台
+                                        </span>
                                     </div>
-                                    
-                                    <!-- Begin 账号登录 -->
-                                    <div class="card-content" id="InputForm">
-                                        <div class="input-group" onkeydown="NextElement('username');">
-                                            <span class="input-group-addon"><i class="material-icons">face</i></span>
-                                            <div class="form-group label-floating">
-                                                <label class="control-label">账号名</label>
-                                                <input class="form-control" style="cursor: auto;" type="text" id="username" value="admin">
-                                                <span class="material-input"></span>
-                                            </div>
-                                        </div>
-    
-                                        <div class="input-group" onkeydown="NextElement('password');">
-                                            <span class="input-group-addon"><i class="material-icons">lock_outline</i></span>
-                                            <div class="form-group label-floating">
-                                                <label class="control-label">密码</label>
-                                                <input class="form-control" style="cursor: auto;" type="password" id="password" value="admin">
-                                                <span class="material-input"></span>
-                                            </div>
-                                        </div>
-    
-                                        <a id="forget-password" href="javascript:void(0)" onclick="SwitchTab('ResetForm');">忘记密码？</a>
+
+                                    <div class="social-line">
+                                        <a href="#账号登录" class="btn btn-just-icon btn-simple" onclick="SwitchTab('InputForm');">
+                                            <span style="font-size: 14px;">账号登录</span>
+                                        </a>
                                     </div>
-                                    <!-- End 账号登录 -->
-    
-                                    <!-- Begin 重置密码 -->
-                                    <div class="card-content" id="ResetForm" style="display: none;">
-                                        <div class="input-group">
-                                            <span class="input-group-addon"><i class="material-icons">phone_iphone</i></span>
-                                            <div class="form-group label-floating">
-                                                <label class="control-label">手机号</label>
-                                                <input class="form-control" style="cursor: auto;" type="text" id="mobile">
-                                                <span class="material-input"></span>
-                                            </div>
-                                        </div>
-    
-                                        <div class="input-group" onkeydown="NextElement('send-sms');">
-                                            <span class="input-group-addon">
-                                                <button id="send-sms" type="button" onclick="SendSMSCode();" class="btn  btn-md">获取验证码</button>
-                                            </span>
-                                            <div class="form-group label-floating">
-                                                <label class="control-label">短信验证码</label>
-                                                <input class="form-control" style="cursor: auto;" type="text" id="sms-code">
-                                                <span class="material-input"></span>
-                                            </div>
-                                        </div>
-    
-                                        <div class="input-group" onkeydown="NextElement('new-password');">
-                                            <span class="input-group-addon"><i class="material-icons">lock_outline</i></span>
-                                            <div class="form-group label-floating">
-                                                <label class="control-label">新密码</label>
-                                                <input class="form-control" style="cursor: auto;" type="password" id="new-password">
-                                                <span class="material-input"></span>
-                                            </div>
-                                        </div>
-    
-                                        <a id="forget-password" href="javascript:void(0)" onclick="SwitchTab('InputForm');">返回账号登录</a>
-                                    </div>
-                                    <!-- End 重置密码 -->
-    
-                                    <!-- 登录按钮 -->
-                                    <div class="text-center">
-                                        <button type="button" id="login" onclick="Login();" class="btn btn-rose btn-simple btn-wd btn-lg">登录</button>
-                                        <button type="button" id="reset" onclick="ModifyPassword();" class="btn btn-rose btn-simple btn-wd btn-lg" style="display: none;">重置密码并登陆</button>
-                                    </div>
-    
                                 </div>
-                            </form>
+                                
+                                <!-- Begin 账号登录 -->
+                                <div class="card-content" id="InputForm">
+                                    <div class="input-group" onkeydown="NextElement('username');">
+                                        <span class="input-group-addon"><i class="material-icons">face</i></span>
+                                        <div class="form-group label-floating">
+                                            <label class="control-label">账号名</label>
+                                            <input class="form-control" style="cursor: auto;" type="text" id="username" value="admin">
+                                            <span class="material-input"></span>
+                                        </div>
+                                    </div>
+
+                                    <div class="input-group" onkeydown="NextElement('password');">
+                                        <span class="input-group-addon"><i class="material-icons">lock_outline</i></span>
+                                        <div class="form-group label-floating">
+                                            <label class="control-label">密码</label>
+                                            <input class="form-control" style="cursor: auto;" type="password" id="password" value="admin">
+                                            <span class="material-input"></span>
+                                        </div>
+                                    </div>
+
+                            
+                                    <a id="forget-password" href="javascript:void(0)" onclick="SwitchTab('ResetForm');">忘记密码？</a>
+                                </div>
+                                <!-- End 账号登录 -->
+
+                                <!-- Begin 重置密码 -->
+                                <div class="card-content" id="ResetForm" style="display: none;">
+                                    <div class="input-group">
+                                        <span class="input-group-addon"><i class="material-icons">phone_iphone</i></span>
+                                        <div class="form-group label-floating">
+                                            <label class="control-label">手机号</label>
+                                            <input class="form-control" style="cursor: auto;" type="text" id="mobile">
+                                            <span class="material-input"></span>
+                                        </div>
+                                    </div>
+
+                                    <div class="input-group" onkeydown="NextElement('send-sms');">
+                                        <span class="input-group-addon">
+                                            <button id="send-sms" type="button" onclick="SendSMSCode();" class="btn  btn-md">获取验证码</button>
+                                        </span>
+                                        <div class="form-group label-floating">
+                                            <label class="control-label">短信验证码</label>
+                                            <input class="form-control" style="cursor: auto;" type="text" id="sms-code">
+                                            <span class="material-input"></span>
+                                        </div>
+                                    </div>
+
+                                    <div class="input-group" onkeydown="NextElement('new-password');">
+                                        <span class="input-group-addon"><i class="material-icons">lock_outline</i></span>
+                                        <div class="form-group label-floating">
+                                            <label class="control-label">新密码</label>
+                                            <input class="form-control" style="cursor: auto;" type="password" id="new-password">
+                                            <span class="material-input"></span>
+                                        </div>
+                                    </div>
+
+                                    <a id="forget-password" href="javascript:void(0)" onclick="SwitchTab('InputForm');">返回账号登录</a>
+                                </div>
+                                <!-- End 重置密码 -->
+
+                                <!-- 登录按钮 -->
+                                <div class="text-center">
+                                    <button type="button" id="login" onclick="Login();" class="btn btn-rose btn-simple btn-wd btn-lg">登录</button>
+                                    <button type="button" id="reset" onclick="ModifyPassword();" class="btn btn-rose btn-simple btn-wd" style="display: none;">重置密码并登陆</button>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -174,7 +172,7 @@
     </div>
     <footer class="navbar-fixed-bottom" style="line-height: 10px;font-size:13px;color:gray;text-align: right;">
         <div class="footer">
-                © 1984-2020 Hyhyhyhyhyhyh
+                © 2019-2020 Hyhyhyhyhyhyh
         </div>
     </footer>
 

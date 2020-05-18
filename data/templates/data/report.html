@@ -35,6 +35,26 @@
         font-family: "SimSun", sans-serif;
         color: #000;
     }
+
+    select{
+        border: 0 none;
+        border-bottom: 1px solid;
+        appearance:none;
+        -moz-appearance:none; /* Firefox */
+        -webkit-appearance:none; /* Safari 和 Chrome */
+        padding: unset;
+        height: unset;
+        padding-left: 2%;
+        padding-right: 1%;
+        /*padding-top: 0.8rem;*/
+        margin: unset;
+    }
+    select::-ms-expand { display: none; }
+    select:focus{
+        border: 0 none;
+        border-bottom: 1px solid;
+        box-shadow: unset;
+    }
 </style>
 <!-- 设置word文档格式 END -->
 
@@ -46,15 +66,13 @@
         </div>
 
         <div class="col-md-5 align-self-center">
-            <div class="btn-group">
-                <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown"
-                    style="background-color:#007bff;">
-                    当前显示季度:{{ quarter }} <span class="caret"></span></button>
-                <ul class="dropdown-menu" role="menu">
-                    {% for quarter_list in db_quarter_list %}
-                    <li><a href="?quarter={{ quarter_list }}">{{ quarter_list }}</a></li>
-                    {% endfor %}
-                </ul>
+            <div class="row">
+                数据日期：
+                <select id="data_year" onchange="GetQuarter();" style="width: 60px;"></select><span style="padding-right: 5px;">年</span>
+                <span>· 第</span><select id="data_quarter" onchange="GetMonth();" style="width: 30px;"></select><span style="padding-right: 5px;">季度 ·</span>
+                <select id="data_month" onchange="GetDay();" style="width: 40px;"></select><span style="padding-right: 5px;">月</span>
+                <select id="data_day" style="width: 40px;"></select><span style="padding-right: 15px;">日</span>
+                <button type="button" class="btn btn-primary btn-xs p310" onclick="ChangeDataDate();" style="border-radius: .25rem;"><i class="fa fa-search"></i></button>
             </div>
         </div>
 
@@ -422,19 +440,8 @@
 </div>
 
 
-{% load staticfiles %}
-<!-- Jquery -->
-<script src="{% static 'js/lib/jquery/jquery.min.js' %}"></script>
-<!-- Bootstrap tether Core JavaScript -->
-<script src="{% static 'js/lib/bootstrap/js/popper.min.js' %}"></script>
-<script src="{% static 'js/lib/bootstrap/js/bootstrap.min.js' %}"></script>
-<!-- slimscrollbar scrollbar JavaScript -->
-<script src="{% static 'js/jquery.slimscroll.js' %}"></script>
-<!--Menu sidebar -->
-<script src="{% static 'js/sidebarmenu.js' %}"></script>
-<!--stickey kit -->
-<script src="{% static 'js/lib/sticky-kit-master/dist/sticky-kit.min.js' %}"></script>
-<script src="{% static 'js/custom.min.js' %}"></script>
+<!-- 设置头像 / 设置日期 -->
+<script src="/static/js/init.js"></script>
 </body>
 
 </html>

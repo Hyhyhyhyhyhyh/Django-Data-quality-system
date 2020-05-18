@@ -142,7 +142,7 @@ def query_data_year():
                 where status='success'
                 group by date_format(execute_date,'%Y')
                 having count(distinct company)>=7
-                order by 1 asc"""
+                order by 1 desc"""
         curs.execute(sql)
         year = curs.fetchall()
         year = [y[0] for y in year]
@@ -167,7 +167,7 @@ def query_data_quarter(year):
                                     group by b.year,b.quarter
                                     having count(distinct company)>=7
                     ) a
-                    order by 1 asc"""
+                    order by 1 desc"""
         curs.execute(sql)
         quarter = curs.fetchall()
         quarter = [q[0] for q in quarter]
@@ -193,7 +193,7 @@ def query_data_month(year, quarter):
                                     group by b.year,b.month,b.day
                                     having count(distinct company)>=7
                     ) a
-                    order by month asc"""
+                    order by month desc"""
         curs.execute(sql)
         month = curs.fetchall()
         month = [m[0] for m in month]
@@ -220,7 +220,7 @@ def query_data_day(year, quarter, month):
                                     group by date_format(a.execute_date,'%Y%m%d')
                                     having count(distinct company)>=7
                     ) a
-                    order by 1 asc"""
+                    order by 1 desc"""
         curs.execute(sql)
         day = curs.fetchall()
         day = [d[0] for d in day]

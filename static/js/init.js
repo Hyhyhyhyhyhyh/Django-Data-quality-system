@@ -42,6 +42,11 @@ function GetYear(){
         data: {},
         dataType : "json",
         success : function(result) {
+            if(localStorage.getItem('selected_year') == null){
+                localStorage.setItem('selected_year', result.data[0]);
+            }
+
+            // 设置下拉框内容
             for(let i in result.data) {
                 obj.options.add(new Option(result.data[i], result.data[i]));
             };
@@ -63,6 +68,11 @@ function GetQuarter(){
         },
         dataType : "json",
         success : function(result) {
+            if(localStorage.getItem('selected_quarter') == null){
+                localStorage.setItem('selected_quarter', result.data[0]);
+            }
+
+            // 设置下拉框内容
             var obj = document.getElementById('data_quarter');
             obj.options.length=0;
             for(let i in result.data) {
@@ -95,6 +105,10 @@ function GetMonth(){
         },
         dataType : "json",
         success : function(result) {
+            if(localStorage.getItem('selected_month') == null){
+                localStorage.setItem('selected_month', result.data[0]);
+            }
+
             var obj = document.getElementById('data_month');
             obj.options.length=0;
             for(let i in result.data) {
@@ -131,6 +145,13 @@ function GetDay(){
         },
         dataType : "json",
         success : function(result) {
+            // 若未选择过数据日期，则显示最新日期数据
+            if(localStorage.getItem('selected_day') == null){
+                localStorage.setItem('selected_day', result.data[0]);
+                // 刷新页面
+                history.go(0);
+            }
+
             var obj = document.getElementById('data_day');
             obj.options.length=0;
             for(let i in result.data) {
@@ -138,10 +159,6 @@ function GetDay(){
             };
         },
     })
-
-    // 根据上一次用户选择的日期设置为下拉框的默认日期
-    y = localStorage.getItem("year");
-
 }
 
 
@@ -172,13 +189,14 @@ function ChangeDataDate(){
 
 // 设置默认显示的日期
 function InitSelectedDate(){
-    //根据用户上一次选择的日期，设置下拉框的默认显示日期
+    // 根据用户上一次选择的日期，设置下拉框的默认显示日期
     var year = localStorage.getItem("selected_year");
     var quarter = localStorage.getItem("selected_quarter");
     var month = localStorage.getItem("selected_month");
     var day = localStorage.getItem("selected_day");
 
-    if([year, quarter, month, day] == [null, null, null, null]){
+    // 若未有选择过日期，默认显示最新日期
+    if(year||quarter||month||day == null){
         GetYear();
         GetQuarter();
         GetMonth();
@@ -226,71 +244,6 @@ function init(){
     // 设置日期
     if (document.getElementById('data_year') != null){
         InitSelectedDate();
-    }
-
-    // 初始化gojs
-    if (document.getElementById('myDiagramDiv') != null){
-        var company = localStorage.getItem('selected_company');
-            if (company == undefined ){
-                company = '信托';
-            }
-            var data;
-            jQuery.ajax({
-                type : "GET",
-                async : false,
-                url : "../../api/check/blood_analyze",
-                data: {'company': company},
-                dataType : "json",
-                success : function(result) {
-                    data = result.data;
-                },
-            })
-
-            var $ = go.GraphObject.make;  // for conciseness in defining templates
-
-            myDiagram =
-                $(go.Diagram, "myDiagramDiv",
-                {
-                    initialAutoScale: go.Diagram.UniformToFill,
-                    // define the layout for the diagram
-                    layout: $(go.TreeLayout, { nodeSpacing: 5, layerSpacing: 30 })
-                });
-
-            // Define a simple node template consisting of text followed by an expand/collapse button
-            myDiagram.nodeTemplate =
-                $(go.Node, "Horizontal",
-                    { isTreeExpanded: false },  // 设置默认叶子节点全折叠
-                //{ selectionChanged: nodeSelectionChanged },  // 点击叶子节点触发的动作
-                $(go.Panel, "Auto",
-                    $(go.Shape, { fill: "#1F4963", stroke: null }), //叶子节点背景色
-                    $(go.TextBlock,                                 //叶子节点文字style
-                    {
-                        font: "bold 13px Helvetica, bold Arial, sans-serif",
-                        stroke: "white", margin: 3
-                    },
-                    new go.Binding("text", "key"))
-                ),
-                $("TreeExpanderButton")                           //展开收缩叶子节点的按钮
-                );
-
-            // 节点间的连接线
-            myDiagram.linkTemplate =
-                $(go.Link,
-                { selectable: true },
-                $(go.Shape));  // the link shape
-
-            // 构建树
-            myDiagram.model =
-                $(go.TreeModel, {
-                isReadOnly: true,  // 禁止删除或复制节点
-                //nodeDataArray: traverseDom(document.activeElement)
-                nodeDataArray: data
-                });
-
-            //设置默认展开的叶子节点层级
-            myDiagram.addDiagramListener("InitialLayoutCompleted", function(e) {
-                e.diagram.findTreeRoots().each(function(r) { r.expandTree(1); });
-            });
     }
 }
 

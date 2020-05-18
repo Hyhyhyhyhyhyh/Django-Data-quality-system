@@ -1,11 +1,17 @@
 import logging
 import sys
 import threading
+import os
 
 sys.path.insert(0, '..')
 from mysite import db_config
-from mysite.source_db_config import *
 from utils import functions as f
+from sqlalchemy import create_engine
+
+
+os.environ['NLS_LANG']    = 'AMERICAN_AMERICA.UTF8'
+os.environ['ORACLE_HOME'] = '/data/oracle/app/11.2.4'
+
 
 class Check(object):
     def __init__(self, company):
@@ -91,17 +97,22 @@ class Check(object):
             
             
             # 连接源系统数据库
-            # loc = locals()
-            # if company in ('xt', 'zc', 'db', 'jk', 'jj1', 'jj2', 'jz'):
-            #     exec(f'conn_source = {company}_{db}()')
-            # else:
-            conn_source = mysql_db()
+            curs.execute(f"select connection_string from source_db_info where company='{company}' and alias='{db}'")
+            connection_string = curs.fetchone()[0]
+            engine = create_engine(
+                connection_string,
+                echo=False,                     # 打印sql语句
+                max_overflow=0,                 # 超过连接池大小外最多创建的连接
+                pool_size=5,                    # 连接池大小
+                pool_timeout=30,                # 池中没有线程最多等待的时间，否则报错
+                pool_recycle=-1,                # 多久之后对线程池中的线程进行一次连接的回收（重置）
+            )
+            conn_source = engine.raw_connection()
             
             # 获取检核版本号
             curs.execute(f"select count(*) from check_execute_log where company='{company}'")
             version = curs.fetchone()[0] + 1
 
-            # with loc['conn_source'].cursor() as curs_source:
             with conn_source.cursor() as curs_source:
                 # 执行检核
                 for i in check_list:
@@ -123,7 +134,6 @@ class Check(object):
                         curs.execute(archive_sql)
                         conn.commit()
                     logging.info(f'{company}, db={db}, id={i[0]} <<<完成')
-            # loc['conn_source'].close()
             conn_source.close()
 
             # 根据检核结果明细计算问题占比

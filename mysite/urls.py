@@ -43,8 +43,9 @@ urlpatterns = [
     path('data/dashboard/subcompany',   dataView.dashboard_subcompany,        name='dashboard_subcompany'),
     path('data/report',                dataView.report,                      name='report'),
     path('data/result_detail',         dataView.result_detail,               name='result_detail'),
-    path('',            RedirectView.as_view(url='data/dashboard/')),
-    path('data/index',            RedirectView.as_view(url='data/dashboard/')),
+    path('',                            RedirectView.as_view(url='data/dashboard/')),
+    path('data',                        RedirectView.as_view(url='data/dashboard/')),
+    path('data/index',                  RedirectView.as_view(url='../data/dashboard/')),
 
     # 登录身份验证
     path('authorize/login/',     authView.login,      name='login'),

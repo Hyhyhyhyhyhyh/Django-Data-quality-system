@@ -117,6 +117,7 @@ CREATE TABLE `source_db_info` (
   `company` varchar(10) DEFAULT NULL,
   `name` varchar(40) DEFAULT NULL,
   `alias` varchar(50) DEFAULT NULL,
+  `connection_string` varchar(100) DEFAULT NULL,
   `ip` varchar(16) DEFAULT NULL,
   `user` varchar(32) DEFAULT NULL,
   `passwd` varchar(200) DEFAULT NULL,

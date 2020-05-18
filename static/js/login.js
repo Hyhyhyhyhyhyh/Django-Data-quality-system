@@ -148,7 +148,7 @@ function SwitchTab(id){
         document.getElementById("ResetForm").style.display='none';
         document.getElementById("reset-pwd").className='';
         document.getElementById("login-page").className='active';
-        document.getElementById("login").style.display='unset';
+        document.getElementById("login").style.display='';
         document.getElementById("reset").style.display='none';
     }
     else if ( id == 'ResetForm' ){
@@ -157,7 +157,7 @@ function SwitchTab(id){
         document.getElementById("reset-pwd").className='active';
         document.getElementById("login-page").className='';
         document.getElementById("login").style.display='none';
-        document.getElementById("reset").style.display='unset';
+        document.getElementById("reset").style.display='';
     }
 }
 
