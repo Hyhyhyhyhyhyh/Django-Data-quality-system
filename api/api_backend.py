@@ -2,6 +2,7 @@ from django.http.response import JsonResponse
 from django.http.response import HttpResponseBadRequest
 from django.views.decorators.http import require_http_methods
 import pandas as pd
+from crontab import CronTab
 
 from mysite import db_config
 
@@ -122,4 +123,40 @@ def db_insert(request):
     finally:
         conn.close()
 
- 
+
+@require_http_methods(['POST'])
+def crontab_enable(request):
+    """
+    启用/禁用自动检核的crontab任务
+    :param request:
+    :return:
+    """
+    enable = request.POST.get('enable')
+    job_name = request.POST.get('job_name')
+
+    cron = CronTab(user=True)
+    job = list(cron.find_comment(job_name))[0]
+
+    if enable == 'false':
+        # job.enable(False)
+        # cron.write()
+        return JsonResponse({"msg": "success"})
+    elif enable == 'true':
+        # job.enable()
+        # cron.write()
+        return JsonResponse({"msg": "success"})
+    else:
+        return JsonResponse({"msg": "failed"})
+    
+
+@require_http_methods(['POST'])
+def crontab_run(request):
+    job_name = request.POST.get('job_name')
+    
+    try:
+        cron =  CronTab(user=True)
+        job = list(cron.find_comment(job_name))[0]
+        job.run()
+        return JsonResponse({"msg": "success"})
+    except Exception as e:
+        return HttpResponseBadRequest(content=e)

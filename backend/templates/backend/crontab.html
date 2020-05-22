@@ -1,0 +1,205 @@
+{% include "data/template-ui.html" %}
+<link rel="stylesheet" type="text/css" href="/static/css/icons.css" />
+<link rel="stylesheet" type="text/css" href="/static/css/fonts.css" />
+<link rel="stylesheet" type="text/css" href="/static/css/sweetalert.css" />
+<link rel="stylesheet" type="text/css" href="/static/css/switchery.min.css" />
+
+<style>
+    .container-fluid {
+        padding: 0 10 0;
+    }
+
+    .page-wrapper {
+        padding-bottom: 20px;
+    }
+
+    .page-wrapper {
+        min-height: 600px !important;
+    }
+
+    .table {
+        font-size: 13px;
+    }
+    .table > tbody > tr > td, .table > tbody > tr > th, .table > tfoot > tr > td, .table > tfoot > tr > th, .table > thead > tr > td, .table > thead > tr > th {
+        line-height: unset;
+    }
+    tbody tr td {
+        text-align: left;
+    }
+    
+    h6 {
+        color: rgb(0,128,82);
+    }
+
+    .btn {
+        margin-top: -3px;
+        margin-left: 1px;
+        background-color: #4680ff;
+        color: aliceblue;
+    }
+    .btn:hover, .btn:focus {
+        color:aliceblue;
+    }
+</style>
+
+<div class="page-wrapper">
+    <div class="container-fluid animated fadeInUp">
+        <div class="row">
+            <div class="card col-12">
+                <div class="card-title">
+                    <h4 class="text-primary">后台任务 - 调度信息</h4>
+                </div>
+
+                <div class="card-content">
+                    <table class="table table-hover">
+                        <thead>
+                            <td>任务名</td>
+                            <td>任务内容</td>
+                            <td>启用状态</td>
+                            <td>调度周期</td>
+                            <td># 操作</td>
+                        </thead>
+                        <tbody>
+                        {% for i in jobs %}
+                            <tr>
+                                <!-- 任务名 -->
+                                <td>{{ i.0 }}</td>
+
+                                <!-- 任务内容 -->
+                                <td>{{ i.1 }}</td>
+
+                                <!-- 启用状态 -->
+                                <td>
+                                    {% if i.2 == True %}
+                                    <input job_name="{{ i.0 }}" type="checkbox" class="js-switch" checked/>
+                                    {% elif i.2 == False %}
+                                    <input job_name="{{ i.0 }}" type="checkbox" class="js-switch"/>
+                                    {% endif %}
+                                </td>
+                                
+                                <!-- 调度周期 -->
+                                <td>{{ i.3 }}</td>
+
+                                <!-- 操作 -->
+                                <td>
+                                    <button job_name="{{ i.0 }}" onclick="ExecJob(this);" class="btn btn-xs btn-check" type="button">
+                                        <i class="im-rocket"></i>&nbsp;&nbsp;立即执行>>
+                                    </button>
+                                </td>
+                            </tr>
+                        {% endfor%}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<footer class="navbar-fixed-bottom" style="line-height: 10px;font-size:13px;">
+    <div class="footer">
+        © 2019-2020 Hyhyhyhyhyhyh
+    </div>
+</footer>
+
+
+<!-- 设置头像 / 设置日期 -->
+<script src="/static/js/init.js"></script>
+
+<script src="/static/js/sweetalert.min.js"></script>
+<script src="/static/js/switchery.min.js"></script>
+
+<script>
+    var elems = Array.prototype.slice.call(document.querySelectorAll('.js-switch'));
+
+    elems.forEach(function(html) {
+        var switchery = new Switchery(html, { size: 'small' });
+
+        html.onchange = function(e) {
+            var obj = $(this);
+            var job_name = obj.attr('job_name');
+            var enable;
+
+            if (obj.is(':checked')) {
+                enable = true;
+            } else {
+                enable = false;
+            }
+
+            // 修改定时任务启用状态
+            $.ajax({
+                url: '../../api/backend/crontab/enable',
+                type: 'POST',
+                data:{
+                    "enable": enable,
+                    "job_name": job_name,
+                },
+                success: function (data) {
+                    if (data.msg == 'success') {
+                        return true
+                    }
+                    else {
+                        swal({
+							title: "发生错误",
+                            icon: "error",
+                            buttons: false,
+							timer: 1000
+						});
+                    }
+                },
+                error: function (e) {
+                    swal({
+                        title: "发生错误",
+                        icon: "error",
+                        buttons: false,
+                        timer: 1000
+                    });
+                }
+            })
+          }
+    });
+
+    function ExecJob(obj){
+        var job_name = obj.attributes.job_name.value;
+        obj.disabled = true;
+        
+        // 手工触发定时任务
+        $.ajax({
+            url: '../../api/backend/crontab/run',
+            type: 'POST',
+            data:{
+                "job_name": job_name,
+            },
+            success: function (data) {
+                if (data.msg == 'success') {
+                    obj.disabled = false;
+                    swal({
+                        title: job_name + "  执行完成",
+                        icon: "success",
+                        timer: 1000
+                    });
+                }
+                else {
+                    swal({
+                        title: "发生错误",
+                        icon: "error",
+                        buttons: false,
+                        timer: 1000
+                    });
+                }
+            },
+            error: function (e) {
+                swal({
+                    title: "发生错误",
+                    icon: "error",
+                    buttons: false,
+                    timer: 1000
+                });
+            }
+        })
+    }
+</script>
+
+</body>
+
+</html>

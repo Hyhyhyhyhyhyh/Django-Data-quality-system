@@ -354,26 +354,6 @@ def rule_execute(request):
         })
 
 
-def enable_crontab(request):
-    """修改crontab状态
-    """
-    status = request.POST.get('status')
-
-    cron = CronTab(user=True)
-    job = list(cron.find_comment('自动进行数据质量检核'))[0]
-
-    if status == 'false':
-        # job.enable(False)
-        # cron.write()
-        return JsonResponse({"msg": "操作成功"})
-    elif status == 'true':
-        # job.enable()
-        # cron.write()
-        return JsonResponse({"msg": "操作成功"})
-    else:
-        return JsonResponse({"msg": "操作失败"})
-
-
 def update_crontab(request):
     """更新crontab命令
     """

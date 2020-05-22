@@ -66,6 +66,10 @@
                                 <td><input id="name" type="text" class="form-control" required></input></td>
                             </tr>
                             <tr>
+                                <td>源系统名称</td>
+                                <td><input id="alias" type="text" class="form-control" required></input></td>
+                            </tr>
+                            <tr>
                                 <td>数据库类型</td>
                                 <td style="text-align: left;">
                                     <select id="db_type">
@@ -132,6 +136,7 @@
         function Commit(){
             var company = document.getElementById("company");
             var name = document.getElementById("name");
+            var alias = document.getElementById("alias");
             var ip = document.getElementById("ip");
             var user = document.getElementById("user");
             var password = document.getElementById("password");
@@ -143,8 +148,8 @@
             var db_type_value = db_type[db_type.selectedIndex].value;
 
             // 判断数据源信息是否存在空值，存在空值则出现提示
-            var obj_id = ["company", "name", "ip", "user", "password", "db", "port"];
-            var objs = [company, name, ip, user, password, db, port];
+            var obj_id = ["company", "name", "alias", "ip", "user", "password", "db", "port"];
+            var objs = [company, name, alias, ip, user, password, db, port];
             var null_cnt = 0;
             for(let i in objs){
                 if (objs[i].value == null || objs[i].value.length == 0){
@@ -175,6 +180,7 @@
                 data: {
                     company: company.value,
                     name: name.value,
+                    alias: alias.value,
                     ip: ip.value,
                     user: user.value,
                     password: password.value,

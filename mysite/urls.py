@@ -75,6 +75,7 @@ urlpatterns = [
     path('backend/database',   beView.database,    name='database'),
     path('backend/database/detail',   beView.database_detail,    name='database_detail'),
     path('backend/database/add',   beView.database_add,    name='database_add'),
+    path('backend/crontab',   beView.crontab,    name='crontab'),
 
     # API
     path('api/date/year',       api_dateView.year_list,     name='year_list'),
@@ -106,8 +107,6 @@ urlpatterns = [
     path('api/check/rule/add',                       api_checkView.rule_add,                  name='rule_add'),
     path('api/check/rule/status_modify',             api_checkView.rule_status_modify,        name='rule_status_modify'),
     path('api/check/rule/execute',                   api_checkView.rule_execute,              name='rule_execute'),
-    path('api/check/crontab/enable',                 api_checkView.enable_crontab,            name='enable_crontab'),
-    path('api/check/crontab/update',                 api_checkView.update_crontab,            name='update_crontab'),
     path('api/check/progress',                       api_checkView.query_check_progress,      name='query_check_progress'),
     path('api/check/blood_analyze',                  api_bloodView.blood_analyze,             name='api_blood_analyze'),
     
@@ -118,4 +117,6 @@ urlpatterns = [
     path('api/backend/database/query',           api_beView.db_query,        name='db_query'),
     path('api/backend/database/update',           api_beView.db_update,        name='db_update'),
     path('api/backend/database/insert',           api_beView.db_insert,        name='db_insert'),
+    path('api/backend/crontab/enable',          api_beView.crontab_enable,            name='crontab_enable'),
+    path('api/backend/crontab/run',          api_beView.crontab_run,            name='crontab_run'),
 ]
