@@ -11,7 +11,8 @@ flush privileges;
 --检核规则库，作为每个新次检核的模板表
 CREATE TABLE `check_result_template` (
   `id` int(11) NOT NULL COMMENT '排序用id',
-  `source_system` varchar(10) NOT NULL COMMENT '二级公司名或系统名',
+  `company` varchar(100) DEFAULT NULL COMMENT '二级公司名或系统名(拼音)',
+  `source_system` varchar(10) NOT NULL COMMENT '二级公司名或系统名(中文)',
   `check_item` varchar(100) DEFAULT NULL COMMENT '数据标准',
   `target_table` varchar(100) DEFAULT NULL COMMENT '目标表',
   `risk_market_item` varchar(2) DEFAULT NULL COMMENT '是否风险集市需要的指标',
