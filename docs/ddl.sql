@@ -87,7 +87,30 @@ CREATE TABLE `data_standard_desc` (
 );
 
 
+--数据标准目录表
+CREATE TABLE `data_standard_index` (
+  `pk_id` int(11) NOT NULL AUTO_INCREMENT,
+  `idx_id` int(11) DEFAULT NULL COMMENT '树节点id',
+  `idx_pid` int(11) DEFAULT NULL COMMENT '树父节点id',
+  `idx_name` text CHARACTER SET utf8 COLLATE utf8_general_ci COMMENT '树节点名',
+  `is_open` text CHARACTER SET utf8 COLLATE utf8_general_ci COMMENT '树节点是否默认展开',
+  PRIMARY KEY (`pk_id`) USING BTREE
+) 
+
+
+-- 数据标准更新记录表
+CREATE TABLE `data_standard_update_log` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `std_name` text CHARACTER SET utf8 COLLATE utf8_general_ci COMMENT '数据标准名',
+  `username` varchar(30) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '操作者',
+  `update_time` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  `previous_version` text CHARACTER SET utf8 COLLATE utf8_general_ci COMMENT '上一版本的内容',
+  PRIMARY KEY (`id`) USING BTREE
+);
+
+
 -- 日期维度表
+-- 时期生成，执行utils/generate_dim_date.py
 CREATE TABLE `dim_date` (
   `date` datetime DEFAULT NULL,
   `day_id` int(11) NOT NULL,
@@ -128,3 +151,4 @@ CREATE TABLE `source_db_info` (
   `note` varchar(200) DEFAULT NULL,
   PRIMARY KEY (`id`)
 );
+
