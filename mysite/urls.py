@@ -26,14 +26,15 @@ from demand import views as demandView
 from files import views as filesView
 from standard import views as stdView
 from backend import views as beView
+from blood import views as bloodView
 from api import api_files as api_filesView
 from api import api_dashboard as api_dashView
 from api import api_datastandard as api_stdView
 from api import api_check as api_checkView
 from api import api_date as api_dateView
 from api import api_quality as api_qualityView
-from api import api_blood as api_bloodView
 from api import api_backend as api_beView
+from api import api_blood as api_bloodView
 
 urlpatterns = [
     url(r'^static/(?P<path>.*)$', serve, {'document_root': '/data/pyweb/data-quality/static'}, name='static'),
@@ -59,7 +60,7 @@ urlpatterns = [
     # 检核定时任务
     path('check/crontab',       checkView.show_crontab,        name='show_crontab'),
     # 血缘分析
-    path('check/blood_analyze',  checkView.blood_analyze,  name='blood_analyze'),
+    path('blood/analyze',       bloodView.analyze,      name='blood_analyze'),
 
     # 源系统改造需求
     path('demand/import_sheet', demandView.import_sheet, name='import_sheet'),
@@ -108,7 +109,6 @@ urlpatterns = [
     path('api/check/rule/status_modify',             api_checkView.rule_status_modify,        name='rule_status_modify'),
     path('api/check/rule/execute',                   api_checkView.rule_execute,              name='rule_execute'),
     path('api/check/progress',                       api_checkView.query_check_progress,      name='query_check_progress'),
-    path('api/check/blood_analyze',                  api_bloodView.blood_analyze,             name='api_blood_analyze'),
     
     # 检核结果明细
     path('api/quality/detail',                       api_qualityView.quality_detail,          name='quality_detail'),
@@ -119,4 +119,6 @@ urlpatterns = [
     path('api/backend/database/insert',           api_beView.db_insert,        name='db_insert'),
     path('api/backend/crontab/enable',          api_beView.crontab_enable,            name='crontab_enable'),
     path('api/backend/crontab/run',          api_beView.crontab_run,            name='crontab_run'),
+    
+    path('api/blood/mapping',                  api_bloodView.query_mapping,             name='api_blood_query_mapping'),
 ]

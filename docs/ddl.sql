@@ -153,3 +153,11 @@ CREATE TABLE `source_db_info` (
   PRIMARY KEY (`id`)
 );
 
+
+-- ETL源-目标表，用于血缘分析
+CREATE TABLE `datacenter_mapping` (
+  `subject_area` varchar(255) DEFAULT NULL,
+  `mapping_name` varchar(255) DEFAULT NULL,
+  `source` varchar(255) DEFAULT NULL,
+  `target` varchar(255) DEFAULT NULL
+);

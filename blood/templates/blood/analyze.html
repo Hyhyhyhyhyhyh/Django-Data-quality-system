@@ -1,0 +1,238 @@
+{% include "data/template-ui.html" %}
+<style>
+    a.active, button.active, a:focus, button:focus, a:hover, button:hover {
+        color: white;
+    }
+    table {
+        border-collapse: collapse;
+        width: 100%;
+        font-size: 13px;
+    }
+    .table > tbody > tr > td, .table > tbody > tr > th, .table > tfoot > tr > td, .table > tfoot > tr > th, .table > thead > tr > td, .table > thead > tr > th {
+        line-height: unset;
+        vertical-align: middle;
+    }
+</style>
+
+<!-- 正文主体 -->
+<div class="page-wrapper">
+    <!-- 标题 -->
+    <div class="row page-titles">
+        <div class="col-md-8 align-self-center">
+            <h3 class="text-primary" id="page_title">血缘分析</h3>
+        </div>
+
+        <div class="col-md-4 align-self-center">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="../../data/dashboard/">主页</a></li>
+                <li class="breadcrumb-item active">血缘分析</li>
+            </ol>
+        </div>
+    </div>
+    
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="card">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <input id="table_name" placeholder="输入关键词：表名、mapping名" class="form-control" />
+                        </div>
+                        <div class="col-md-4">
+                            <button class="btn btn-info" onclick="QueryMapping();"><i class="fa fa-search"></i> 查询</button>
+                        </div>
+                    </div>
+    
+                    <div class="row" style="padding-top:30px;">
+                        <div class="col-md-12">
+                            <div class="table-responsive">
+                                <table class="table table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th>文件夹</th>
+                                            <th>映射名称</th>
+                                            <th>源表</th>
+                                            <th>目标表</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="mapping_info">
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12">
+                <div id="chart1" class="card" style="height: 300px;"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- footer -->
+<footer class="navbar-fixed-bottom" style="line-height: 10px;font-size:13px;">
+    <div class="footer">
+        © 2019-2020 Hyhyhyhyhyhyh
+    </div>
+</footer>
+
+</div>
+
+
+<!-- 设置头像 -->
+<script src="/static/js/init.js"></script>
+<script type="text/javascript" src="/static/js/sweetalert.min.js"></script>
+
+<script>
+    function QueryMapping(){
+        var table_name = $("#table_name").val();
+
+        if(table_name==undefined || table_name==""){
+            table_name = localStorage.getItem("blood_query");
+            $("#table_name").attr("placeholder", table_name);
+        }
+        else{
+            localStorage.setItem("blood_query", table_name);
+        }
+
+        if(table_name == null || table_name == ''){
+            swal({
+                text: "不能查询空关键字",
+                icon: "warning",
+                buttons: false,
+                timer: 1000
+            });
+            return
+        }
+
+        $.ajax({
+            type : "GET",
+            async : false,
+            url : "../../api/blood/mapping",    
+            data: {
+                table_name: table_name
+            },
+            dataType : "json",
+            success : function(result) {
+                let tab = document.getElementById("mapping_info");
+                let html = "";
+                for(let i in result.subject_area){
+                    html += "<tr>";
+                    html += "<td>" + result.subject_area[i] + "</td>";
+                    html += "<td>" + result.mapping_name[i] + "</td>";
+                    html += "<td>" + result.source[i] + "</td>";
+                    html += "<td>" + result.target[i] + "</td>";
+                    html += "</tr>";
+                }
+                tab.innerHTML = html;
+
+                InitChart(result);
+            }
+        })
+    }
+
+    // 血缘流向 桑基图
+    function InitChart(result){
+        var data = {
+            nodes: [],
+            links: []
+        }
+
+        var nodes = [];
+        var links = [];
+        const colors = [null, '#fbb4ae', '#b3cde3', '#ccebc5', '#decbe4'];
+        for(let i in result.subject_area){
+            nodes.push({
+                name: result.source[i],
+                itemStyle: {
+                    normal: {
+                        color: colors[result.level[i]]
+                    }
+                }
+            });
+            nodes.push({
+                name: result.target[i],
+                itemStyle: {
+                    normal: {
+                        color: colors[result.level[i]+1]
+                    }
+                }
+            });
+            links.push({
+                source: result.source[i],
+                target: result.target[i],
+                value: result.mapping_name[i].length,
+                mapping: result.mapping_name[i]
+            })
+        }
+
+        // nodes数组去重
+        var l = nodes.length;
+        var nodes_uniq = [];
+        for(let i=0;i<l;i++){
+            for(let j=i+1;j<l;j++){
+                if (nodes[i].name === nodes[j].name){
+                    i++;
+                    j = i;
+                }
+            }
+            nodes_uniq.push(nodes[i]);
+        }
+
+        data = {
+            nodes: nodes_uniq,
+            links: links
+        }
+        console.log(data);
+
+        // 设置桑基图
+        var chart1 = echarts.init(document.getElementById('chart1'));
+        chart1.clear();
+        chart1.setOption(option = {
+            title: {
+                text: '血缘流向'
+            },
+            tooltip: {
+                trigger: 'item',
+                triggerOn: 'mousemove',
+                formatter: function(x){
+                    return x.data.mapping;
+                }
+            },
+            animation: false,
+            series: [
+                {
+                    type: 'sankey',
+                    focusNodeAdjacency: 'allEdges',
+                    nodeAlign: 'left',
+                    data: data.nodes,
+                    links: data.links,
+                    lineStyle: {
+                        color: 'source',
+                        curveness: 0.5
+                    }
+                }
+            ]
+        });
+    }
+
+    // 初始化搜索结果，如果未有过血缘分析查询操作，则查询test_table用作展示样例
+    function initQuery(){
+        var blood_query = localStorage.getItem("blood_query");
+        if(blood_query==undefined || blood_query==""){
+            $("#table_name").val("test_table");
+            $("#table_name").attr("placeholder","test_table");
+            localStorage.setItem("blood_query", "test_table");
+        }
+        QueryMapping();
+    }
+    initQuery();
+</script>
+
+</body>
+
+</html>
