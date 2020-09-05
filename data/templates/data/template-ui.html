@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="zh-cmn-Hans">
+{% load staticfiles %}
 
 <head>
     <meta charset="utf-8">
@@ -7,7 +8,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="">
     <meta name="author" content="">
-    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests" />
 
     <title>数据质量管理平台</title>
 
@@ -33,7 +33,7 @@
     <script src="/static/js/custom.min.js"></script>
 
     <!-- Echarts js如果放在二级模板延迟加载,会出现始化空白 -->
-    <script src="https://cdn.bootcss.com/echarts/4.7.0/echarts.min.js"></script>
+    <script src="/static/js/Echarts/echarts.js"></script>
 </head>
 
 <style>
@@ -173,7 +173,8 @@
                             </ul>
                         </li>
                         
-                        <li> <a class="has-arrow" href="#" aria-expanded="false">
+                        <li>
+                            <a class="has-arrow" href="#" aria-expanded="false">
                             <i class="fa fa-table"></i>
                             <span class="hide-menu">检核结果明细<span class="label label-rouded label-danger pull-right">7</span>
                             </a>
@@ -191,16 +192,19 @@
 
                         <!-- 标准管理 -->
                         <li class="nav-label">标准管理</li>
-                        <li> <a class="has-arrow" href="../../datastandard/show" aria-expanded="false"><i class="fa fa-check-square-o"></i>
-                            <span class="hide-menu">数据标准</span>
+                        <li>
+                            <a class="has-arrow" href="../../datastandard/show" aria-expanded="false">
+                                <i class="fa fa-check-square-o"></i>
+                                <span class="hide-menu">数据标准</span>
                             </a>
                         </li>
 
-                        <li> <a class="has-arrow" href="#" aria-expanded="false">
-                            <i class="fa">
-                                <img src="/static/icons/db-icons/sql.svg" style="width: 27px;margin-left: -5px;" />
-                            </i>
-                            <span class="hide-menu">检核规则库<span class="label label-rouded label-warning pull-right">7</span>
+                        <li>
+                            <a class="has-arrow" href="#" aria-expanded="false">
+                                <i class="fa">
+                                    <img src="/static/icons/db-icons/sql.svg" style="width: 27px;margin-left: -5px;" />
+                                </i>
+                                <span class="hide-menu">检核规则库<span class="label label-rouded label-warning pull-right">7</span>
                             </a>
                             <ul aria-expanded="false" class="collapse">
                                 <li><a href="../../check/rule?company=xt&risk_market="> 信托 </a></li>
@@ -221,7 +225,8 @@
                         
                         <!-- 知识管理 -->
                         <li class="nav-label">知识管理</li>
-                        <li> <a class="has-arrow" href="../../files/list" aria-expanded="false"><i class="fa fa-book"></i>
+                        <li>
+                            <a class="has-arrow" href="../../files/list" aria-expanded="false"><i class="fa fa-book"></i>
                             <span class="hide-menu">数据治理知识库</span>
                             </a>
                         </li>
@@ -254,11 +259,12 @@
                             </a>
                         </li>
                         
-                        <li> <a class="has-arrow" href="../../demand/import_sheet" target="_blank" aria-expanded="false"><i class="fa fa-tags"></i>
-                            <span class="hide-menu">更新源系统改造需求进度表</span>
+                        <li>
+                            <a class="has-arrow" href="../../demand/import_sheet" target="_blank" aria-expanded="false">
+                                <i class="fa fa-tags" style="width: 27px;"></i>
+                                <span class="hide-menu">更新源系统改造需求进度表</span>
                             </a>
                         </li>
-                        
                     </ul>
                 </nav>
             </div>

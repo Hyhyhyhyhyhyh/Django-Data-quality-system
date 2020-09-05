@@ -3,15 +3,14 @@ from sqlalchemy import create_engine
 
 def db():
     host     = 'localhost'
-    user     = 'dq_check'
+    user     = 'system'
     passwd   = 'H5cT7yHB8_'
     port     = 3306
     charset  = 'utf8mb4'
     database = 'data_quality'
-    socket   = '/data/mysql/data/mysql.sock'
     
     engine = create_engine(
-        f'mysql+mysqldb://{user}:{passwd}@{host}:{port}/{database}?charset={charset}&unix_socket={socket}',
+        f'mysql+mysqldb://{user}:{passwd}@{host}:{port}/{database}?charset={charset}',
         echo=False,				# 打印sql语句
         max_overflow=0,  		# 超过连接池大小外最多创建的连接
         pool_size=5,  			# 连接池大小
@@ -48,7 +47,5 @@ data = generateData(startDate='2019-1-01', endDate='2029-12-31')
 # data.to_csv('/tmp/dim_date.csv', index = False,index_label = False)
 
 conn = db()
-data.to_sql('dim_date', con=conn, if_exists='replace', index=False)
-
 # 插入到mysql中，pandas的bool类型会转换为tinyint(1)类型，0表示False，1表示True
-pd.read_sql('alter table dim_date add constraint pk_dim_date primary key (day_id)', con=conn)
+data.to_sql('dim_date', con=conn, if_exists='replace', index=False)
