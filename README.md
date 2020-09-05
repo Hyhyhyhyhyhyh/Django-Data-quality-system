@@ -1,6 +1,3 @@
-# 说明
-登录页面背景图来自https://pixabay.com
-
 # demo
 http://data.sghen.cn
 登录用户名密码：admin/admin
@@ -40,6 +37,10 @@ http://data.sghen.cn
 
 
 # 更新记录
+## 2020-09-05
+- 修复若干本地部署会发生的错误
+- **重要**：修正部署文档`docs/部署文档.md`中的许多错误
+
 ## 2020-06-13
 - 更新血缘分析模块
 
@@ -77,3 +78,6 @@ gunicorn mysite.wsgi -c /data/pyweb/data-quality/gconfig.py &
 
 # todo
 - [ ] 数据标准编辑功能完善
+
+# 说明
+登录页面背景图来自https://pixabay.com
