@@ -19,7 +19,7 @@ gunicorn==19.9.0
 idna==2.8
 isort==4.3.21
 jdcal==1.4.1
-Jinja2==2.10.1
+Jinja2==2.11.3
 lazy-object-proxy==1.4.3
 ldap3==2.6
 lml==0.0.9
