@@ -27,7 +27,7 @@ MarkupSafe==1.1.1
 mccabe==0.6.1
 meld3==1.0.2
 mysqlclient==1.4.4
-numpy==1.17.0
+numpy==1.22.0
 odfpy==1.4.0
 openpyxl==2.5.14
 pandas==1.0.3
